@@ -1,0 +1,4638 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Abinit documentation">
+      
+      
+      
+        <meta name="author" content="The Abinit group">
+      
+      
+        <link rel="canonical" href="https://docs.abinit.org/tutorial/z2pack/">
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.6">
+    
+    
+      
+        <title>Z2pack - abinit</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2c0c5eaf.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.7fa14f5b.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#ff6e42">
+        
+      
+    
+    
+    
+
+    <!-- 
+    IMPORTANT: Don't use boostrap in particular boostrap.css since it comes into conflict with mkdocs-material theme.
+    Prefer low-level tools based on Jquery or JS library such as Tippyjs to get the work done.
+    -->
+
+    <!-- Jquery from Google CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load Jquery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- Handle jQuery plugin naming conflict between jQuery UI and Bootstrap
+    https://stackoverflow.com/questions/13731400/jqueryui-tooltips-are-competing-with-twitter-bootstrap
+    <script>
+      $.widget.bridge('uibutton', $.ui.button);
+      $.widget.bridge('uitooltip', $.ui.tooltip);
+    </script>
+    -->
+
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+    <!-- Tippyjs for popovers https://atomiks.github.io/tippyjs/ -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+
+    <!-- font-awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <!--Pace support. http://github.hubspot.com/pace/ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/white/pace-theme-big-counter.min.css" />
+
+    <script>
+        paceOptions = {
+            ajax: true,      // disabled
+            document: true,  // activated
+            eventLag: false  // disabled
+            //target: 'article'
+            //elements: {selectors: ['.my-page']}
+        };
+    </script>
+
+    <!-- MathJax support
+    <script type="text/javascript" async 
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script> 
+    -->
+
+    <!-- This version is compatible with plotly. -->
+    <script type="text/javascript" async 
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_SVG">
+    </script> 
+
+    <!-- Configure MathJax to produce automatic equation numbers http://docs.mathjax.org/en/latest/tex.html -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        //jax: ["input/TeX","output/HTML-CSS"],
+        //tex2jax: {inlineMath: [['$','$']]},
+        //displayAlign: "center",
+        TeX: {
+            equationNumbers: { autoNumber: "AMS" },
+            extensions: ["AMSmath.js", "boldsymbol.js"],
+            Macros: {
+                "*": "{\\dagger}",
+                "ra": "{\\rangle}",
+                "la": "{\\langle}",
+                // Workaround for bm package. See https://github.com/mathjax/MathJax/issues/1219
+                bm: ["{\\boldsymbol #1}",1],
+                // Mathcal symbols
+                mcL: "{\\mathcal{L}}",
+                mcG: "{\\mathcal{G}}",
+                mcR: "{\\mathcal{R}}",
+                mcS: "{\\mathcal{S}}",
+                mcC: "{\\mathcal{C}}",
+                mcO: "{\\mathcal{O}}",
+                // Acronyms
+                KS: "{\\text{KS}}",
+                eph: "{\\text{e-ph}}",
+                ee: "{\\text{e-e}}",
+                phph: "{\\text{ph-ph}}",
+                FM: "{\\text{FM}}",
+                DW: "{\\text{DW}}",
+                QP: "{\\text{QP}}",
+                BZ: "{\\text{BZ}}",
+                sign: "{\\text{sign}}",
+                xc: "{\\text{xc}}",
+                tchi: "{\\tilde\\chi}",
+                // Symbols commonly used (k-points, eigenvalues ...)
+                rr: "{\\bf r}",
+                RR: "{\\bf R}",
+                tt: "{\\bf t}",
+                GG: "{\\bf G}",
+                kk: "{\\bf k}",
+                qq: "{\\bf q}",
+                kq: "{\\kk + \\qq}",
+                qG: "{\\bf q + G}",
+                kG: "{\\bf k + G}",
+                kmq: "{\\kk - \\qq}",
+                kpq: "{\\kk + \\qq}",
+                kpG: "{\\kk + \\GG}",
+                qpG: "{\\qq + \\GG}",
+                nk: "{n \\kk}",
+                mk: "{, \\kk}",
+                nks: "{n \\kk\\sigma}",
+                mks: "{m \\kk\\sigma}",
+                enk: "{\\varepsilon_\\nk}",
+                emkq: "{\\varepsilon_{m\\kk+\\qq}}",
+                qnu: "{\\qq \\nu}",
+                wqnu: "{\\omega_{\\qnu}}",
+                vnk: "{\\mathbf{v}_{n\\kk}}",
+                vmkq: "{\\mathbf{v}_{m\\kk+\\qq}}",
+                vnka: "{\\mathrm{v}_{n\\kk,\\alpha}}",
+                vnkb: "{\\mathrm{v}_{n\\kk,\\beta}}",
+                ef: "{\\varepsilon_F}",
+                // EPH quantities
+                gkkp: "{g_{mn\\nu}(\\kk,\\qq)}",
+                gkq: "{g_{mn\\nu}(\\kk,\\qq)}",
+                //\newcommand{\gkkpL}{g_{mn\nu}^\Lc(\kb,\qb)}
+                // Many-body theory
+                Go: "{G_0}",
+                Wo: "{W_0}",
+                Ueff: "{U_{\\text{eff}}}",
+                // Greek symbols + tilde version
+                ee: "{\\epsilon}",
+                tee: "{\\tilde{\\epsilon}}",
+                ww: "{\\omega}",
+                tww: "{\\tilde\\omega}",
+                dd: "{\\,\\text{d}}",
+                vxc: "{v_\\xc}",
+                // symrel
+                Ri: "{\\mcR^{-1}}",
+                Rit: "{\\mcR^{-1\\tau}}",
+                // symrec
+                Si: "{\\mcS^{-1}}}",
+                Sit: "{\\Si^\\tau}}",
+                // partial and functional derivative.
+                PDER: ["{\\dfrac{\\partial #1}{\\partial #2}}", 2],
+                FDER: ["{\\dfrac{\\delta #1}{\\delta #2}}", 2],
+                // PAW
+                tPsi: "{\\tilde\\Psi}",
+                tpsi: "{\\tilde\\psi}",
+                tPhi: "{\\tilde\\Phi}",
+                tphi: "{\\tilde\\phi}",
+                tprj: "{\\tilde p}"
+            }
+          }
+      });
+    </script>
+
+    
+
+    
+
+    <!-- Load fonts used for input variables -->
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+      <link rel="stylesheet" href="../../css/gallery.css">
+    
+      <link rel="stylesheet" href="../../css/my_codehilite.css">
+    
+    
+      
+        
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-116681470-1","docs.abinit.org"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#z2pack-postprocessor" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="abinit" class="md-header__button md-logo" aria-label="abinit" data-md-component="logo">
+      
+  <img src="../../images/logo-abinit-2015.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            abinit
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Z2pack
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="md-header__options">
+      
+    </div>
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/abinit/abinit/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github-abinit
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        User Guides
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../topics/features/" class="md-tabs__link">
+        Topics
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../variables/" class="md-tabs__link">
+        Variables
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../" class="md-tabs__link md-tabs__link--active">
+        Tutorials
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../faq/configuration_and_compilation/" class="md-tabs__link">
+        FAQ
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../theory/geometry/" class="md-tabs__link">
+        Theory
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../developers/git_and_gitlab/" class="md-tabs__link">
+        Developers
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/release-notes/" class="md-tabs__link">
+        About
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="abinit" class="md-nav__button md-logo" aria-label="abinit" data-md-component="logo">
+      
+  <img src="../../images/logo-abinit-2015.png" alt="logo">
+
+    </a>
+    abinit
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/abinit/abinit/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github-abinit
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      <label class="md-nav__link" for="__nav_1">
+        User Guides
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="User Guides" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          User Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        NewUser
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/abinit/" class="md-nav__link">
+        Abinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/aim/" class="md-nav__link">
+        Aim
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/anaddb/" class="md-nav__link">
+        Anaddb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/atdep/" class="md-nav__link">
+        aTDEP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/cut3d/" class="md-nav__link">
+        Cut3d
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/fold2bloch/" class="md-nav__link">
+        Fold2Bloch
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/mrgddb/" class="md-nav__link">
+        Mrgddb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/mrgscr/" class="md-nav__link">
+        Mrgscr
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/multibinit/" class="md-nav__link">
+        Multibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/optic/" class="md-nav__link">
+        Optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/respfn/" class="md-nav__link">
+        Respfn
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/spacegroup/" class="md-nav__link">
+        Spacegroup
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_14" type="checkbox" id="__nav_1_14" >
+      
+      <label class="md-nav__link" for="__nav_1_14">
+        Installation
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Installation" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_14">
+          <span class="md-nav__icon md-icon"></span>
+          Installation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        HowTo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_MacOS/" class="md-nav__link">
+        MacOS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_Ubuntu/" class="md-nav__link">
+        Ubuntu
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_CentOS/" class="md-nav__link">
+        CentOS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_EasyBuild/" class="md-nav__link">
+        EasyBuild
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_gpu/" class="md-nav__link">
+        GPUs
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Topics
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/features/" class="md-nav__link">
+        Features
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/" class="md-nav__link">
+        Topic List
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Abipy/" class="md-nav__link">
+        Abipy
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/APPA/" class="md-nav__link">
+        APPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Artificial/" class="md-nav__link">
+        Artificial
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/AtomManipulator/" class="md-nav__link">
+        AtomManipulator
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/aTDEP/" class="md-nav__link">
+        aTDEP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/AtomTypes/" class="md-nav__link">
+        AtomTypes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Bader/" class="md-nav__link">
+        Bader
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Band2eps/" class="md-nav__link">
+        Band2eps
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Berry/" class="md-nav__link">
+        Berry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/BandOcc/" class="md-nav__link">
+        BandOcc
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/BSE/" class="md-nav__link">
+        BSE
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/BoundingProcess/" class="md-nav__link">
+        BoundingProcess
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ConstrainedDFT/" class="md-nav__link">
+        ConstrainedDFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ConstrainedPol/" class="md-nav__link">
+        ConstrainedPol
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Control/" class="md-nav__link">
+        Control
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Coulomb/" class="md-nav__link">
+        Coulomb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/CrossingBarriers/" class="md-nav__link">
+        CrossingBarriers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/CRPA/" class="md-nav__link">
+        CRPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/crystal/" class="md-nav__link">
+        Crystal
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DFT%2BU/" class="md-nav__link">
+        DFT+U
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DeltaSCF/" class="md-nav__link">
+        DeltaSCF
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DensityPotential/" class="md-nav__link">
+        DensityPotential
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Dev/" class="md-nav__link">
+        Dev
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DFPT/" class="md-nav__link">
+        DFPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DMFT/" class="md-nav__link">
+        DMFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DynamicsMultibinit/" class="md-nav__link">
+        DynamicsMultibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/EffectiveMass/" class="md-nav__link">
+        EffectiveMass
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/EFG/" class="md-nav__link">
+        EFG
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Elastic/" class="md-nav__link">
+        Elastic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ElPhonInt/" class="md-nav__link">
+        ElPhonInt
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ElPhonTransport/" class="md-nav__link">
+        ElPhonTransport
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ElecDOS/" class="md-nav__link">
+        ElecDOS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ElecBandStructure/" class="md-nav__link">
+        ElecBandStructure
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ExtFPMD/" class="md-nav__link">
+        ExtFPMD
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/FileFormats/" class="md-nav__link">
+        FileFormats
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/FitProcess/" class="md-nav__link">
+        FitProcess
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ForcesStresses/" class="md-nav__link">
+        ForcesStresses
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/FrequencyMeshMBPT/" class="md-nav__link">
+        FrequencyMeshMBPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GeoConstraints/" class="md-nav__link">
+        GeoConstraints
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GeoOpt/" class="md-nav__link">
+        GeoOpt
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Git/" class="md-nav__link">
+        Git
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GSintroduction/" class="md-nav__link">
+        GSintroduction
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GW/" class="md-nav__link">
+        GW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GWls/" class="md-nav__link">
+        GWls
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Hybrids/" class="md-nav__link">
+        Hybrids
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/k-points/" class="md-nav__link">
+        K points
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LatticeModel/" class="md-nav__link">
+        LatticeModel
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LatticeWannier/" class="md-nav__link">
+        LatticeWannier
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LWFModel/" class="md-nav__link">
+        LWFModel
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LDAminushalf/" class="md-nav__link">
+        LDAminushalf
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LOTF/" class="md-nav__link">
+        LOTF
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/longwave/" class="md-nav__link">
+        Longwave
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Macroave/" class="md-nav__link">
+        Macroave
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/MagField/" class="md-nav__link">
+        MagField
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/MagMom/" class="md-nav__link">
+        MagMom
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/MolecularDynamics/" class="md-nav__link">
+        MolecularDynamics
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/multidtset/" class="md-nav__link">
+        Multidtset
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/nonlinear/" class="md-nav__link">
+        Nonlinear
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Optic/" class="md-nav__link">
+        Optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Output/" class="md-nav__link">
+        Output
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/parallelism/" class="md-nav__link">
+        Parallelism
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PAW/" class="md-nav__link">
+        PAW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PIMD/" class="md-nav__link">
+        PIMD
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Planewaves/" class="md-nav__link">
+        Planewaves
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Phonons/" class="md-nav__link">
+        Phonons
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PhononBands/" class="md-nav__link">
+        PhononBands
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PhononWidth/" class="md-nav__link">
+        PhononWidth
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PortabilityNonRegression/" class="md-nav__link">
+        PortabilityNonRegression
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/positron/" class="md-nav__link">
+        Positron
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/printing/" class="md-nav__link">
+        Printing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PseudosPAW/" class="md-nav__link">
+        PseudosPAW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/q-points/" class="md-nav__link">
+        Q points
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/RandStopPow/" class="md-nav__link">
+        RandStopPow
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Recursion/" class="md-nav__link">
+        Recursion
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/RPACorrEn/" class="md-nav__link">
+        RPACorrEn
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SCFControl/" class="md-nav__link">
+        SCFControl
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SCFAlgorithms/" class="md-nav__link">
+        SCFAlgorithms
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SelfEnergy/" class="md-nav__link">
+        SelfEnergy
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SmartSymm/" class="md-nav__link">
+        SmartSymm
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/spinpolarisation/" class="md-nav__link">
+        Spinpolarisation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SpinDynamicsMultibinit/" class="md-nav__link">
+        SpinDynamicsMultibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/STM/" class="md-nav__link">
+        STM
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Susceptibility/" class="md-nav__link">
+        Susceptibility
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/TDDFT/" class="md-nav__link">
+        TDDFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/TDepES/" class="md-nav__link">
+        TDepES
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Temperature/" class="md-nav__link">
+        Temperature
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/TransPath/" class="md-nav__link">
+        TransPath
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/TuningSpeedMem/" class="md-nav__link">
+        TuningSpeedMem
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Unfolding/" class="md-nav__link">
+        Unfolding
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/UnitCell/" class="md-nav__link">
+        UnitCell
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/vdw/" class="md-nav__link">
+        Vdw
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Verification/" class="md-nav__link">
+        Verification
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Wannier/" class="md-nav__link">
+        Wannier
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Wavelets/" class="md-nav__link">
+        Wavelets
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/xc/" class="md-nav__link">
+        Xc
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/external_resources/" class="md-nav__link">
+        External Resources
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Variables
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Variables" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Variables
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/" class="md-nav__link">
+        All Variables
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      <label class="md-nav__link" for="__nav_3_2">
+        Abinit
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Abinit" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Abinit
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/basic/" class="md-nav__link">
+        Basic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/bse/" class="md-nav__link">
+        Bethe-Salpeter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/dev/" class="md-nav__link">
+        Developers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/dmft/" class="md-nav__link">
+        DMFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/eph/" class="md-nav__link">
+        Electron-Phonon
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/ffield/" class="md-nav__link">
+        Varff
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/files/" class="md-nav__link">
+        File-handling
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/geo/" class="md-nav__link">
+        Geometry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/gstate/" class="md-nav__link">
+        Ground-State
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/gw/" class="md-nav__link">
+        GW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/internal/" class="md-nav__link">
+        Internal
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/paral/" class="md-nav__link">
+        Parallelism
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/paw/" class="md-nav__link">
+        PAW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/dfpt/" class="md-nav__link">
+        DFPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/rlx/" class="md-nav__link">
+        Relaxation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/vdw/" class="md-nav__link">
+        VdW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/w90/" class="md-nav__link">
+        Wannier90
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/anaddb/" class="md-nav__link">
+        Anaddb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/atdep/" class="md-nav__link">
+        aTDEP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/multibinit/" class="md-nav__link">
+        Multibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/optic/" class="md-nav__link">
+        Optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/aim/" class="md-nav__link">
+        Aim
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/external_parameters/" class="md-nav__link">
+        External Parameters
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/varset_stats/" class="md-nav__link">
+        Statistics
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      <label class="md-nav__link" for="__nav_4">
+        Tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      <label class="md-nav__link" for="__nav_4_2">
+        Basic tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Basic tutorials" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Basic tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../base1/" class="md-nav__link">
+        basic1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../base2/" class="md-nav__link">
+        basic2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../base3/" class="md-nav__link">
+        basic3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../base4/" class="md-nav__link">
+        basic4
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../abinit_build/" class="md-nav__link">
+        ABINIT_build
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paw1/" class="md-nav__link">
+        PAW1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spin/" class="md-nav__link">
+        Spin
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polarization/" class="md-nav__link">
+        Polarization & finite field
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rf1/" class="md-nav__link">
+        DFPT1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rf2/" class="md-nav__link">
+        DFPT2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basepar/" class="md-nav__link">
+        parallelism
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_10" type="checkbox" id="__nav_4_10" checked>
+      
+      <label class="md-nav__link" for="__nav_4_10">
+        ABINIT postprocessors
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="ABINIT postprocessors" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_10">
+          <span class="md-nav__icon md-icon"></span>
+          ABINIT postprocessors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../atdep1/" class="md-nav__link">
+        aTDEP1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cut3d/" class="md-nav__link">
+        cut3D
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fold2bloch/" class="md-nav__link">
+        fold2bloch
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optic/" class="md-nav__link">
+        optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wannier90/" class="md-nav__link">
+        wannier90
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Z2pack
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Z2pack
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-z2pack-interface-tutorial" class="md-nav__link">
+    The Z2Pack interface tutorial
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-summary-of-z2pack-in-abinit" class="md-nav__link">
+    1. Summary of Z2Pack in ABINIT
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-pressure-dependent-band-inversion-in-bitei" class="md-nav__link">
+    2. Pressure dependent band inversion in BiTeI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-computing-the-z2-invariant-using-z2pack" class="md-nav__link">
+    3. Computing the Z2 invariant using Z2Pack
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-conclusion" class="md-nav__link">
+    4. Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_11" type="checkbox" id="__nav_4_11" >
+      
+      <label class="md-nav__link" for="__nav_4_11">
+        DFT beyond basics
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="DFT beyond basics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          DFT beyond basics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nuc/" class="md-nav__link">
+        properties at the nucleus
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dftu/" class="md-nav__link">
+        DFT+U
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ucalc_crpa/" class="md-nav__link">
+        U_calc_RPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ucalc_lr/" class="md-nav__link">
+        U_calc_LR
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paw2/" class="md-nav__link">
+        PAW2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paw3/" class="md-nav__link">
+        PAW3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../positron/" class="md-nav__link">
+        positron
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_12" type="checkbox" id="__nav_4_12" >
+      
+      <label class="md-nav__link" for="__nav_4_12">
+        Many-Body Theory & excitations
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Many-Body Theory & excitations" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_12">
+          <span class="md-nav__icon md-icon"></span>
+          Many-Body Theory & excitations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gw1/" class="md-nav__link">
+        GW1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gw2/" class="md-nav__link">
+        GW2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bse/" class="md-nav__link">
+        Bethe-Salpeter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dmft/" class="md-nav__link">
+        DMFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tddft/" class="md-nav__link">
+        TDDFT (Casida)
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_13" type="checkbox" id="__nav_4_13" >
+      
+      <label class="md-nav__link" for="__nav_4_13">
+        DFPT & electron-phonon
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="DFPT & electron-phonon" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_13">
+          <span class="md-nav__icon md-icon"></span>
+          DFPT & electron-phonon
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elastic/" class="md-nav__link">
+        elastic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nlo/" class="md-nav__link">
+        nonlinear
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lattice_wannier/" class="md-nav__link">
+        lattice_wannier
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../eph_intro/" class="md-nav__link">
+        eph_intro
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../eph4mob/" class="md-nav__link">
+        eph for mobilities
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../eph4zpr/" class="md-nav__link">
+        eph for zero-point renormalization
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../eph_legacy/" class="md-nav__link">
+        eph_legacy
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../eph_tdep_legacy/" class="md-nav__link">
+        tdepes_legacy
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_14" type="checkbox" id="__nav_4_14" >
+      
+      <label class="md-nav__link" for="__nav_4_14">
+        Multibinit
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Multibinit" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_14">
+          <span class="md-nav__icon md-icon"></span>
+          Multibinit
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multibinit/" class="md-nav__link">
+        introduction to multibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lattice_model/" class="md-nav__link">
+        lattice_model
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spin_model/" class="md-nav__link">
+        spin_model
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lwf_model/" class="md-nav__link">
+        lwf_model
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_15" type="checkbox" id="__nav_4_15" >
+      
+      <label class="md-nav__link" for="__nav_4_15">
+        Advanced parallelism
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Advanced parallelism" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_15">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced parallelism
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paral_bandpw/" class="md-nav__link">
+        paral_band_PW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paral_gswvl/" class="md-nav__link">
+        paral_wavelets
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paral_moldyn/" class="md-nav__link">
+        paral_MD
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paral_images/" class="md-nav__link">
+        paral_images
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paral_dfpt/" class="md-nav__link">
+        paral_DFPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paral_mbt/" class="md-nav__link">
+        paral_MBPT
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        FAQ
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="FAQ" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          FAQ
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/configuration_and_compilation/" class="md-nav__link">
+        Configuration and compilation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/general_questions/" class="md-nav__link">
+        General questions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/pre_and_post_processing/" class="md-nav__link">
+        Pre/Post processing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/ground_state/" class="md-nav__link">
+        Ground state
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/dfpt/" class="md-nav__link">
+        DFPT
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Theory
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Theory" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/geometry/" class="md-nav__link">
+        Geometry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/spherical_harmonics/" class="md-nav__link">
+        Spherical Harmonics
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/wavefunctions/" class="md-nav__link">
+        Wavefunctions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/noncollinear/" class="md-nav__link">
+        Noncollinear
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/pseudopotentials/" class="md-nav__link">
+        Pseudopotentials
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/mbt/" class="md-nav__link">
+        Many-Body Perturbation Theory
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/bse/" class="md-nav__link">
+        Bethe-Salpeter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/documents/" class="md-nav__link">
+        Documents
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/acknowledgments/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/bibliography/" class="md-nav__link">
+        Bibliography
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/acronyms/" class="md-nav__link">
+        Acronyms
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      <label class="md-nav__link" for="__nav_7">
+        Developers
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Developers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Developers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/git_and_gitlab/" class="md-nav__link">
+        Git and Gitlab
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/developers_howto/" class="md-nav__link">
+        HowTo for developers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/abimkdocs/" class="md-nav__link">
+        Abimkdocs
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/markdown/" class="md-nav__link">
+        Markdown
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      <label class="md-nav__link" for="__nav_7_5">
+        Test Suite
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Test Suite" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          Test Suite
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/testsuite/" class="md-nav__link">
+        Test list
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/testsuite_howto/" class="md-nav__link">
+        Test Suite Howto
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/new_testsuite/" class="md-nav__link">
+        YAML-based test suite Howto
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/yaml_tools_api/" class="md-nav__link">
+        YAML-based test suite Python tools and API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/XgType/" class="md-nav__link">
+        XgType
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_7" type="checkbox" id="__nav_7_7" >
+      
+      <label class="md-nav__link" for="__nav_7_7">
+        Pseudos
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Pseudos" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_7">
+          <span class="md-nav__icon md-icon"></span>
+          Pseudos
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp1_info/" class="md-nav__link">
+        psp1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp3_info/" class="md-nav__link">
+        psp3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp45_info/" class="md-nav__link">
+        psp45
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp5spinorbit_info/" class="md-nav__link">
+        psp5
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp6_info/" class="md-nav__link">
+        psp6
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp8_info/" class="md-nav__link">
+        psp8
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/codestats/" class="md-nav__link">
+        Code stats
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/autoconf_examples/" class="md-nav__link">
+        Autoconf_examples
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/testlink/" class="md-nav__link">
+        Test Page for linkcheck
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      <label class="md-nav__link" for="__nav_8">
+        About
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/release-notes/" class="md-nav__link">
+        Release Notes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/history/" class="md-nav__link">
+        History
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-z2pack-interface-tutorial" class="md-nav__link">
+    The Z2Pack interface tutorial
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-summary-of-z2pack-in-abinit" class="md-nav__link">
+    1. Summary of Z2Pack in ABINIT
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-pressure-dependent-band-inversion-in-bitei" class="md-nav__link">
+    2. Pressure dependent band inversion in BiTeI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-computing-the-z2-invariant-using-z2pack" class="md-nav__link">
+    3. Computing the Z2 invariant using Z2Pack
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-conclusion" class="md-nav__link">
+    4. Conclusion
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+
+                
+                  <a href="https://github.com/abinit/abinit/edit/master/doc/tutorial/z2pack.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="z2pack-postprocessor">Z2Pack postprocessor<a class="headerlink" href="#z2pack-postprocessor" title="Permanent link">&para;</a></h1>
+<h2 id="the-z2pack-interface-tutorial">The Z2Pack interface tutorial<a class="headerlink" href="#the-z2pack-interface-tutorial" title="Permanent link">&para;</a></h2>
+<p>This tutorial aims at showing how to use the
+<a href="https://z2pack.greschd.ch/en/latest/index.html">Z2Pack</a> application
+with an interface to ABINIT, to compute
+the Z2 topological invariant and find topologically non-trivial insulators.</p>
+<p>You will learn how to use Wannier90 and Z2Pack to follow Wannier charge centers
+which allow to compute the Z2 topological invariant.
+You will be reproducing some of the results obtained in <a class="wikilink citation-wikilink" data-tippy-content="Temperature dependence of the topological phase transition of BiTeI from first principles" data-toggle="popover" href="/theory/bibliography#brousseau-couture2020">[Brousseau-Couture2020]</a>,
+where it it shown that BiTeI is a trivial insulator at 0GPa but undergoes a transition
+to a non-trivial insulating phase under isotropic pressure. At 5GPa, the material is
+a non-trivial topological insulator.</p>
+<p>You already should know about the interface between ABINIT and Wannier90 
+(see the tutorial <a href="/tutorial/wannier90">Wannier90</a>).
+This tutorial should take about 1 hour. It is important to note that the examples in this tutorial
+are not converged, they are just examples to show how to use the code.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Supposing you made your own installation of ABINIT, the input files to run the examples
+are in the <em>~abinit/tests/</em> directory where <em>~abinit</em> is the <strong>absolute path</strong> of the abinit top-level directory.
+If you have NOT made your own install, ask your system administrator where to find the package,
+especially the executable and test files.</p>
+<p>In case you work on your own PC or workstation, to make things easier, we suggest you define
+some handy environment variables by executing the following lines in the terminal:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span> <span class="nv">ABI_HOME</span><span class="o">=</span>Replace_with_absolute_path_to_abinit_top_level_dir <span class="c1"># Change this line</span>
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$ABI_HOME</span>/src/98_main/:<span class="nv">$PATH</span>      <span class="c1"># Do not change this line: path to executable</span>
+<span class="nb">export</span> <span class="nv">ABI_TESTS</span><span class="o">=</span><span class="nv">$ABI_HOME</span>/tests/             <span class="c1"># Do not change this line: path to tests dir</span>
+<span class="nb">export</span> <span class="nv">ABI_PSPDIR</span><span class="o">=</span><span class="nv">$ABI_TESTS</span>/Psps_for_tests/  <span class="c1"># Do not change this line: path to pseudos dir</span>
+</code></pre></div>
+<p>Examples in this tutorial use these shell variables: copy and paste
+the code snippets into the terminal (<strong>remember to set ABI_HOME first!</strong>) or, alternatively,
+source the <code>set_abienv.sh</code> script located in the <em>~abinit</em> directory:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span> ~abinit/set_abienv.sh
+</code></pre></div>
+<p>The &lsquo;export PATH&rsquo; line adds the directory containing the executables to your <a href="http://www.linfo.org/path_env_var.html">PATH</a>
+so that you can invoke the code by simply typing <em>abinit</em> in the terminal instead of providing the absolute path.</p>
+<p>To execute the tutorials, create a working directory (<code>Work*</code>) and
+copy there the input files of the lesson.</p>
+<p>Most of the tutorials do not rely on parallelism (except specific <a class="wikilink lesson-wikilink" href="/tutorial/basepar">tutorials on parallelism</a>).
+However you can run most of the tutorial examples in parallel with MPI, see the <a class="wikilink topic-wikilink" data-tippy-content="How to set parameters for a parallel calculation" data-toggle="popover" href="/topics/parallelism">topic on parallelism</a>.</p>
+</div>
+<h2 id="1-summary-of-z2pack-in-abinit">1. Summary of Z2Pack in ABINIT<a class="headerlink" href="#1-summary-of-z2pack-in-abinit" title="Permanent link">&para;</a></h2>
+<p>Z2Pack is a code that enables the calculation of topological invariants from model 
+Hamiltonians, as well as from first-principles calculations.
+It is highly recommended to read the following papers to understand its basics:
+<a class="wikilink citation-wikilink" data-tippy-content="Z2Pack: Numerical implementation of hybrid Wannier centers for identifying topological materials" data-toggle="popover" href="/theory/bibliography#gresch2017">[Gresch2017]</a> and <a class="wikilink citation-wikilink" data-tippy-content="Calculating Topological Invariants with Z2Pack" data-toggle="popover" href="/theory/bibliography#gresch2018">[Gresch2018]</a>.</p>
+<p>Z2Pack starts from a one-particle Hamiltonian <span><span class="MathJax_Preview">H(\textbf{k})</span><script type="math/tex">H(\textbf{k})</script></span>  which describes the electronic states in a crystalline material.
+Its eigenvectors are so-called <em>Bloch states</em> <span><span class="MathJax_Preview">| \psi_{n,\textbf{k}} \rangle</span><script type="math/tex">| \psi_{n,\textbf{k}} \rangle</script></span>. 
+They are superpositions of plane waves with wave vector <span><span class="MathJax_Preview">\textbf{k}</span><script type="math/tex">\textbf{k}</script></span>.
+Bloch states can be written as <span><span class="MathJax_Preview">| \psi_{n, \textbf{k}} \rangle = e^{i\textbf{k} \cdot \textbf{r}} | u_{n, \textbf{k}} \rangle</span><script type="math/tex">| \psi_{n, \textbf{k}} \rangle = e^{i\textbf{k} \cdot \textbf{r}} | u_{n, \textbf{k}} \rangle</script></span>
+where <span><span class="MathJax_Preview">|u_{n, \textbf{k}} \rangle</span><script type="math/tex">|u_{n, \textbf{k}} \rangle</script></span> is cell-periodic.
+Taking into account the shape of the Bloch states leads to a topological classification of materials.</p>
+<p>The topological classification of materials is based on a topological invariant called the Chern number.
+For a closed, orientable two-dimensional surface <span><span class="MathJax_Preview">S</span><script type="math/tex">S</script></span> in reciprocal space, the Chern number invariant <span><span class="MathJax_Preview">C</span><script type="math/tex">C</script></span>
+can be defined in terms of the cell-periodic states in a set <span><span class="MathJax_Preview">B</span><script type="math/tex">B</script></span> of bands as 
+<span><span class="MathJax_Preview">C = \frac{i}{2\pi} \sum_{n\in B}  \int_S \nabla_{\textbf{k}} \wedge \langle u_{n, \textbf{k}} | \nabla_{\textbf{k}} | u_{n, \textbf{k}} \rangle \cdot d\textbf{S}</span><script type="math/tex">C = \frac{i}{2\pi} \sum_{n\in B}  \int_S \nabla_{\textbf{k}} \wedge \langle u_{n, \textbf{k}} | \nabla_{\textbf{k}} | u_{n, \textbf{k}} \rangle \cdot d\textbf{S}</script></span>.</p>
+<p>There are various ways to calculate the Chern number that are easier numerically.
+One involves dividing the surface <span><span class="MathJax_Preview">S</span><script type="math/tex">S</script></span> into small segments, which correspond to calculating the Berry phase for closed loops in the Brillouin zone.
+These can then be expressed as Wilson loops, for which the eigenvalues are connected to the total Berry phase.</p>
+<p>Another approach used by Z2Pack is to compute the so-called Wannier charge centers,
+which is based on the notion of Wannier orbitals.
+These are given by Fourier transforming the Bloch states
+<span><span class="MathJax_Preview">|\textbf{R}n\rangle = \frac{V}{(2\pi)^d} \int_{BZ} e^{-i\textbf{k} \cdot \textbf{R}} | \psi_{n, \textbf{k}} \rangle d\textbf{k}</span><script type="math/tex">|\textbf{R}n\rangle = \frac{V}{(2\pi)^d} \int_{BZ} e^{-i\textbf{k} \cdot \textbf{R}} | \psi_{n, \textbf{k}} \rangle d\textbf{k}</script></span> where <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> is the dimensionality of the system and <span><span class="MathJax_Preview">V</span><script type="math/tex">V</script></span> the unit cell volume.
+These orbitals can be changed by a Gauge transformation which affects their localization and position in real space.
+To compute topological invariants, hybrid Wannier orbitals are introduced: they are Fourier transforms performed only in one spatial direction, for example <span><span class="MathJax_Preview">|\textbf{R}_x, k_y, k_z; n \rangle = \frac{a_x}{2\pi} \int^{\pi/a_x}_{-\pi/ax} e^{-ik_xR_x} | \psi_{n \textbf{k}} \rangle</span><script type="math/tex">|\textbf{R}_x, k_y, k_z; n \rangle = \frac{a_x}{2\pi} \int^{\pi/a_x}_{-\pi/ax} e^{-ik_xR_x} | \psi_{n \textbf{k}} \rangle</script></span>.</p>
+<p>The average position of such orbital depend on the remaining reciprocal space variables:
+<span><span class="MathJax_Preview">\bar{x}_n(k_y, k_z) = \langle 0, k_y, k_z; n | \hat{x} | 0, k_y, k_z; n\rangle.</span><script type="math/tex">\bar{x}_n(k_y, k_z) = \langle 0, k_y, k_z; n | \hat{x} | 0, k_y, k_z; n\rangle.</script></span>
+This quantity is called the hybrid Wannier charge center and it is directly related to the Berry phase as
+<span><span class="MathJax_Preview">C = \frac{1}{a} \sum_n \bar{x}_n</span><script type="math/tex">C = \frac{1}{a} \sum_n \bar{x}_n</script></span>.
+This procedure of segmenting the surface is illustrated in <a class="wikilink citation-wikilink" data-tippy-content="Calculating Topological Invariants with Z2Pack" data-toggle="popover" href="/theory/bibliography#gresch2018">[Gresch2018]</a> Figure 6.</p>
+<p>The equivalence between hybrid Wannier charge centers and the Berry phase gives rise to a physical interpretation of the Chern number as a charge pumping process, where each cycle of <span><span class="MathJax_Preview">k_x</span><script type="math/tex">k_x</script></span> moves the charge by <span><span class="MathJax_Preview">C</span><script type="math/tex">C</script></span> unit cells.</p>
+<p>For time-reversal invariant systems, the total Chern number is zero as 
+the Chern numbers of Kramers partners cancel each other.
+We will rather compute the Z2 invariant, which can only take values of 0 or 1.
+Z2Pack can handle this calculation in the following way.
+By fixing one reciprocal space coordinate at a time-reversal invariant value
+(i.e. <span><span class="MathJax_Preview">k_i=0</span><script type="math/tex">k_i=0</script></span> or <span><span class="MathJax_Preview">k_i=0.5</span><script type="math/tex">k_i=0.5</script></span> in reduced coordinates), we can define a surface in 
+reciprocal space which contains its own time-reversal image.
+Using the hybrid Wannier charge centers computed on this surface, we can
+then define a surface invariant <span><span class="MathJax_Preview">\Delta\in\{0,1\}</span><script type="math/tex">\Delta\in\{0,1\}</script></span>, which can be intuitively
+understood as the Chern number mod 2 of one subset of Kramers partners.
+More details about how Z2Pack handles this calculation will be provided later.</p>
+<p>To compute the surface invariant <span><span class="MathJax_Preview">\Delta</span><script type="math/tex">\Delta</script></span>, Z2pack needs 2 inputs: a description
+of the system and the surface on which the invariant should be calculated.
+In the interface with ABINIT, Z2Pack will start from a computed ground state and 
+perform the Wannierization on lines in the Brillouin zone.
+At the end, it can sum mod 2 the surface invariants obtained on the two 
+time-reversal invariant surfaces to evaluate the Z2 invariant.</p>
+<p>Before we actually compute the Z2 invariant, we will take a look at another indication of non-trivial topology: band inversion.</p>
+<h2 id="2-pressure-dependent-band-inversion-in-bitei">2. Pressure dependent band inversion in BiTeI<a class="headerlink" href="#2-pressure-dependent-band-inversion-in-bitei" title="Permanent link">&para;</a></h2>
+<p>Before beginning, you might consider working in a different sub-directory as for the other tutorials.
+Follow these instructions which take you to the right folder, create a subfolder called <em>Work_z2pack</em> and
+copy the first calculation:</p>
+<div class="codehilite"><pre><span></span><code>cd $ABI_TESTS/tutoplugs/Input
+mkdir Work_z2pack &amp;&amp; cd Work_z2pack
+cp ../tz2_2.abi .
+</code></pre></div>
+
+<p>You are now ready to run abinit by using (here for four cores - other number of cores or sequential runs are possible as well) :</p>
+<div class="codehilite"><pre><span></span><code>mpirun -n 4 abinit tz2_2.abi &gt; log 2&gt; err &amp;
+</code></pre></div>
+
+<p>Let us examine the input file <em>tz2_2.abi</em>, while the calculation is running:.</p>
+<div class="text-center"><button id="uuid-ddebfad0-309b-4fc7-899c-64bbbc688181" class="md-button md-button--secondary"> View tests/tutoplugs/Input/tz2_2.abi </button></div>
+<div id="uuid-e9681d75-f235-43e8-bced-906945a4f2e1" class="my_dialog" title="tests/tutoplugs/Input/tz2_2.abi" hidden><div><div class="codehilite small-text"><pre><span></span><span class="c1"># Ground state calculation for BiTeI at 0 GPa</span>
+
+autoparal <span class="m">1</span>
+pp_dirpath <span class="s2">&quot;</span><span class="nv">$ABI_PSPDIR</span><span class="s2">/Pseudodojo_nc_fr_04_pbe_standard_psp8/&quot;</span>
+pseudos <span class="s2">&quot;Bi.psp8,Te.psp8,I.psp8&quot;</span>
+
+ndtset <span class="m">6</span>
+udtset <span class="m">2</span> <span class="m">3</span>
+
+<span class="c1"># Unit cell</span>
+ntypat  <span class="m">3</span>
+znucl   <span class="m">83</span> <span class="m">52</span> <span class="m">53</span> 
+natom   <span class="m">3</span>
+typat   <span class="m">1</span> <span class="m">2</span> <span class="m">3</span> 
+
+acell1?    <span class="m">8</span>.3956 <span class="m">8</span>.3956 <span class="m">13</span>.7627 
+rprim1?    <span class="m">0</span>.86602540378 <span class="m">0</span>.5 <span class="m">0</span>.0 
+          -0.86602540378 <span class="m">0</span>.5 <span class="m">0</span>.0 
+           <span class="m">0</span>.0 <span class="m">0</span>.0 <span class="m">1</span>.0 
+xred1?    <span class="m">0</span>.0000000000E+00  <span class="m">0</span>.0000000000E+00  <span class="m">1</span>.953E-03 <span class="c1"># Bi</span>
+          <span class="m">6</span>.6666666667E-01 <span class="m">3</span>.3333333333E-01 <span class="m">2</span>.36867E-01 <span class="c1"># Te</span>
+          <span class="m">3</span>.3333333333E-01 <span class="m">6</span>.6666666667E-01 <span class="m">7</span>.11179E-01 <span class="c1"># I</span>
+
+acell2?    <span class="m">8</span>.0007E+00 <span class="m">8</span>.0007E+00 <span class="m">1</span>.23580E+01
+rprim2?    <span class="m">0</span>.86602540378 <span class="m">0</span>.5 <span class="m">0</span>.0 
+          -0.86602540378 <span class="m">0</span>.5 <span class="m">0</span>.0 
+           <span class="m">0</span>.0 <span class="m">0</span>.0 <span class="m">1</span>.0 
+xred2?    <span class="m">0</span>.0000000000E+00  <span class="m">0</span>.0000000000E+00  <span class="m">4</span>.186E-03 <span class="c1"># Bi</span>
+          <span class="m">6</span>.6666666667E-01 <span class="m">3</span>.3333333333E-01 <span class="m">2</span>.72237E-01 <span class="c1"># Te</span>
+          <span class="m">3</span>.3333333333E-01 <span class="m">6</span>.6666666667E-01 <span class="m">6</span>.73578E-01 <span class="c1"># I</span>
+
+<span class="c1"># Ground state calculation</span>
+ecut       <span class="m">15</span> <span class="c1"># unconverged</span>
+nspinor    <span class="m">2</span> <span class="c1"># WFK are spinors</span>
+
+kptopt?1     <span class="m">1</span>
+ngkpt?1  <span class="m">6</span> <span class="m">6</span> <span class="m">6</span> 
+nshiftk?1  <span class="m">1</span>
+shiftk?1   <span class="m">0</span>.0 <span class="m">0</span>.0 <span class="m">0</span>.5 
+
+prtden?1 <span class="m">1</span>
+tolvrs?1     <span class="m">1</span>.0e-10 <span class="c1"># unconverged</span>
+nstep?1   <span class="m">30</span> 
+nband?1 <span class="m">40</span>
+nbdbuf    <span class="m">2</span> <span class="c1"># Buffer to ease convergence</span>
+prtwf <span class="m">0</span>
+diemac    <span class="m">12</span>  
+enunit    <span class="m">1</span>   
+
+<span class="c1"># Full bandstructure</span>
+iscf?2 -2
+getden?2 -1
+kptopt?2 -7
+ndivsm?2 <span class="m">5</span>
+kptbounds?2 <span class="m">0</span>.5 <span class="m">0</span>.0 <span class="m">0</span>.0 <span class="c1">#M</span>
+          <span class="m">0</span>.0 <span class="m">0</span>.0 <span class="m">0</span>.0 <span class="c1">#Gamma</span>
+          <span class="m">1</span>/3 <span class="m">1</span>/3 <span class="m">0</span>.0 <span class="c1">#K</span>
+          <span class="m">1</span>/3 <span class="m">1</span>/3 <span class="m">0</span>.5 <span class="c1">#H</span>
+          <span class="m">0</span>.0 <span class="m">0</span>.0 <span class="m">0</span>.5 <span class="c1">#A</span>
+          <span class="m">0</span>.5 <span class="m">0</span>.0 <span class="m">0</span>.5 <span class="c1">#L</span>
+          <span class="m">1</span>.0 <span class="m">0</span>.0 <span class="m">0</span>.0 <span class="c1">#Gamma</span>
+          <span class="m">1</span>.0 <span class="m">0</span>.0 <span class="m">0</span>.5 <span class="c1">#A</span>
+tolwfr?2     <span class="m">1</span>.0e-6 <span class="c1"># unconverged</span>
+nband?2 <span class="m">50</span>
+
+<span class="c1"># Bandstructure and fatbands on H-A-L path</span>
+iscf?3 -2
+getden?3 -2
+kptopt?3 -2
+prtdos?3 <span class="m">3</span>
+ndivsm?3 <span class="m">15</span>
+kptbounds?3 <span class="m">1</span>/6 <span class="m">1</span>/6 <span class="m">0</span>.5 <span class="c1">#0.5H</span>
+          <span class="m">0</span>.0 <span class="m">0</span>.0 <span class="m">0</span>.5 <span class="c1">#A</span>
+          <span class="m">0</span>.25 <span class="m">0</span>.0 <span class="m">0</span>.5 <span class="c1">#0.5L</span>
+
+tolwfr?3     <span class="m">1</span>.0e-6  <span class="c1"># unconverged</span>
+nband?3 <span class="m">50</span>
+ratsph?3 <span class="m">2</span>.5 <span class="m">1</span>.9 <span class="m">2</span>.15
+
+
+<span class="c1">##############################################################</span>
+<span class="c1"># This section is used only for regression testing of ABINIT #</span>
+<span class="c1">##############################################################</span>
+<span class="c1">#%%&lt;BEGIN TEST_INFO&gt;</span>
+<span class="c1">#%% [setup]</span>
+<span class="c1">#%% executable = abinit</span>
+<span class="c1">#%% [paral_info]                                                                </span>
+<span class="c1">#%% max_nprocs = 10                                                              </span>
+<span class="c1">#%% nprocs_to_test = 10                                                          </span>
+<span class="c1">#%% [NCPU_10]                                                                    </span>
+<span class="c1">#%% files_to_test =</span>
+<span class="c1">#%%    tz2_2_MPI10.abo, tolnlines=5, tolabs=7.00e-05, tolrel=1.10e+00, fld_options=-medium</span>
+<span class="c1">#%% [extra_info]</span>
+<span class="c1">#%% authors = O. Gingras, V. Brousseau-Couture</span>
+<span class="c1">#%% keywords = wannier90, z2pack, fatbands</span>
+<span class="c1">#%% description = Test interface with Z2Pack (NC pseudopotentials)</span>
+<span class="c1">#%%&lt;END TEST_INFO&gt;</span>
+<span class="c1">#</span>
+</pre></div>
+</div></div>
+
+<script> $(function() { abidocs_jqueryui_dialog("#uuid-e9681d75-f235-43e8-bced-906945a4f2e1", "#uuid-ddebfad0-309b-4fc7-899c-64bbbc688181") }); </script>
+
+<p>This input file should look familiar, as it involves features of ABINIT that you probably already used.
+It is constructed into two loops of three datasets.
+The first big loop uses the system at 0 GPa while the second is performed at 5 GPa.
+In each of these big loops, the first computation calculates the ground state on a coarse grid,
+the second one computes the band structure along high-symmetry paths in the entire Brillouin zone
+and the third one is the calculation of fatbands which outputs the orbital character of the different bands, only along a specific path.</p>
+<p>Let us compare the band structure. We use a small python script based on abipy:</p>
+<div class="text-center"><button id="uuid-a513f36e-f21d-46e4-9d7b-f81cabe35d40" class="md-button md-button--secondary"> View tests/tutoplugs/Input/tz2_2_bandstructure.py </button></div>
+<div id="uuid-8c29d89d-2f9d-423d-8439-1ac9e4c115c7" class="my_dialog" title="tests/tutoplugs/Input/tz2_2_bandstructure.py" hidden><div><div class="codehilite small-text"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">from</span> <span class="nn">abipy.abilab</span> <span class="kn">import</span> <span class="n">abiopen</span>
+<span class="kn">import</span> <span class="nn">abipy.data</span> <span class="k">as</span> <span class="nn">abidata</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">flist</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tz2_2o_DS12_GSR.nc&quot;</span><span class="p">,</span> <span class="s2">&quot;tz2_2o_DS22_GSR.nc&quot;</span><span class="p">]</span>
+<span class="n">flist_gap</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tz2_2o_DS13_FATBANDS.nc&quot;</span><span class="p">,</span> <span class="s2">&quot;tz2_2o_DS23_FATBANDS.nc&quot;</span><span class="p">]</span>
+
+
+<span class="n">gspec</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">height_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot_mosaic</span><span class="p">([[</span><span class="s1">&#39;full0&#39;</span><span class="p">,</span> <span class="s1">&#39;gap0&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;full5&#39;</span><span class="p">,</span> <span class="s1">&#39;gap5&#39;</span><span class="p">]],</span>
+                             <span class="n">gridspec_kw</span><span class="o">=</span><span class="n">gspec</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+                             <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;full0&#39;</span><span class="p">,</span> <span class="s1">&#39;full5&#39;</span><span class="p">]</span>
+<span class="n">ax_gap_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gap0&#39;</span><span class="p">,</span> <span class="s1">&#39;gap5&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">full</span> <span class="o">=</span> <span class="n">abiopen</span><span class="p">(</span><span class="n">flist</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">ebands</span>
+    <span class="n">full</span><span class="o">.</span><span class="n">set_fermie_to_vbm</span><span class="p">()</span>
+    <span class="n">full</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">with_gaps</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ylims</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">ax_list</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">gap</span> <span class="o">=</span> <span class="n">abiopen</span><span class="p">(</span><span class="n">flist_gap</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">ebands</span>
+    <span class="n">gap</span><span class="o">.</span><span class="n">set_fermie_to_vbm</span><span class="p">()</span>
+    <span class="n">gap</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">with_gaps</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ylims</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">ax_gap_list</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="n">ax</span><span class="p">[</span><span class="s1">&#39;full5&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;5 GPa&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="s1">&#39;full0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;0 GPa&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="s1">&#39;gap5&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">gap</span><span class="o">.</span><span class="n">kpoints</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="s1">&#39;gap5&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;0.5H&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;0.5L&#39;</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="s1">&#39;gap0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">gap</span><span class="o">.</span><span class="n">kpoints</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="s1">&#39;gap0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;0.5H&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;0.5L&#39;</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;tz2_2_bandstructure.pdf&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div></div>
+
+<script> $(function() { abidocs_jqueryui_dialog("#uuid-8c29d89d-2f9d-423d-8439-1ac9e4c115c7", "#uuid-a513f36e-f21d-46e4-9d7b-f81cabe35d40") }); </script>
+
+<p>Run it using:</p>
+<div class="codehilite"><pre><span></span><code>python ../tz2_2_bandstructure.py
+</code></pre></div>
+
+<p>You should get a less resolved version of the following figure:</p>
+<p><img alt="" src="../z2pack_assets/tz2_2_bandstructure.png" /> </p>
+<p>The path of this band structure is first along a high-symmetry path in the <span><span class="MathJax_Preview">k_z=0</span><script type="math/tex">k_z=0</script></span> plane
+<span><span class="MathJax_Preview">(M-\Gamma-K)</span><script type="math/tex">(M-\Gamma-K)</script></span>.
+Then is goes out of plane to the <span><span class="MathJax_Preview">k_z=\pi/c</span><script type="math/tex">k_z=\pi/c</script></span> plane (<span><span class="MathJax_Preview">K</span><script type="math/tex">K</script></span>-<span><span class="MathJax_Preview">H</span><script type="math/tex">H</script></span>).
+It then goes in along the same path as in the <span><span class="MathJax_Preview">k_z=0</span><script type="math/tex">k_z=0</script></span> plane, but translated to the <span><span class="MathJax_Preview">k_z=\pi/c</span><script type="math/tex">k_z=\pi/c</script></span> one (<span><span class="MathJax_Preview">H</span><script type="math/tex">H</script></span>-<span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span>-<span><span class="MathJax_Preview">L</span><script type="math/tex">L</script></span>).</p>
+<p>At first glance, the two figures in the right column look very similar, as they are both gapped.
+The band gap energy is slightly smaller at 5 GPa compared to the 0 GPa value,
+which seems to indicate that the band gap of BiTeI closes with increasing pressure.
+However, if we compute the pressure dependence of the band gap energy between these two pressures,
+we will observe that the band gap decreases up to P\sim 2 GPa (and almost vanishes),
+then starts to \textit{increase} as pressure is further increased (see Figure 4 of <a class="wikilink citation-wikilink" data-tippy-content="Temperature dependence of the topological phase transition of BiTeI from first principles" data-toggle="popover" href="/theory/bibliography#brousseau-couture2020">[Brousseau-Couture2020]</a>).
+Knowing that a topological phase transition must be accompanied by a closing of the band gap,
+this behavior suggests that one of those pressures might have a non-trivial topology.
+If this is the case, the electronic bands in the non-trivial phase would display a band inversion.</p>
+<p>Around the <span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> point, one can notice some band dispersions characteristic of band inversion.
+In order to check whether or not there is inversion of character between bands which are gapped due to spin-orbit coupling,
+we plot the fatbands.
+One can use the fatbands plotting feature of abipy as used in the <a href="/tutorial/wannier90">Wannier90</a> tutorial,
+but instead here we will use a more advanced script which plots the difference in character between
+the p orbitals of bismuth and of those of both the tellurium and iodine.
+This procedure makes more clear the band inversion and the script is the following:</p>
+<div class="text-center"><button id="uuid-307f82b6-1f0e-4e49-b5ac-cf305c4b022b" class="md-button md-button--secondary"> View tests/tutoplugs/Input/tz2_2_relative_projection.py </button></div>
+<div id="uuid-780bf31f-9a57-4290-92a3-26c4277a1d68" class="my_dialog" title="tests/tutoplugs/Input/tz2_2_relative_projection.py" hidden><div><div class="codehilite small-text"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">from</span> <span class="nn">abipy.abilab</span> <span class="kn">import</span> <span class="n">abiopen</span>
+<span class="kn">import</span> <span class="nn">abipy.data</span> <span class="k">as</span> <span class="nn">abidata</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
+
+<span class="k">def</span> <span class="nf">get_projection</span><span class="p">(</span><span class="n">fb</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">typat</span><span class="p">,</span> <span class="n">blist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fact</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="c1"># This function was adapted from the plot_fatbands_typeview function</span>
+    <span class="n">e0</span> <span class="o">=</span> <span class="n">fb</span><span class="o">.</span><span class="n">ebands</span><span class="o">.</span><span class="n">get_e0</span><span class="p">(</span><span class="s1">&#39;fermie&#39;</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">fb</span><span class="o">.</span><span class="n">nkpt</span><span class="p">)</span>
+
+    <span class="n">mybands</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">fb</span><span class="o">.</span><span class="n">ebands</span><span class="o">.</span><span class="n">mband</span><span class="p">)</span> <span class="k">if</span> <span class="n">blist</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">blist</span>
+
+    <span class="n">eigens</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">fb</span><span class="o">.</span><span class="n">nkpt</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mybands</span><span class="p">)))</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">eigens</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">typat</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">spin</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fb</span><span class="o">.</span><span class="n">nsppol</span><span class="p">):</span>
+            <span class="n">wl_sbk</span> <span class="o">=</span> <span class="n">fb</span><span class="o">.</span><span class="n">get_wl_symbol</span><span class="p">(</span><span class="n">symbol</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">fact</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">ib</span><span class="p">,</span> <span class="n">band</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mybands</span><span class="p">):</span>
+
+                <span class="n">eigens</span><span class="p">[:,</span> <span class="n">ib</span><span class="p">]</span> <span class="o">=</span> <span class="n">fb</span><span class="o">.</span><span class="n">ebands</span><span class="o">.</span><span class="n">eigens</span><span class="p">[</span><span class="n">spin</span><span class="p">,</span> <span class="p">:,</span> <span class="n">band</span><span class="p">]</span> <span class="o">-</span> <span class="n">e0</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">wl_sbk</span><span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="n">spin</span><span class="p">,</span> <span class="n">band</span><span class="p">]</span>
+                <span class="n">width</span><span class="p">[:,</span> <span class="n">ib</span><span class="p">]</span> <span class="o">+=</span> <span class="n">w</span>
+
+    <span class="k">return</span> <span class="n">eigens</span><span class="p">,</span> <span class="n">width</span>
+
+<span class="k">def</span> <span class="nf">plot_relative_projection</span><span class="p">(</span><span class="n">eigen</span><span class="p">,</span> <span class="n">proj1</span><span class="p">,</span> <span class="n">proj2</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+    <span class="c1"># comptute relative projection and transform to [0,1] interval</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">proj1</span> <span class="o">-</span> <span class="n">proj2</span>
+    <span class="n">diff</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+    <span class="n">maxproj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">diff</span><span class="o">/</span><span class="n">maxproj</span>
+
+    <span class="k">for</span> <span class="n">ib</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">diff</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">ax0</span> <span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">eigen</span><span class="p">[:,</span> <span class="n">ib</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">diff</span><span class="p">[:,</span> <span class="n">ib</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;seismic&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ax0</span>
+
+
+<span class="n">flist</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;tz2_2o_DS13_FATBANDS.nc&quot;</span><span class="p">,</span> <span class="s2">&quot;tz2_2o_DS23_FATBANDS.nc&quot;</span><span class="p">]</span>
+
+<span class="n">title</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;0GPa&#39;</span><span class="p">,</span> <span class="s1">&#39;5GPa&#39;</span><span class="p">]</span>
+<span class="n">bands</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span><span class="mi">40</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span><span class="mi">40</span><span class="p">)]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">flist</span><span class="p">),</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">flist</span><span class="p">),</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">flist</span><span class="p">)):</span>
+    <span class="c1"># plot electronic bands</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">abiopen</span><span class="p">(</span><span class="n">flist</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">ebands</span><span class="o">.</span><span class="n">set_fermie_to_vbm</span><span class="p">()</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">ebands</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">with_gaps</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ylims</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+    <span class="c1"># compute Bi-p projections</span>
+    <span class="n">bi_eigen</span><span class="p">,</span> <span class="n">bi_proj</span> <span class="o">=</span> <span class="n">get_projection</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">typat</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Bi&#39;</span><span class="p">],</span> <span class="n">blist</span><span class="o">=</span><span class="n">bands</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+    <span class="c1"># compute the sum of Te-p and I-p projections</span>
+    <span class="n">tei_eigen</span><span class="p">,</span> <span class="n">tei_proj</span> <span class="o">=</span> <span class="n">get_projection</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">typat</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Te&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">],</span> <span class="n">blist</span><span class="o">=</span><span class="n">bands</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+    <span class="c1"># compute and plot relative projection</span>
+    <span class="n">relplot</span> <span class="o">=</span> <span class="n">plot_relative_projection</span><span class="p">(</span><span class="n">bi_eigen</span><span class="p">,</span> <span class="n">bi_proj</span><span class="p">,</span> <span class="n">tei_proj</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">nkpt</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+    <span class="n">ax</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+    <span class="n">ax</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">nkpt</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;0.5H&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;0.5L&#39;</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">cax</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s2">&quot;7%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">relplot</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cax</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="s1">&#39;(Te+I)$_p$&#39;</span><span class="p">,</span> <span class="s1">&#39;Bi$_p$&#39;</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;tz2_2_relative_projection.png&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div></div>
+
+<script> $(function() { abidocs_jqueryui_dialog("#uuid-780bf31f-9a57-4290-92a3-26c4277a1d68", "#uuid-307f82b6-1f0e-4e49-b5ac-cf305c4b022b") }); </script>
+
+<div class="codehilite"><pre><span></span><code>cp -r ../input_tz2_3/ .
+python ../tz2_2_relative_projection.py
+</code></pre></div>
+
+<p>which produces a less converged version of this figure:</p>
+<p><img alt="" src="../z2pack_assets/tz2_2_relative_projection.png" /></p>
+<p>At 0 GPa, there is no band inversion while at 5 GPa, there is one around the <span><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> point.
+We thus suspect that there is a non-trivial Z2 invariant for this material,
+that we will now compute using Z2Pack.</p>
+<h2 id="3-computing-the-z2-invariant-using-z2pack">3. Computing the Z2 invariant using Z2Pack<a class="headerlink" href="#3-computing-the-z2-invariant-using-z2pack" title="Permanent link">&para;</a></h2>
+<p>You need first to install Z2Pack, if not yet available on your computer.
+Please, see <a href="https://z2pack.greschd.ch/en/latest/index.html">Z2Pack home</a>, or directly
+the <a href="https://z2pack.greschd.ch/en/latest/tutorial/installation.html">Installation and setup information</a>.</p>
+<p>Then, to run the example presented in this section, you need to download four big files from GitHub, 
+<a href="https://github.com/abinit/abinit_assets/tree/main/tests/tutoplugs/Input/results_tz2_3">https://github.com/abinit/abinit_assets/tree/main/tests/tutoplugs/Input/results_tz2_3</a> ,
+and store them in the directory results_tz2_3, such that</p>
+<div class="codehilite"><pre><span></span><code>ls results_tz2_3
+BiTeI_0.msgpack  BiTeI_1.msgpack  BiTeI_2.msgpack  BiTeI_3.msgpack
+</code></pre></div>
+
+<p>You will now launch the script for ABINIT with Z2Pack:</p>
+<div class="codehilite"><pre><span></span><code>cp -r ../input_tz2_3/ .
+python ../z2.py
+</code></pre></div>
+
+<p>given by the following file:</p>
+<div class="text-center"><button id="uuid-c52d86d7-e0b9-48f7-9113-1be5efb579c4" class="md-button md-button--secondary"> View tests/tutoplugs/Input/z2.py </button></div>
+<div id="uuid-029e8f57-f17e-4263-9d22-3863a03b0dd3" class="my_dialog" title="tests/tutoplugs/Input/z2.py" hidden><div><div class="codehilite small-text"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Z2 invariant calculation for BiTeI at 0 and 5 GPa</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">z2pack</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;./results_tz2_3&#39;</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;./results_tz2_3&#39;</span><span class="p">)</span>
+
+<span class="c1"># creating the System object</span>
+<span class="c1"># We will create one for each pressure.</span>
+<span class="n">BiTeI_0gpa</span> <span class="o">=</span> <span class="n">z2pack</span><span class="o">.</span><span class="n">fp</span><span class="o">.</span><span class="n">System</span><span class="p">(</span>
+    <span class="n">input_files</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;input_tz2_3/tz2_3_0gpa.abi&#39;</span><span class="p">,</span> <span class="s1">&#39;input_tz2_3/wannier90.win&#39;</span> <span class="p">],</span>
+    <span class="n">kpt_fct</span><span class="o">=</span><span class="n">z2pack</span><span class="o">.</span><span class="n">fp</span><span class="o">.</span><span class="n">kpoint</span><span class="o">.</span><span class="n">abinit</span><span class="p">,</span>
+    <span class="n">kpt_path</span><span class="o">=</span><span class="s1">&#39;tz2_3_0gpa.abi&#39;</span><span class="p">,</span>
+    <span class="n">command</span><span class="o">=</span><span class="s1">&#39;abinit tz2_3_0gpa.abi &gt;&amp; log&#39;</span><span class="p">,</span>
+    <span class="n">executable</span><span class="o">=</span><span class="s1">&#39;/bin/bash&#39;</span>
+<span class="p">)</span>
+
+<span class="n">BiTeI_5gpa</span> <span class="o">=</span> <span class="n">z2pack</span><span class="o">.</span><span class="n">fp</span><span class="o">.</span><span class="n">System</span><span class="p">(</span>
+    <span class="n">input_files</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;input_tz2_3/tz2_3_5gpa.abi&#39;</span><span class="p">,</span> <span class="s1">&#39;input_tz2_3/wannier90.win&#39;</span> <span class="p">],</span>
+    <span class="n">kpt_fct</span><span class="o">=</span><span class="n">z2pack</span><span class="o">.</span><span class="n">fp</span><span class="o">.</span><span class="n">kpoint</span><span class="o">.</span><span class="n">abinit</span><span class="p">,</span>
+    <span class="n">kpt_path</span><span class="o">=</span><span class="s1">&#39;tz2_3_5gpa.abi&#39;</span><span class="p">,</span>
+    <span class="n">command</span><span class="o">=</span><span class="s1">&#39;abinit tz2_3_5gpa.abi &gt;&amp; log&#39;</span><span class="p">,</span>
+    <span class="n">executable</span><span class="o">=</span><span class="s1">&#39;/bin/bash&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># calculating the WCC</span>
+<span class="c1"># Invariant at fixed k_z planes</span>
+<span class="n">result_0</span> <span class="o">=</span> <span class="n">z2pack</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">BiTeI_0gpa</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span><span class="n">s</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">num_lines</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">save_file</span> <span class="o">=</span> <span class="s1">&#39;./results_tz2_3/BiTeI_0.msgpack&#39;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">result_1</span> <span class="o">=</span> <span class="n">z2pack</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">BiTeI_0gpa</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span><span class="n">s</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">num_lines</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">save_file</span> <span class="o">=</span> <span class="s1">&#39;./results_tz2_3/BiTeI_1.msgpack&#39;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">result_2</span> <span class="o">=</span> <span class="n">z2pack</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">BiTeI_5gpa</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span><span class="n">s</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">num_lines</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">save_file</span> <span class="o">=</span> <span class="s1">&#39;./results_tz2_3/BiTeI_2.msgpack&#39;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">result_3</span> <span class="o">=</span> <span class="n">z2pack</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">system</span><span class="o">=</span><span class="n">BiTeI_5gpa</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span><span class="n">s</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">num_lines</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">save_file</span> <span class="o">=</span> <span class="s1">&#39;./results_tz2_3/BiTeI_3.msgpack&#39;</span><span class="p">,</span> <span class="n">load</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;for 0 GPa:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;z2 topological invariant at kz = 0.0: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z2pack</span><span class="o">.</span><span class="n">invariant</span><span class="o">.</span><span class="n">z2</span><span class="p">(</span><span class="n">result_0</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;z2 topological invariant at kz = 0.5: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z2pack</span><span class="o">.</span><span class="n">invariant</span><span class="o">.</span><span class="n">z2</span><span class="p">(</span><span class="n">result_1</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;for 5 GPa:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;z2 topological invariant at kz = 0.0: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z2pack</span><span class="o">.</span><span class="n">invariant</span><span class="o">.</span><span class="n">z2</span><span class="p">(</span><span class="n">result_2</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;z2 topological invariant at kz = 0.5: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z2pack</span><span class="o">.</span><span class="n">invariant</span><span class="o">.</span><span class="n">z2</span><span class="p">(</span><span class="n">result_3</span><span class="p">)))</span>
+</pre></div>
+</div></div>
+
+<script> $(function() { abidocs_jqueryui_dialog("#uuid-029e8f57-f17e-4263-9d22-3863a03b0dd3", "#uuid-c52d86d7-e0b9-48f7-9113-1be5efb579c4") }); </script>
+
+<p>It works as follow:</p>
+<ul>
+<li>
+<p>We define the system using z2pack.fp.System().</p>
+</li>
+<li>
+<p>We define the surfaces for which the invariant is computed using z2pack.surface.run.
+We need two time-reversal invariant planes, in this case the <span><span class="MathJax_Preview">k_z=0</span><script type="math/tex">k_z=0</script></span> and <span><span class="MathJax_Preview">k_z=\pi/c</span><script type="math/tex">k_z=\pi/c</script></span> planes.
+This function also runs the calculation. It will create a directory where for each new line on the
+surface, corresponding to different points in the x
+direction, a computation using ABINIT+Wannier90 is performed.
+This data is preserved and if you want to add a line, you can use the argument load=True which will restart the calculation
+and perform only the lines that were not already done.
+This is what is done in this tutorial, as in order for this calculation to be sufficiently converged, it takes too much time.</p>
+</li>
+<li>
+<p>The surface invariant is stored in the z2pack.invariant.z2 variable.</p>
+</li>
+</ul>
+<p>The script delivers:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="mi">0</span> <span class="n">GPa</span><span class="p">:</span>
+<span class="n">z2</span> <span class="n">topological</span> <span class="n">invariant</span> <span class="n">at</span> <span class="n">kz</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">:</span> <span class="mi">0</span>
+<span class="n">z2</span> <span class="n">topological</span> <span class="n">invariant</span> <span class="n">at</span> <span class="n">kz</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">:</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="mi">5</span> <span class="n">GPa</span><span class="p">:</span>
+<span class="n">z2</span> <span class="n">topological</span> <span class="n">invariant</span> <span class="n">at</span> <span class="n">kz</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">:</span> <span class="mi">0</span>
+<span class="n">z2</span> <span class="n">topological</span> <span class="n">invariant</span> <span class="n">at</span> <span class="n">kz</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">:</span> <span class="mi">1</span>
+</code></pre></div>
+
+<p>which informs us that at 0 GPa, the system is a trivial insulator, while at 5 GPa, it is topologically non-trivial.</p>
+<p>We included a script that helps visualize the trajectories of the Wannier charge centers. Run it like this:</p>
+<div class="codehilite"><pre><span></span><code>python ../tz2_3_hwcc.py
+</code></pre></div>
+
+<p>You will find the following figure:</p>
+<p><img alt="" src="../z2pack_assets/tz2_3_hwcc_converged.png" /></p>
+<p>In this figure each open circle represents a hybrid Wannier charge center (HWCC).
+The left column is calculated in the <span><span class="MathJax_Preview">k_z=0</span><script type="math/tex">k_z=0</script></span> plane and the right column in the <span><span class="MathJax_Preview">k_z=0.5</span><script type="math/tex">k_z=0.5</script></span> plane.
+The HWCC form &ldquo;bands&rdquo;, similar to the band structure of a dispersion relation,
+but the values are defined mod 1, so the y axis is periodic.
+In the continuum case, the parity of the number of times a horizontal line crosses the HWCCs constitutes
+a topological invariant of the <span><span class="MathJax_Preview">k_z=0</span><script type="math/tex">k_z=0</script></span> and <span><span class="MathJax_Preview">0.5</span><script type="math/tex">0.5</script></span> planes, which we denote by <span><span class="MathJax_Preview">\Delta</span><script type="math/tex">\Delta</script></span>.
+If <span><span class="MathJax_Preview">\Delta</span><script type="math/tex">\Delta</script></span> differs between <span><span class="MathJax_Preview">k_z=0</span><script type="math/tex">k_z=0</script></span> and <span><span class="MathJax_Preview">k_z=0.5</span><script type="math/tex">k_z=0.5</script></span>, the bulk <span><span class="MathJax_Preview">Z_2</span><script type="math/tex">Z_2</script></span> invariant is <span><span class="MathJax_Preview">\nu=1</span><script type="math/tex">\nu=1</script></span>.</p>
+<p>To calculate this invariant on a coarse k-mesh, we consider the points marking the middle
+of the largest gap at each <span><span class="MathJax_Preview">k_x</span><script type="math/tex">k_x</script></span> value rather than a horizontal line.
+These points are marked by blue diamonds above.
+Whenever the location of the middle of the gap changes between two adjacent <span><span class="MathJax_Preview">k_x</span><script type="math/tex">k_x</script></span> values,
+we count the number of HWCC that exist between the two gap centers and sum this number for all the crossings as <span><span class="MathJax_Preview">k_x</span><script type="math/tex">k_x</script></span> goes from 0 to <span><span class="MathJax_Preview">\pi/a_x</span><script type="math/tex">\pi/a_x</script></span>.
+If this value is even, <span><span class="MathJax_Preview">\Delta=0</span><script type="math/tex">\Delta=0</script></span>, and if it is odd, <span><span class="MathJax_Preview">\Delta=1</span><script type="math/tex">\Delta=1</script></span>.
+Performing this counting procedure for both <span><span class="MathJax_Preview">k_z</span><script type="math/tex">k_z</script></span> planes produces <span><span class="MathJax_Preview">\Delta=0</span><script type="math/tex">\Delta=0</script></span> for each case
+besides <span><span class="MathJax_Preview">k_z=0.5</span><script type="math/tex">k_z=0.5</script></span> with <span><span class="MathJax_Preview">P=5</span><script type="math/tex">P=5</script></span> GPa, indicating that the 0 Gpa phase is trivial and the 5 GPa phase is topological.</p>
+<h2 id="4-conclusion">4. Conclusion<a class="headerlink" href="#4-conclusion" title="Permanent link">&para;</a></h2>
+<p>We have seen that in material with strong spin-orbit coupling, band crossing at the Fermi level can lead to band inversion seen in the orbital character of the bands. The gap thus created can be topologically non-trivial.
+To know whether or not a material is a topological insulator in the sense of the Z2 invariant, 
+we can look at the displacement of the Wannier charge centers instead of integrating the whole Berry curvature.
+This leads to the calculation performed by Z2Pack.</p>
+<p>For BiTeI, we found that at 0 GPa, the material is a non-trivial insulator.
+Applying pressure, the bands reach a point where they cross at the Fermi level.
+Upon increasing pressure, the bands countinue to move and spin-orbit ocupling opens a non-trivial topological gap,
+which makes this material a topological insulator.
+With the help of first-principles calculation using ABINIT, along with clever ways to compute the
+topological invariant using Z2Pack, we were able to confirm this intrinsic property of BiTeI.</p>
+                
+                  
+                
+              
+
+<!-- 
+Add dropdown button with toolbar (based on https://bootsnipp.com/snippets/featured/inbox-by-gmail)
+and return to Top button (based on https://codepen.io/rdallaire/pen/apoyx)
+-->
+<div class="md-container">
+  <div class="row">
+    <div id="inbox">
+      <div class="fab btn-group show-on-hover dropup">
+        <div data-toggle="tooltip" data-placement="left" title="Menu" style="margin-left: 42px;">
+          <button id="return-to-top" type="button" class="btn btn-primary btn-io dropdown-toggle" data-toggle="dropdown">
+            <span class="fa-stack fa-2x">
+               <i class="fa fa-circle fa-stack-2x fab-backdrop"></i>
+               <i class="fa fa-chevron-up fa-stack-1x fa-inverse fab-primary"></i>
+               <i class="fa fa-map-signs fa-stack-1x fa-inverse fab-secondary"></i>
+            </span>
+          </button>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        
+        
+          <li>
+            <a href="https://docs.abinit.org/about/release-notes/" 
+               data-toggle="popover" data-tippy-content="About">
+               <i class="fa fa-info-circle"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/developers/git_and_gitlab/" 
+               data-toggle="popover" data-tippy-content="Developers">
+               <i class="fa fa-terminal"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/theory/geometry/" 
+               data-toggle="popover" data-tippy-content="Theory">
+               <i class="fa fa-book"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/faq/configuration_and_compilation/" 
+               data-toggle="popover" data-tippy-content="FAQ">
+               <i class="fa fa-graduation-cap"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/tutorial/" 
+               data-toggle="popover" data-tippy-content="Tutorials">
+               <i class="fa fa-file-text-o"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/variables/" 
+               data-toggle="popover" data-tippy-content="Variables">
+               <i class="fa fa-question"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/topics/features/" 
+               data-toggle="popover" data-tippy-content="Topics">
+               <i class="fa fa-user-circle-o"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/" 
+               data-toggle="popover" data-tippy-content="User Guides">
+               <i class="fa "></i>
+            </a>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../wannier90/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              wannier90
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../nuc/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              properties at the nucleus
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+            <center>Abinit version 9.8.2</center>
+        
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2020-2021 The Abinit Group
+            
+            (O. Gingras, V. Brousseau-Couture)
+            
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/abinit/abinit" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://www.youtube.com/watch?v=gcbfb_Mteo4" target="_blank" rel="noopener" title="www.youtube.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="http://www.facebook.com/abinit.org" target="_blank" rel="noopener" title="www.facebook.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/hashtag/abinit" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "header.autohide"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fb4a9340.min.js", "version": "9.8.2"}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a1c7c35e.min.js"></script>
+      
+        <script src="../../extra_javascript/abidocs.js"></script>
+      
+    
+  </body>
+</html>

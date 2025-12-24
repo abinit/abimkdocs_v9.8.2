@@ -1,0 +1,4955 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Abinit documentation">
+      
+      
+      
+        <meta name="author" content="The Abinit group">
+      
+      
+        <link rel="canonical" href="https://docs.abinit.org/theory/wavefunctions/">
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.6">
+    
+    
+      
+        <title>Wavefunctions - abinit</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2c0c5eaf.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.7fa14f5b.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#ff6e42">
+        
+      
+    
+    
+    
+
+    <!-- 
+    IMPORTANT: Don't use boostrap in particular boostrap.css since it comes into conflict with mkdocs-material theme.
+    Prefer low-level tools based on Jquery or JS library such as Tippyjs to get the work done.
+    -->
+
+    <!-- Jquery from Google CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load Jquery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- Handle jQuery plugin naming conflict between jQuery UI and Bootstrap
+    https://stackoverflow.com/questions/13731400/jqueryui-tooltips-are-competing-with-twitter-bootstrap
+    <script>
+      $.widget.bridge('uibutton', $.ui.button);
+      $.widget.bridge('uitooltip', $.ui.tooltip);
+    </script>
+    -->
+
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+    <!-- Tippyjs for popovers https://atomiks.github.io/tippyjs/ -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+
+    <!-- font-awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <!--Pace support. http://github.hubspot.com/pace/ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/white/pace-theme-big-counter.min.css" />
+
+    <script>
+        paceOptions = {
+            ajax: true,      // disabled
+            document: true,  // activated
+            eventLag: false  // disabled
+            //target: 'article'
+            //elements: {selectors: ['.my-page']}
+        };
+    </script>
+
+    <!-- MathJax support
+    <script type="text/javascript" async 
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script> 
+    -->
+
+    <!-- This version is compatible with plotly. -->
+    <script type="text/javascript" async 
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_SVG">
+    </script> 
+
+    <!-- Configure MathJax to produce automatic equation numbers http://docs.mathjax.org/en/latest/tex.html -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        //jax: ["input/TeX","output/HTML-CSS"],
+        //tex2jax: {inlineMath: [['$','$']]},
+        //displayAlign: "center",
+        TeX: {
+            equationNumbers: { autoNumber: "AMS" },
+            extensions: ["AMSmath.js", "boldsymbol.js"],
+            Macros: {
+                "*": "{\\dagger}",
+                "ra": "{\\rangle}",
+                "la": "{\\langle}",
+                // Workaround for bm package. See https://github.com/mathjax/MathJax/issues/1219
+                bm: ["{\\boldsymbol #1}",1],
+                // Mathcal symbols
+                mcL: "{\\mathcal{L}}",
+                mcG: "{\\mathcal{G}}",
+                mcR: "{\\mathcal{R}}",
+                mcS: "{\\mathcal{S}}",
+                mcC: "{\\mathcal{C}}",
+                mcO: "{\\mathcal{O}}",
+                // Acronyms
+                KS: "{\\text{KS}}",
+                eph: "{\\text{e-ph}}",
+                ee: "{\\text{e-e}}",
+                phph: "{\\text{ph-ph}}",
+                FM: "{\\text{FM}}",
+                DW: "{\\text{DW}}",
+                QP: "{\\text{QP}}",
+                BZ: "{\\text{BZ}}",
+                sign: "{\\text{sign}}",
+                xc: "{\\text{xc}}",
+                tchi: "{\\tilde\\chi}",
+                // Symbols commonly used (k-points, eigenvalues ...)
+                rr: "{\\bf r}",
+                RR: "{\\bf R}",
+                tt: "{\\bf t}",
+                GG: "{\\bf G}",
+                kk: "{\\bf k}",
+                qq: "{\\bf q}",
+                kq: "{\\kk + \\qq}",
+                qG: "{\\bf q + G}",
+                kG: "{\\bf k + G}",
+                kmq: "{\\kk - \\qq}",
+                kpq: "{\\kk + \\qq}",
+                kpG: "{\\kk + \\GG}",
+                qpG: "{\\qq + \\GG}",
+                nk: "{n \\kk}",
+                mk: "{, \\kk}",
+                nks: "{n \\kk\\sigma}",
+                mks: "{m \\kk\\sigma}",
+                enk: "{\\varepsilon_\\nk}",
+                emkq: "{\\varepsilon_{m\\kk+\\qq}}",
+                qnu: "{\\qq \\nu}",
+                wqnu: "{\\omega_{\\qnu}}",
+                vnk: "{\\mathbf{v}_{n\\kk}}",
+                vmkq: "{\\mathbf{v}_{m\\kk+\\qq}}",
+                vnka: "{\\mathrm{v}_{n\\kk,\\alpha}}",
+                vnkb: "{\\mathrm{v}_{n\\kk,\\beta}}",
+                ef: "{\\varepsilon_F}",
+                // EPH quantities
+                gkkp: "{g_{mn\\nu}(\\kk,\\qq)}",
+                gkq: "{g_{mn\\nu}(\\kk,\\qq)}",
+                //\newcommand{\gkkpL}{g_{mn\nu}^\Lc(\kb,\qb)}
+                // Many-body theory
+                Go: "{G_0}",
+                Wo: "{W_0}",
+                Ueff: "{U_{\\text{eff}}}",
+                // Greek symbols + tilde version
+                ee: "{\\epsilon}",
+                tee: "{\\tilde{\\epsilon}}",
+                ww: "{\\omega}",
+                tww: "{\\tilde\\omega}",
+                dd: "{\\,\\text{d}}",
+                vxc: "{v_\\xc}",
+                // symrel
+                Ri: "{\\mcR^{-1}}",
+                Rit: "{\\mcR^{-1\\tau}}",
+                // symrec
+                Si: "{\\mcS^{-1}}}",
+                Sit: "{\\Si^\\tau}}",
+                // partial and functional derivative.
+                PDER: ["{\\dfrac{\\partial #1}{\\partial #2}}", 2],
+                FDER: ["{\\dfrac{\\delta #1}{\\delta #2}}", 2],
+                // PAW
+                tPsi: "{\\tilde\\Psi}",
+                tpsi: "{\\tilde\\psi}",
+                tPhi: "{\\tilde\\Phi}",
+                tphi: "{\\tilde\\phi}",
+                tprj: "{\\tilde p}"
+            }
+          }
+      });
+    </script>
+
+    
+
+    
+
+    <!-- Load fonts used for input variables -->
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+      <link rel="stylesheet" href="../../css/gallery.css">
+    
+      <link rel="stylesheet" href="../../css/my_codehilite.css">
+    
+    
+      
+        
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-116681470-1","docs.abinit.org"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#notations-and-theoretical-considerations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="abinit" class="md-header__button md-logo" aria-label="abinit" data-md-component="logo">
+      
+  <img src="../../images/logo-abinit-2015.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            abinit
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Wavefunctions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="md-header__options">
+      
+    </div>
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/abinit/abinit/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github-abinit
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        User Guides
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../topics/features/" class="md-tabs__link">
+        Topics
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../variables/" class="md-tabs__link">
+        Variables
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../tutorial/" class="md-tabs__link">
+        Tutorials
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../faq/configuration_and_compilation/" class="md-tabs__link">
+        FAQ
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../geometry/" class="md-tabs__link md-tabs__link--active">
+        Theory
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../developers/git_and_gitlab/" class="md-tabs__link">
+        Developers
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/release-notes/" class="md-tabs__link">
+        About
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="abinit" class="md-nav__button md-logo" aria-label="abinit" data-md-component="logo">
+      
+  <img src="../../images/logo-abinit-2015.png" alt="logo">
+
+    </a>
+    abinit
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/abinit/abinit/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github-abinit
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      <label class="md-nav__link" for="__nav_1">
+        User Guides
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="User Guides" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          User Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        NewUser
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/abinit/" class="md-nav__link">
+        Abinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/aim/" class="md-nav__link">
+        Aim
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/anaddb/" class="md-nav__link">
+        Anaddb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/atdep/" class="md-nav__link">
+        aTDEP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/cut3d/" class="md-nav__link">
+        Cut3d
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/fold2bloch/" class="md-nav__link">
+        Fold2Bloch
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/mrgddb/" class="md-nav__link">
+        Mrgddb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/mrgscr/" class="md-nav__link">
+        Mrgscr
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/multibinit/" class="md-nav__link">
+        Multibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/optic/" class="md-nav__link">
+        Optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/respfn/" class="md-nav__link">
+        Respfn
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/spacegroup/" class="md-nav__link">
+        Spacegroup
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_14" type="checkbox" id="__nav_1_14" >
+      
+      <label class="md-nav__link" for="__nav_1_14">
+        Installation
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Installation" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_14">
+          <span class="md-nav__icon md-icon"></span>
+          Installation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        HowTo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_MacOS/" class="md-nav__link">
+        MacOS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_Ubuntu/" class="md-nav__link">
+        Ubuntu
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_CentOS/" class="md-nav__link">
+        CentOS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_EasyBuild/" class="md-nav__link">
+        EasyBuild
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_gpu/" class="md-nav__link">
+        GPUs
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Topics
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/features/" class="md-nav__link">
+        Features
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/" class="md-nav__link">
+        Topic List
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Abipy/" class="md-nav__link">
+        Abipy
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/APPA/" class="md-nav__link">
+        APPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Artificial/" class="md-nav__link">
+        Artificial
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/AtomManipulator/" class="md-nav__link">
+        AtomManipulator
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/aTDEP/" class="md-nav__link">
+        aTDEP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/AtomTypes/" class="md-nav__link">
+        AtomTypes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Bader/" class="md-nav__link">
+        Bader
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Band2eps/" class="md-nav__link">
+        Band2eps
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Berry/" class="md-nav__link">
+        Berry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/BandOcc/" class="md-nav__link">
+        BandOcc
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/BSE/" class="md-nav__link">
+        BSE
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/BoundingProcess/" class="md-nav__link">
+        BoundingProcess
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ConstrainedDFT/" class="md-nav__link">
+        ConstrainedDFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ConstrainedPol/" class="md-nav__link">
+        ConstrainedPol
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Control/" class="md-nav__link">
+        Control
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Coulomb/" class="md-nav__link">
+        Coulomb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/CrossingBarriers/" class="md-nav__link">
+        CrossingBarriers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/CRPA/" class="md-nav__link">
+        CRPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/crystal/" class="md-nav__link">
+        Crystal
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DFT%2BU/" class="md-nav__link">
+        DFT+U
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DeltaSCF/" class="md-nav__link">
+        DeltaSCF
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DensityPotential/" class="md-nav__link">
+        DensityPotential
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Dev/" class="md-nav__link">
+        Dev
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DFPT/" class="md-nav__link">
+        DFPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DMFT/" class="md-nav__link">
+        DMFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DynamicsMultibinit/" class="md-nav__link">
+        DynamicsMultibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/EffectiveMass/" class="md-nav__link">
+        EffectiveMass
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/EFG/" class="md-nav__link">
+        EFG
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Elastic/" class="md-nav__link">
+        Elastic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ElPhonInt/" class="md-nav__link">
+        ElPhonInt
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ElPhonTransport/" class="md-nav__link">
+        ElPhonTransport
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ElecDOS/" class="md-nav__link">
+        ElecDOS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ElecBandStructure/" class="md-nav__link">
+        ElecBandStructure
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ExtFPMD/" class="md-nav__link">
+        ExtFPMD
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/FileFormats/" class="md-nav__link">
+        FileFormats
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/FitProcess/" class="md-nav__link">
+        FitProcess
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ForcesStresses/" class="md-nav__link">
+        ForcesStresses
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/FrequencyMeshMBPT/" class="md-nav__link">
+        FrequencyMeshMBPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GeoConstraints/" class="md-nav__link">
+        GeoConstraints
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GeoOpt/" class="md-nav__link">
+        GeoOpt
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Git/" class="md-nav__link">
+        Git
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GSintroduction/" class="md-nav__link">
+        GSintroduction
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GW/" class="md-nav__link">
+        GW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GWls/" class="md-nav__link">
+        GWls
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Hybrids/" class="md-nav__link">
+        Hybrids
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/k-points/" class="md-nav__link">
+        K points
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LatticeModel/" class="md-nav__link">
+        LatticeModel
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LatticeWannier/" class="md-nav__link">
+        LatticeWannier
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LWFModel/" class="md-nav__link">
+        LWFModel
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LDAminushalf/" class="md-nav__link">
+        LDAminushalf
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LOTF/" class="md-nav__link">
+        LOTF
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/longwave/" class="md-nav__link">
+        Longwave
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Macroave/" class="md-nav__link">
+        Macroave
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/MagField/" class="md-nav__link">
+        MagField
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/MagMom/" class="md-nav__link">
+        MagMom
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/MolecularDynamics/" class="md-nav__link">
+        MolecularDynamics
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/multidtset/" class="md-nav__link">
+        Multidtset
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/nonlinear/" class="md-nav__link">
+        Nonlinear
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Optic/" class="md-nav__link">
+        Optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Output/" class="md-nav__link">
+        Output
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/parallelism/" class="md-nav__link">
+        Parallelism
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PAW/" class="md-nav__link">
+        PAW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PIMD/" class="md-nav__link">
+        PIMD
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Planewaves/" class="md-nav__link">
+        Planewaves
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Phonons/" class="md-nav__link">
+        Phonons
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PhononBands/" class="md-nav__link">
+        PhononBands
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PhononWidth/" class="md-nav__link">
+        PhononWidth
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PortabilityNonRegression/" class="md-nav__link">
+        PortabilityNonRegression
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/positron/" class="md-nav__link">
+        Positron
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/printing/" class="md-nav__link">
+        Printing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PseudosPAW/" class="md-nav__link">
+        PseudosPAW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/q-points/" class="md-nav__link">
+        Q points
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/RandStopPow/" class="md-nav__link">
+        RandStopPow
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Recursion/" class="md-nav__link">
+        Recursion
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/RPACorrEn/" class="md-nav__link">
+        RPACorrEn
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SCFControl/" class="md-nav__link">
+        SCFControl
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SCFAlgorithms/" class="md-nav__link">
+        SCFAlgorithms
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SelfEnergy/" class="md-nav__link">
+        SelfEnergy
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SmartSymm/" class="md-nav__link">
+        SmartSymm
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/spinpolarisation/" class="md-nav__link">
+        Spinpolarisation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SpinDynamicsMultibinit/" class="md-nav__link">
+        SpinDynamicsMultibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/STM/" class="md-nav__link">
+        STM
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Susceptibility/" class="md-nav__link">
+        Susceptibility
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/TDDFT/" class="md-nav__link">
+        TDDFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/TDepES/" class="md-nav__link">
+        TDepES
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Temperature/" class="md-nav__link">
+        Temperature
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/TransPath/" class="md-nav__link">
+        TransPath
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/TuningSpeedMem/" class="md-nav__link">
+        TuningSpeedMem
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Unfolding/" class="md-nav__link">
+        Unfolding
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/UnitCell/" class="md-nav__link">
+        UnitCell
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/vdw/" class="md-nav__link">
+        Vdw
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Verification/" class="md-nav__link">
+        Verification
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Wannier/" class="md-nav__link">
+        Wannier
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Wavelets/" class="md-nav__link">
+        Wavelets
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/xc/" class="md-nav__link">
+        Xc
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/external_resources/" class="md-nav__link">
+        External Resources
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Variables
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Variables" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Variables
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/" class="md-nav__link">
+        All Variables
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      <label class="md-nav__link" for="__nav_3_2">
+        Abinit
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Abinit" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Abinit
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/basic/" class="md-nav__link">
+        Basic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/bse/" class="md-nav__link">
+        Bethe-Salpeter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/dev/" class="md-nav__link">
+        Developers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/dmft/" class="md-nav__link">
+        DMFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/eph/" class="md-nav__link">
+        Electron-Phonon
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/ffield/" class="md-nav__link">
+        Varff
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/files/" class="md-nav__link">
+        File-handling
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/geo/" class="md-nav__link">
+        Geometry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/gstate/" class="md-nav__link">
+        Ground-State
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/gw/" class="md-nav__link">
+        GW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/internal/" class="md-nav__link">
+        Internal
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/paral/" class="md-nav__link">
+        Parallelism
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/paw/" class="md-nav__link">
+        PAW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/dfpt/" class="md-nav__link">
+        DFPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/rlx/" class="md-nav__link">
+        Relaxation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/vdw/" class="md-nav__link">
+        VdW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/w90/" class="md-nav__link">
+        Wannier90
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/anaddb/" class="md-nav__link">
+        Anaddb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/atdep/" class="md-nav__link">
+        aTDEP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/multibinit/" class="md-nav__link">
+        Multibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/optic/" class="md-nav__link">
+        Optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/aim/" class="md-nav__link">
+        Aim
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/external_parameters/" class="md-nav__link">
+        External Parameters
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../variables/varset_stats/" class="md-nav__link">
+        Statistics
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      <label class="md-nav__link" for="__nav_4_2">
+        Basic tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Basic tutorials" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Basic tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/base1/" class="md-nav__link">
+        basic1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/base2/" class="md-nav__link">
+        basic2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/base3/" class="md-nav__link">
+        basic3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/base4/" class="md-nav__link">
+        basic4
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/abinit_build/" class="md-nav__link">
+        ABINIT_build
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paw1/" class="md-nav__link">
+        PAW1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/spin/" class="md-nav__link">
+        Spin
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/polarization/" class="md-nav__link">
+        Polarization & finite field
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/rf1/" class="md-nav__link">
+        DFPT1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/rf2/" class="md-nav__link">
+        DFPT2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/basepar/" class="md-nav__link">
+        parallelism
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_10" type="checkbox" id="__nav_4_10" >
+      
+      <label class="md-nav__link" for="__nav_4_10">
+        ABINIT postprocessors
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="ABINIT postprocessors" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_10">
+          <span class="md-nav__icon md-icon"></span>
+          ABINIT postprocessors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/atdep1/" class="md-nav__link">
+        aTDEP1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/cut3d/" class="md-nav__link">
+        cut3D
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/fold2bloch/" class="md-nav__link">
+        fold2bloch
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/optic/" class="md-nav__link">
+        optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/wannier90/" class="md-nav__link">
+        wannier90
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/z2pack/" class="md-nav__link">
+        Z2pack
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_11" type="checkbox" id="__nav_4_11" >
+      
+      <label class="md-nav__link" for="__nav_4_11">
+        DFT beyond basics
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="DFT beyond basics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          DFT beyond basics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/nuc/" class="md-nav__link">
+        properties at the nucleus
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/dftu/" class="md-nav__link">
+        DFT+U
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/ucalc_crpa/" class="md-nav__link">
+        U_calc_RPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/ucalc_lr/" class="md-nav__link">
+        U_calc_LR
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paw2/" class="md-nav__link">
+        PAW2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paw3/" class="md-nav__link">
+        PAW3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/positron/" class="md-nav__link">
+        positron
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_12" type="checkbox" id="__nav_4_12" >
+      
+      <label class="md-nav__link" for="__nav_4_12">
+        Many-Body Theory & excitations
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Many-Body Theory & excitations" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_12">
+          <span class="md-nav__icon md-icon"></span>
+          Many-Body Theory & excitations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/gw1/" class="md-nav__link">
+        GW1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/gw2/" class="md-nav__link">
+        GW2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/bse/" class="md-nav__link">
+        Bethe-Salpeter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/dmft/" class="md-nav__link">
+        DMFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/tddft/" class="md-nav__link">
+        TDDFT (Casida)
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_13" type="checkbox" id="__nav_4_13" >
+      
+      <label class="md-nav__link" for="__nav_4_13">
+        DFPT & electron-phonon
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="DFPT & electron-phonon" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_13">
+          <span class="md-nav__icon md-icon"></span>
+          DFPT & electron-phonon
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/elastic/" class="md-nav__link">
+        elastic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/nlo/" class="md-nav__link">
+        nonlinear
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/lattice_wannier/" class="md-nav__link">
+        lattice_wannier
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/eph_intro/" class="md-nav__link">
+        eph_intro
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/eph4mob/" class="md-nav__link">
+        eph for mobilities
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/eph4zpr/" class="md-nav__link">
+        eph for zero-point renormalization
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/eph_legacy/" class="md-nav__link">
+        eph_legacy
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/eph_tdep_legacy/" class="md-nav__link">
+        tdepes_legacy
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_14" type="checkbox" id="__nav_4_14" >
+      
+      <label class="md-nav__link" for="__nav_4_14">
+        Multibinit
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Multibinit" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_14">
+          <span class="md-nav__icon md-icon"></span>
+          Multibinit
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/multibinit/" class="md-nav__link">
+        introduction to multibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/lattice_model/" class="md-nav__link">
+        lattice_model
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/spin_model/" class="md-nav__link">
+        spin_model
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/lwf_model/" class="md-nav__link">
+        lwf_model
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_15" type="checkbox" id="__nav_4_15" >
+      
+      <label class="md-nav__link" for="__nav_4_15">
+        Advanced parallelism
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Advanced parallelism" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_15">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced parallelism
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paral_bandpw/" class="md-nav__link">
+        paral_band_PW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paral_gswvl/" class="md-nav__link">
+        paral_wavelets
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paral_moldyn/" class="md-nav__link">
+        paral_MD
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paral_images/" class="md-nav__link">
+        paral_images
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paral_dfpt/" class="md-nav__link">
+        paral_DFPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paral_mbt/" class="md-nav__link">
+        paral_MBPT
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        FAQ
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="FAQ" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          FAQ
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/configuration_and_compilation/" class="md-nav__link">
+        Configuration and compilation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/general_questions/" class="md-nav__link">
+        General questions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/pre_and_post_processing/" class="md-nav__link">
+        Pre/Post processing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/ground_state/" class="md-nav__link">
+        Ground state
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/dfpt/" class="md-nav__link">
+        DFPT
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      <label class="md-nav__link" for="__nav_6">
+        Theory
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Theory" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../geometry/" class="md-nav__link">
+        Geometry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spherical_harmonics/" class="md-nav__link">
+        Spherical Harmonics
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Wavefunctions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Wavefunctions
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#notations-and-theoretical-considerations" class="md-nav__link">
+    Notations and theoretical considerations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#properties-of-the-wavefunctions-scalar-case" class="md-nav__link">
+    Properties of the wavefunctions (scalar case)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#properties-of-the-wavefunctions-spinor-case" class="md-nav__link">
+    Properties of the wavefunctions (spinor case)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plane-wave-basis-set-sphere" class="md-nav__link">
+    Plane wave basis set sphere
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fft-grid-and-fft-box" class="md-nav__link">
+    FFT grid and FFT box
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#symmetry-properties" class="md-nav__link">
+    Symmetry Properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Symmetry Properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#effect-of-space-group-symmetries-on-electron-energies-and-wavefunctions" class="md-nav__link">
+    Effect of space group symmetries on electron energies and wavefunctions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#magnetic-space-groups" class="md-nav__link">
+    Magnetic Space Groups
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../noncollinear/" class="md-nav__link">
+        Noncollinear
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pseudopotentials/" class="md-nav__link">
+        Pseudopotentials
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mbt/" class="md-nav__link">
+        Many-Body Perturbation Theory
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bse/" class="md-nav__link">
+        Bethe-Salpeter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../documents/" class="md-nav__link">
+        Documents
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../acknowledgments/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bibliography/" class="md-nav__link">
+        Bibliography
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../acronyms/" class="md-nav__link">
+        Acronyms
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      <label class="md-nav__link" for="__nav_7">
+        Developers
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Developers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Developers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/git_and_gitlab/" class="md-nav__link">
+        Git and Gitlab
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/developers_howto/" class="md-nav__link">
+        HowTo for developers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/abimkdocs/" class="md-nav__link">
+        Abimkdocs
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/markdown/" class="md-nav__link">
+        Markdown
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      <label class="md-nav__link" for="__nav_7_5">
+        Test Suite
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Test Suite" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          Test Suite
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/testsuite/" class="md-nav__link">
+        Test list
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/testsuite_howto/" class="md-nav__link">
+        Test Suite Howto
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/new_testsuite/" class="md-nav__link">
+        YAML-based test suite Howto
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/yaml_tools_api/" class="md-nav__link">
+        YAML-based test suite Python tools and API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/XgType/" class="md-nav__link">
+        XgType
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_7" type="checkbox" id="__nav_7_7" >
+      
+      <label class="md-nav__link" for="__nav_7_7">
+        Pseudos
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Pseudos" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_7">
+          <span class="md-nav__icon md-icon"></span>
+          Pseudos
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp1_info/" class="md-nav__link">
+        psp1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp3_info/" class="md-nav__link">
+        psp3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp45_info/" class="md-nav__link">
+        psp45
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp5spinorbit_info/" class="md-nav__link">
+        psp5
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp6_info/" class="md-nav__link">
+        psp6
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp8_info/" class="md-nav__link">
+        psp8
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/codestats/" class="md-nav__link">
+        Code stats
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/autoconf_examples/" class="md-nav__link">
+        Autoconf_examples
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/testlink/" class="md-nav__link">
+        Test Page for linkcheck
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      <label class="md-nav__link" for="__nav_8">
+        About
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/release-notes/" class="md-nav__link">
+        Release Notes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/history/" class="md-nav__link">
+        History
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#notations-and-theoretical-considerations" class="md-nav__link">
+    Notations and theoretical considerations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#properties-of-the-wavefunctions-scalar-case" class="md-nav__link">
+    Properties of the wavefunctions (scalar case)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#properties-of-the-wavefunctions-spinor-case" class="md-nav__link">
+    Properties of the wavefunctions (spinor case)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plane-wave-basis-set-sphere" class="md-nav__link">
+    Plane wave basis set sphere
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fft-grid-and-fft-box" class="md-nav__link">
+    FFT grid and FFT box
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#symmetry-properties" class="md-nav__link">
+    Symmetry Properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Symmetry Properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#effect-of-space-group-symmetries-on-electron-energies-and-wavefunctions" class="md-nav__link">
+    Effect of space group symmetries on electron energies and wavefunctions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#magnetic-space-groups" class="md-nav__link">
+    Magnetic Space Groups
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+
+                
+                  <a href="https://github.com/abinit/abinit/edit/master/doc/theory/wavefunctions.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Wavefunctions</h1>
+                
+                <div>
+<div class="MathJax_Preview">
+\newcommand{\mcR}{{\mathcal{R}}}
+\newcommand{\omcR}{{\hat\mcR}}
+\newcommand{\Atm}{{\bf A}}
+\newcommand{\AFMomcR}{{\underline{\omcR}}}
+\newcommand{\AFMmcR}{{\underline{\mcR}}}
+\newcommand{\HH}{{\hat H}}
+\newcommand{\nk}{{n\kk}}
+\newcommand{\RRm}{\mcR^{-1}} 
+\newcommand{\Rit}{\mcR^{-1T}}
+\newcommand{\rmt}{{\rr-\tt}}
+\newcommand{\aa}{\alpha}
+\newcommand{\bb}{\beta}
+\newcommand{\ss}{\sigma}
+\newcommand{\mcJ}{{\mathcal{J}}}
+\newcommand{\omcA}{{\hat\mcA}}
+\newcommand{\thalf}{{\tfrac{1}{2}}}
+\newcommand{\mcE}{{\mathcal{E}}}
+\newcommand{\mcA}{{\mathcal{A}}}
+</div>
+<script type="math/tex; mode=display">
+\newcommand{\mcR}{{\mathcal{R}}}
+\newcommand{\omcR}{{\hat\mcR}}
+\newcommand{\Atm}{{\bf A}}
+\newcommand{\AFMomcR}{{\underline{\omcR}}}
+\newcommand{\AFMmcR}{{\underline{\mcR}}}
+\newcommand{\HH}{{\hat H}}
+\newcommand{\nk}{{n\kk}}
+\newcommand{\RRm}{\mcR^{-1}} 
+\newcommand{\Rit}{\mcR^{-1T}}
+\newcommand{\rmt}{{\rr-\tt}}
+\newcommand{\aa}{\alpha}
+\newcommand{\bb}{\beta}
+\newcommand{\ss}{\sigma}
+\newcommand{\mcJ}{{\mathcal{J}}}
+\newcommand{\omcA}{{\hat\mcA}}
+\newcommand{\thalf}{{\tfrac{1}{2}}}
+\newcommand{\mcE}{{\mathcal{E}}}
+\newcommand{\mcA}{{\mathcal{A}}}
+</script>
+</div>
+<p>Representation and convension of one wavefunction
+ABINIT data structures and their theoretical justifications.</p>
+<h2 id="notations-and-theoretical-considerations">Notations and theoretical considerations<a class="headerlink" href="#notations-and-theoretical-considerations" title="Permanent link">&para;</a></h2>
+<p>A Bloch wavefunction characterized by a wavevector <span><span class="MathJax_Preview">\kk</span><script type="math/tex">\kk</script></span> is such that</p>
+<div>
+<div class="MathJax_Preview"> \psi_{\bf k}({\bf r}) = e^{i{\bf k}\cdot{\bf r}} u_{\bf k}({\bf r}) \,, </div>
+<script type="math/tex; mode=display"> \psi_{\bf k}({\bf r}) = e^{i{\bf k}\cdot{\bf r}} u_{\bf k}({\bf r}) \,, </script>
+</div>
+<p>where <span><span class="MathJax_Preview">u_{\bf k}({\bf r})</span><script type="math/tex">u_{\bf k}({\bf r})</script></span> is periodic, that is</p>
+<div>
+<div class="MathJax_Preview"> u_{\bf k}({\bf r}+{\bf R})=u_{\bf k}({\bf r}) \,, </div>
+<script type="math/tex; mode=display"> u_{\bf k}({\bf r}+{\bf R})=u_{\bf k}({\bf r}) \,, </script>
+</div>
+<p>where <span><span class="MathJax_Preview">{\bf R}</span><script type="math/tex">{\bf R}</script></span> is a vector of the real space lattice.</p>
+<p>Its representation by plane waves reads:</p>
+<div>
+<div class="MathJax_Preview">\begin{eqnarray*}
+u_{\bf k}({\bf r})&amp;=&amp;\sum_{\bf G}u_{\bf k}({\bf G})e^{i{\bf G}\cdot{\bf r}}  \,, \\
+\psi_{\bf k}({\bf r})&amp;=&amp;\sum_{\bf G}u_{\bf k}({\bf G})
+e^{i ({\bf k}+{\bf G})\cdot{\bf r}} \,.
+\end{eqnarray*}</div>
+<script type="math/tex; mode=display">\begin{eqnarray*}
+u_{\bf k}({\bf r})&=&\sum_{\bf G}u_{\bf k}({\bf G})e^{i{\bf G}\cdot{\bf r}}  \,, \\
+\psi_{\bf k}({\bf r})&=&\sum_{\bf G}u_{\bf k}({\bf G})
+e^{i ({\bf k}+{\bf G})\cdot{\bf r}} \,.
+\end{eqnarray*}</script>
+</div>
+<p>Normalization of <span><span class="MathJax_Preview">{u_k}</span><script type="math/tex">{u_k}</script></span> reads:</p>
+<div>
+<div class="MathJax_Preview"> \sum_{\bf G}|u_{\bf k}({\bf G})|^2 = 1 \,.</div>
+<script type="math/tex; mode=display"> \sum_{\bf G}|u_{\bf k}({\bf G})|^2 = 1 \,.</script>
+</div>
+<p>For a <strong>spinor</strong> wavefunction, there is an additional variable, 
+the spin <span><span class="MathJax_Preview">\sigma</span><script type="math/tex">\sigma</script></span> that can take two values, that is <span><span class="MathJax_Preview">\sigma=\uparrow</span><script type="math/tex">\sigma=\uparrow</script></span> (spin up) 
+or <span><span class="MathJax_Preview">\sigma=\downarrow</span><script type="math/tex">\sigma=\downarrow</script></span> (spin down).
+The following relations hold:</p>
+<div>
+<div class="MathJax_Preview">
+u_{\bf k}({\bf r},\sigma) = \sum_{\bf G}u_{\bf k}({\bf G},\sigma) e^{i{\bf G} \cdot {\bf r}} \,,
+</div>
+<script type="math/tex; mode=display">
+u_{\bf k}({\bf r},\sigma) = \sum_{\bf G}u_{\bf k}({\bf G},\sigma) e^{i{\bf G} \cdot {\bf r}} \,,
+</script>
+</div>
+<div>
+<div class="MathJax_Preview">
+\psi_{\bf k}({\bf r},\sigma) = \sum_{\bf G}u_{\bf k}({\bf G},\sigma) e^{i({\bf k}+{\bf G})\cdot{\bf r}} \,,
+</div>
+<script type="math/tex; mode=display">
+\psi_{\bf k}({\bf r},\sigma) = \sum_{\bf G}u_{\bf k}({\bf G},\sigma) e^{i({\bf k}+{\bf G})\cdot{\bf r}} \,,
+</script>
+</div>
+<div>
+<div class="MathJax_Preview">
+\sum_{\sigma}\sum_{\bf G}|u_{\bf k}({\bf G},\sigma)|^2 = 1 \,.
+</div>
+<script type="math/tex; mode=display">
+\sum_{\sigma}\sum_{\bf G}|u_{\bf k}({\bf G},\sigma)|^2 = 1 \,.
+</script>
+</div>
+<h2 id="properties-of-the-wavefunctions-scalar-case">Properties of the wavefunctions (scalar case)<a class="headerlink" href="#properties-of-the-wavefunctions-scalar-case" title="Permanent link">&para;</a></h2>
+<p>For ground-state wavefunctions, we have to solve the Schrödinger equation</p>
+<div>
+<div class="MathJax_Preview"> H |\psi_{n{\bf k}}\ra = \varepsilon_{n{\bf k}}|\psi_{n{\bf k}}\ra \,, </div>
+<script type="math/tex; mode=display"> H |\psi_{n{\bf k}}\ra = \varepsilon_{n{\bf k}}|\psi_{n{\bf k}}\ra \,, </script>
+</div>
+<p>where <span><span class="MathJax_Preview">H</span><script type="math/tex">H</script></span> is the Hamiltonian operator, <span><span class="MathJax_Preview">n</span><script type="math/tex">n</script></span> labels the state (or the band), <span><span class="MathJax_Preview">\varepsilon_{n{\bf k}}</span><script type="math/tex">\varepsilon_{n{\bf k}}</script></span> is the eigenvalue.</p>
+<p>As the wavevector labelling of an eigenstate comes from the property</p>
+<div>
+<div class="MathJax_Preview"> \psi_{\bf k}({\bf r}+{\bf R}) = e^{i{\bf k}{\bf R}} \psi_{\bf k}({\bf r}) \,, </div>
+<script type="math/tex; mode=display"> \psi_{\bf k}({\bf r}+{\bf R}) = e^{i{\bf k}{\bf R}} \psi_{\bf k}({\bf r}) \,, </script>
+</div>
+<p>in which <span><span class="MathJax_Preview">\kk</span><script type="math/tex">\kk</script></span> can be replaced by <span><span class="MathJax_Preview">\kk + \GG</span><script type="math/tex">\kk + \GG</script></span> where <span><span class="MathJax_Preview">\GG</span><script type="math/tex">\GG</script></span> is any reciprocal space lattice vector, we can
+<em>choose</em> the wavefunctions at <span><span class="MathJax_Preview">\kk</span><script type="math/tex">\kk</script></span> and <span><span class="MathJax_Preview">\kk + \GG</span><script type="math/tex">\kk + \GG</script></span>
+to be equal, or to make a linear combination of wavefunctions with the same energy. 
+This is a choice of <strong>gauge</strong> that does not affect the value of physical observables.
+In what follows we prefer to work with the gauge </p>
+<div>
+<div class="MathJax_Preview"> \psi_{\kk + \GG}(\rr) = \psi_\kk(\rr) </div>
+<script type="math/tex; mode=display"> \psi_{\kk + \GG}(\rr) = \psi_\kk(\rr) </script>
+</div>
+<p>to keep the notation as simple as possible,</p>
+<p>The time-reversal symmetry (non-magnetic case) of the Hamiltonian gives the following relation:</p>
+<div>
+<div class="MathJax_Preview">
+\psi_{n{\bf k}}({\bf r}) = \psi^{*}_{n-\bf k}({\bf r}) \,.
+</div>
+<script type="math/tex; mode=display">
+\psi_{n{\bf k}}({\bf r}) = \psi^{*}_{n-\bf k}({\bf r}) \,.
+</script>
+</div>
+<p>For the <span><span class="MathJax_Preview">{\bf k}</span><script type="math/tex">{\bf k}</script></span> wavevectors that are half a reciprocal lattice vector
+<span><span class="MathJax_Preview">(2{\bf k}={\bf G}_{0})</span><script type="math/tex">(2{\bf k}={\bf G}_{0})</script></span>, there is a special relationship between 
+the Fourier coefficients of the wavefunction:</p>
+<div>
+<div class="MathJax_Preview">
+u_{n{\bf k}}({\bf G}) =
+u_{n{\bf k}-{\bf G}_{0}}({\bf G}+{\bf G}_{0}) = 
+u_{n-{\bf k}}({\bf G}+{\bf G}_{0}) =
+u^{*}_{n{\bf k}}(-{\bf G}-{\bf G}_{0}) \,.
+</div>
+<script type="math/tex; mode=display">
+u_{n{\bf k}}({\bf G}) =
+u_{n{\bf k}-{\bf G}_{0}}({\bf G}+{\bf G}_{0}) = 
+u_{n-{\bf k}}({\bf G}+{\bf G}_{0}) =
+u^{*}_{n{\bf k}}(-{\bf G}-{\bf G}_{0}) \,.
+</script>
+</div>
+<p>That is, coefficients at <span><span class="MathJax_Preview">\GG</span><script type="math/tex">\GG</script></span> and <span><span class="MathJax_Preview">-{\bf G}-{\bf G}_{0}</span><script type="math/tex">-{\bf G}-{\bf G}_{0}</script></span> are related.
+This will allow to decrease by a factor of 2 the storage space for these
+specific <span><span class="MathJax_Preview">{\bf k}</span><script type="math/tex">{\bf k}</script></span> points and accelerate CPU-intensive parts such as the 
+application of the non-local part and the Fourier transform.</p>
+<h2 id="properties-of-the-wavefunctions-spinor-case">Properties of the wavefunctions (spinor case)<a class="headerlink" href="#properties-of-the-wavefunctions-spinor-case" title="Permanent link">&para;</a></h2>
+<p>One must distinguish two classes of Hamiltonians:</p>
+<ol>
+<li>the Hamiltonian is spin-diagonal,</li>
+<li>the Hamiltonian mixes the spin components.</li>
+</ol>
+<p>In the first class, one finds usual non-spin-polarized, non-spin-orbit
+Hamiltonians, in which case the spin up-spin up and spin down-spin down parts of the Hamiltonian
+are equal, as well as spin-polarized
+Hamiltonian when the magnetic field varies in strength but <em>not</em> in direction.
+In the second class, one finds Hamiltonians that include the
+spin-orbit splitting as well as non-collinear spin systems.</p>
+<p>In the first class, the wavefunctions can be made entirely of <em>either</em> spin-up components <em>or</em> spin-down
+components, and treated independently of those made of opposite spin.
+This corresponds to <a class="wikilink codevar-wikilink" href="/variables/basic#nsppol">nsppol</a> = 2.
+In the second class, one must stay with spinor wavefunctions.
+This corresponds to <a class="wikilink codevar-wikilink" href="/variables/gstate#nspinor">nspinor</a> = 2.</p>
+<p>These two classes are mutually exclusive. The possibilities are thus:</p>
+<table>
+<thead>
+<tr>
+<th>nsppol</th>
+<th>nspinor</th>
+<th>wavefunction type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>scalar wavefunctions</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>spin-polarized wavefunctions</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>spinor wavefunctions</td>
+</tr>
+</tbody>
+</table>
+<p>The inclusion of spin-orbit coupling in the Hamiltonian requires <a class="wikilink codevar-wikilink" href="/variables/gstate#nspinor">nspinor</a> = 2.</p>
+<h2 id="plane-wave-basis-set-sphere">Plane wave basis set sphere<a class="headerlink" href="#plane-wave-basis-set-sphere" title="Permanent link">&para;</a></h2>
+<p>In order to avoid dealing with an infinite number of plane waves to represent Bloch wavefunctions,
+one selects those with a kinetic energy lower than some cutoff energy <span><span class="MathJax_Preview">E_{\rm cut}</span><script type="math/tex">E_{\rm cut}</script></span>.
+The set of allowed <span><span class="MathJax_Preview">{\bf G}</span><script type="math/tex">{\bf G}</script></span> vectors will be denoted by <span><span class="MathJax_Preview">\mcS_{\kk}(E_{\rm cut})</span><script type="math/tex">\mcS_{\kk}(E_{\rm cut})</script></span> such that</p>
+<div>
+<div class="MathJax_Preview">
+\GG\,\in \mcS_{\kk}(E_{\rm cut}) \;\mbox{if}\; \dfrac{\lvert{\bf k + G}\rvert^{2}}{2} \leq E_{\rm cut} \,.
+</div>
+<script type="math/tex; mode=display">
+\GG\,\in \mcS_{\kk}(E_{\rm cut}) \;\mbox{if}\; \dfrac{\lvert{\bf k + G}\rvert^{2}}{2} \leq E_{\rm cut} \,.
+</script>
+</div>
+<p>The kinetic energy cutoff is computed from the input variables <a class="wikilink codevar-wikilink" href="/variables/basic#ecut">ecut</a> and <a class="wikilink codevar-wikilink" href="/variables/rlx#dilatmx">dilatmx</a>
+to give the <em>effective</em> value</p>
+<div>
+<div class="MathJax_Preview"> {\text{ecut_eff}} = {\text ecut} * ({\text dilatmx})^2 </div>
+<script type="math/tex; mode=display"> {\text{ecut_eff}} = {\text ecut} * ({\text dilatmx})^2 </script>
+</div>
+<p>For special <span><span class="MathJax_Preview">\kk</span><script type="math/tex">\kk</script></span>-points satisfying the condition <span><span class="MathJax_Preview">2 \kk = \GG_0</span><script type="math/tex">2 \kk = \GG_0</script></span>, not all coefficients must be stored. 
+A specific storage mode, governed by the input variable <a class="wikilink codevar-wikilink" href="/variables/dev#istwfk">istwfk</a> has been
+introduced for the following <span><span class="MathJax_Preview">\kk</span><script type="math/tex">\kk</script></span> points:</p>
+<div>
+<div class="MathJax_Preview">
+\Bigl(0, 0, 0\Bigr), 
+\left(0, 0, \frac{1}{2}\right),
+\left(0, \frac{1}{2}, 0\right),
+\left(0, \frac{1}{2}, \frac{1}{2}\right),
+\left(\frac{1}{2}, 0, 0,\right),
+\left(\frac{1}{2}, 0, \frac{1}{2}\right),
+\left(\frac{1}{2}, \frac{1}{2}, 0\right),
+\left(\frac{1}{2}, \frac{1}{2}, \frac{1}{2}\right)
+</div>
+<script type="math/tex; mode=display">
+\Bigl(0, 0, 0\Bigr), 
+\left(0, 0, \frac{1}{2}\right),
+\left(0, \frac{1}{2}, 0\right),
+\left(0, \frac{1}{2}, \frac{1}{2}\right),
+\left(\frac{1}{2}, 0, 0,\right),
+\left(\frac{1}{2}, 0, \frac{1}{2}\right),
+\left(\frac{1}{2}, \frac{1}{2}, 0\right),
+\left(\frac{1}{2}, \frac{1}{2}, \frac{1}{2}\right)
+</script>
+</div>
+<p>For these points, the number of <span><span class="MathJax_Preview">\GG</span><script type="math/tex">\GG</script></span> vectors to be taken into account, is decreased by about a factor of 2.
+For the <span><span class="MathJax_Preview">\GG</span><script type="math/tex">\GG</script></span>&lsquo;s that are not treated, the coefficients
+<span><span class="MathJax_Preview">u_{n{\bf k}}({\bf G})</span><script type="math/tex">u_{n{\bf k}}({\bf G})</script></span> can be recovered from those that are treated, thanks to</p>
+<div>
+<div class="MathJax_Preview"> u_{n{\bf k}}({\bf G}) = u^{*}_{n{\bf k}}(-{\bf G}-{\bf G}_0) </div>
+<script type="math/tex; mode=display"> u_{n{\bf k}}({\bf G}) = u^{*}_{n{\bf k}}(-{\bf G}-{\bf G}_0) </script>
+</div>
+<p>The value of <a class="wikilink codevar-wikilink" href="/variables/dev#istwfk">istwfk</a> is automatically computed by the code
+on the basis of the k-point coordinates and the treatment of time-reversal symmetry as specified by <a class="wikilink codevar-wikilink" href="/variables/basic#kptopt">kptopt</a>.
+One can disable the time-reversal trick in the input file by setting explicitly the value of <a class="wikilink codevar-wikilink" href="/variables/dev#istwfk">istwfk</a>
+with the syntax:</p>
+<div class="highlight"><pre><span></span><code>istwfk *1
+</code></pre></div>
+<!--
+The number of plane waves is {\text npw}
+For ${\text ipw}=1\cdots {\text npw}$, the reduced coordinates of ${\bf G}$
+are contained in the array {\text kg}:
+
+$$
+\mbox{these are integer numbers}
+\cases{
+  {\bf G}^{red}_{1}=& {\text kg}(1,{\text ipw}) \cr
+  {\bf G}^{red}_{2}=& {\text kg}(2,{\text ipw}) \cr
+  {\bf G}^{red}_{3}=& {\text kg}(3,{\text ipw}) \cr
+}
+$$
+This list of $\GG$ vectors is computed in the routine {\text kpgsph.f}.
+-->
+
+<p>The maximum number of <span><span class="MathJax_Preview">\GG</span><script type="math/tex">\GG</script></span>-vectors over all k-points is called <a class="wikilink codevar-wikilink" href="/variables/internal#mpw">%mpw</a> inside the code. </p>
+<h2 id="fft-grid-and-fft-box">FFT grid and FFT box<a class="headerlink" href="#fft-grid-and-fft-box" title="Permanent link">&para;</a></h2>
+<p>For the generation of the density from wavefunctions, as well as for
+the application of the local part of the potential, one needs to be
+able to compute <span><span class="MathJax_Preview">u_{n\kk}(\rr)</span><script type="math/tex">u_{n\kk}(\rr)</script></span>
+for a 3D-mesh of <span><span class="MathJax_Preview">\rr</span><script type="math/tex">\rr</script></span>-points, extremely fast, from the values <span><span class="MathJax_Preview">u_{n\kk}(\GG)</span><script type="math/tex">u_{n\kk}(\GG)</script></span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>spin up and spin down parts can be treated separately in this
+operation, so they do not need to be specified otherwise in this section.</p>
+</div>
+<p>The FFT algorithm starts from values of a function</p>
+<div>
+<div class="MathJax_Preview">
+\begin{aligned}
+  z (j_{1},j_{2},j_{3})  \, \mbox{for} \, &amp;j_{1}=0\cdots(N_{1}-1) \,, \\
+               &amp;j_{2}=0\cdots(N_{2}-1) \,,
+               &amp;j_{3}=0\cdots(N_{3}-1)
+\end{aligned}
+</div>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  z (j_{1},j_{2},j_{3})  \, \mbox{for} \, &j_{1}=0\cdots(N_{1}-1) \,, \\
+               &j_{2}=0\cdots(N_{2}-1) \,,
+               &j_{3}=0\cdots(N_{3}-1)
+\end{aligned}
+</script>
+</div>
+<p>and compute fast the transformed</p>
+<div>
+<div class="MathJax_Preview">
+\begin{aligned}
+\tilde{z}(l_{1},l_{2},l_{3}) \, \mbox{for} \, 
+                                &amp;l_{1}=0\cdots(N_{1}-1)\,, \\
+                &amp;l_{2}=0\cdots(N_{2}-1)\,, \\
+                &amp;l_{3}=0\cdots(N_{3}-1)  \\
+\end{aligned}
+</div>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\tilde{z}(l_{1},l_{2},l_{3}) \, \mbox{for} \, 
+                                &l_{1}=0\cdots(N_{1}-1)\,, \\
+                &l_{2}=0\cdots(N_{2}-1)\,, \\
+                &l_{3}=0\cdots(N_{3}-1)  \\
+\end{aligned}
+</script>
+</div>
+<p>with</p>
+<div>
+<div class="MathJax_Preview">
+\tilde{z}(l_{1},l_{2},l_{3})=\sum_{j_{1},j_{2},j_{3}} z(j_{1},j_{2},j_{3})
+e^{i2\pi\left(\frac{j_{1}l_{1}}{N_{1}}+\frac{j_{2}l_{2}}{N_{2}}+\frac{j_{3}l_{3}}{N_{3}}\right)} \,.
+</div>
+<script type="math/tex; mode=display">
+\tilde{z}(l_{1},l_{2},l_{3})=\sum_{j_{1},j_{2},j_{3}} z(j_{1},j_{2},j_{3})
+e^{i2\pi\left(\frac{j_{1}l_{1}}{N_{1}}+\frac{j_{2}l_{2}}{N_{2}}+\frac{j_{3}l_{3}}{N_{3}}\right)} \,.
+</script>
+</div>
+<p>We want the values of <span><span class="MathJax_Preview">u_{\bf k}({\bf r})</span><script type="math/tex">u_{\bf k}({\bf r})</script></span> on a FFT grid with: </p>
+<div>
+<div class="MathJax_Preview">\begin{eqnarray*}
+r^{red}_{1}&amp;=&amp;\frac{0}{N_{1}},\frac{1}{N_{1}},\cdots
+\frac{N_{1}-1}{N_{1}}\left(=\frac{l_{1}}{N_{1}}\right) \,, \\
+r^{red}_{2}&amp;=&amp;\frac{0}{N_{2}},\frac{1}{N_{1}},\cdots
+\frac{N_{2}-1}{N_{2}}\left(=\frac{l_{2}}{N_{2}}\right) \,, \\
+r^{red}_{3}&amp;=&amp;\frac{0}{N_{3}},\frac{1}{N_{3}},\cdots
+\frac{N_{3}-1}{N_{3}}\left(=\frac{l_{3}}{N_{3}}\right) \,. 
+\end{eqnarray*}</div>
+<script type="math/tex; mode=display">\begin{eqnarray*}
+r^{red}_{1}&=&\frac{0}{N_{1}},\frac{1}{N_{1}},\cdots
+\frac{N_{1}-1}{N_{1}}\left(=\frac{l_{1}}{N_{1}}\right) \,, \\
+r^{red}_{2}&=&\frac{0}{N_{2}},\frac{1}{N_{1}},\cdots
+\frac{N_{2}-1}{N_{2}}\left(=\frac{l_{2}}{N_{2}}\right) \,, \\
+r^{red}_{3}&=&\frac{0}{N_{3}},\frac{1}{N_{3}},\cdots
+\frac{N_{3}-1}{N_{3}}\left(=\frac{l_{3}}{N_{3}}\right) \,. 
+\end{eqnarray*}</script>
+</div>
+<p>The FFT algorithm has a computational cost that scales as <span><span class="MathJax_Preview">N\log(N)</span><script type="math/tex">N\log(N)</script></span> where <span><span class="MathJax_Preview">N</span><script type="math/tex">N</script></span> is the 
+total number of points in the mesh.
+Note, however, that we cannot obtain <span><span class="MathJax_Preview">u_\kk(\rr)</span><script type="math/tex">u_\kk(\rr)</script></span> <em>everywhere</em> but only
+on the discrete set of FFT points given in the above equations.
+The choice of <span><span class="MathJax_Preview">N_{1},N_{2},N_{3}</span><script type="math/tex">N_{1},N_{2},N_{3}</script></span> is not discussed here.</p>
+<!--
+The effect of $G^{red}_{1}$ or $G^{red}_{1}+N_{1}$ (or any value of $G^{red}_{1}$ modulo $N$) will be similar.
+
+\begin{eqnarray*}
+u_{{\bf k}}({\bf r})&=&\sum_{\bf G} u_{\bf k}({\bf G})
+e^{i2\pi {\bf G} \cdot {\bf r}} \\
+ &=&\sum_{\bf G} u_{\bf k}({\bf G}) e^{i2\pi(G^{red}_{1}r^{red}_{1} +
+G^{red}_{2}r^{red}_{2} + G^{red}_{3}r^{red}_{3})}
+\end{eqnarray*}
+
+Let us represent $u_{\kk}(\rr)$ by the segment
+
+<div class="highlight"><pre><span></span><code><span class="n">wf_real</span> <span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="n">N_</span><span class="err">{</span><span class="mi">1</span><span class="err">}</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="n">N_</span><span class="err">{</span><span class="mi">2</span><span class="err">}</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="n">N_</span><span class="err">{</span><span class="mi">3</span><span class="err">}</span><span class="p">)</span>
+</code></pre></div>
+
+where the first index refer to the real or imaginary part and the
+three others to the integer values $l_{1}+1,l_{2}+1,l_{3}+1$
+
+Let us map the $c_{\bf k}({\bf G})$ coefficients on a similar segment
+
+<div class="highlight"><pre><span></span><code><span class="n">wf_reciprocal</span> <span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="n">N_</span><span class="err">{</span><span class="mi">1</span><span class="err">}</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="n">N_</span><span class="err">{</span><span class="mi">2</span><span class="err">}</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="n">N_</span><span class="err">{</span><span class="mi">3</span><span class="err">}</span><span class="p">)</span>
+</code></pre></div>
+
+with a similar meaning of {\tt wf\_reciprocal}$(1:2,j_{1}+1,j_{2}+1,j_{3}+1)$:
+
+\begin{eqnarray*}
+j_{1}&=&{\tt mod}({\bf G}^{red}_{1},N_{1}) [\Rightarrow j_{1}\in[0,N_{1}-1]]\\
+j_{2}&=&{\tt mod}({\bf G}^{red}_{2},N_{2}) \\
+j_{3}&=&{\tt mod}({\bf G}^{red}_{3},N_{3})
+\end{eqnarray*}
+
+Then:
+
+\begin{eqnarray*}
+\lefteqn{
+{\tt wf\_real}(\cdot ,l_{1}+1,l_{2}+1,l_{3}+1)}  \\
+&=& \sum^{N_{1}-1}_{j_{1}=0}
+\sum^{N_{2}-1}_{j_{2}=0} \sum^{N_{3}-1}_{j_{3}=0} {\tt wf\_reciprocal}
+(\cdot ,j_{1}+1,j_{2}+1,j_{3}+1) \times
+e^{i2\pi(\frac{j_{1}l_{1}}{N_{1}}+\frac{j_{2}l_{2}}{N_{2}}+\frac{j_{3}l_{3}}{N_{3}})}
+\end{eqnarray*}
+
+This is, up to the array indexing convention, precisely the operation done by the FFT algorithm.
+-->
+
+<p>For FFT efficiency (minimisation of cache conflicts), the arrays
+are not dimensioned with <span><span class="MathJax_Preview">(N_1, N_2, N_3)</span><script type="math/tex">(N_1, N_2, N_3)</script></span> but with <span><span class="MathJax_Preview">(N_4, N_5, N_6)</span><script type="math/tex">(N_4, N_5, N_6)</script></span> where:</p>
+<div>
+<div class="MathJax_Preview">\begin{eqnarray*}
+N_4 = N_1 + 1\;{\text{if}}\; N_1\; {\text{is even else}}\; N_1, \\
+N_5 = N_2 + 1\;{\text{if}}\; N_2\; {\text{is even else}}\; N_2, \\
+N_6 = N_3 + 1\;{\text{if}}\; N_3\; {\text{is even else}}\; N_3.
+\end{eqnarray*}</div>
+<script type="math/tex; mode=display">\begin{eqnarray*}
+N_4 = N_1 + 1\;{\text{if}}\; N_1\; {\text{is even else}}\; N_1, \\
+N_5 = N_2 + 1\;{\text{if}}\; N_2\; {\text{is even else}}\; N_2, \\
+N_6 = N_3 + 1\;{\text{if}}\; N_3\; {\text{is even else}}\; N_3.
+\end{eqnarray*}</script>
+</div>
+<p>The FFT mesh is given by <a class="wikilink codevar-wikilink" href="/variables/gstate#ngfft">ngfft</a>. 
+PAW requires an additional <strong>dense</strong> FFT mesh for densities and potentials called <a class="wikilink codevar-wikilink" href="/variables/paw#ngfftdg">ngfftdg</a>.</p>
+<!--
+## Wavefunctions and spatial symmetries
+
+If some spatial symmetry operation commutes with the Hamiltonian:
+
+$$ [H,S_{\bf t}]=0 $$
+
+then
+
+\begin{eqnarray*}
+H|\psi\ra = \varepsilon|\psi>&\Rightarrow&
+S_{\bf t}H|\psi\ra = \varepsilon S_{t}|\psi\ra \\
+ &\Rightarrow& H[S_{\bf t}|\psi\ra] = \varepsilon[S_{\bf t}|\psi]
+\end{eqnarray*}
+
+$S_{\bf t}|\psi\ra$ is also an eigenvector, with the same eigenvalue as $|\psi\ra$.
+
+However its wavevector is different:
+
+\begin{eqnarray*}
+\psi_{n{\bf k}}({\bf r}+{\bf R}) &=&
+ e^{i2\pi {\bf k} {\bf R}} \psi_{n{\bf k}}({\bf r}) \\
+\Rightarrow (S_{\bf t} \psi_{n{\bf k}})({\bf r}+{\bf R})&=&
+\psi_{n{\bf k}}((S_{\bf t})^{-1}({\bf r}+{\bf R})) \\
+ &=&\psi_{n{\bf k}}(\sum_{\beta}S^{-1}_{\alpha\beta}(r_{\beta}+R_{\beta}-t_{\beta})) \\
+ &=&\psi_{n{\bf k}}(\sum_{\beta}S^{-1}_{\alpha\beta}(r_{\beta}-t_{\beta})+\sum_{\beta}S^{-1}_{\alpha\beta}R_{\beta}) \\
+ &=&\psi_{n{\bf k}}((S_{t})^{-1}({\bf r})+\sum_{\beta}S^{-1}_{\alpha\beta}R_{\beta}) \\
+\noalign{\hbox{($S^{-1}_{\alpha\beta} R_{\beta}$ must be a vector of the real space lattice if $S_{t}$ leaves the lattice invariant)}}
+ &=&e^{i2\pi \sum_{\alpha\beta} k_{\alpha}
+S^{-1}_{\alpha\beta} R_{\beta}} \psi_{n{\bf k}}((S_{t})^{-1}({\bf r})) \\
+ &=&e^{i2\pi {\bf k}'\cdot{\bf R}}(S_{\bf t}\psi_{n{\bf k}})({\bf r})
+\end{eqnarray*}
+
+where $({\bf k}')_{\alpha} = \sum_{\beta} S^{-1}_{\beta\alpha} k_{\beta}$
+
+For a vector in the reciprocal space
+
+$$ ({\bf k}')_{\beta} = (S_{\bf t}({\bf k}))_{\beta} = \sum_{\beta} S^{-1}_{\beta\alpha} k_{\beta} $$
+
+i.e. the inverse transpose of $S_{\alpha\beta}$ is used.
+
+The preceeding result means
+
+\begin{eqnarray*}
+\psi_{n(S^{-1,t}{\bf k})}
+ &\stackrel{\rm L.C.}{=}& (S_{t}\psi_{n{\bf k}})({\bf r}) \\
+ &\stackrel{\rm L.C.}{=}& \psi_{n{\bf k}} (\sum_{\beta}
+ S^{-1}_{\alpha\beta}(r_{\beta}-t_{\beta}))
+\end{eqnarray*}
+
+\begin{eqnarray*}
+&\Longrightarrow& u_{n(S^{-1,t} k)}({\bf r}) e^{i2\pi \sum_{\alpha\beta}
+S^{-1,t}_{\alpha\beta} k_{\beta} r_{\alpha}} \stackrel{\rm L.C.}{=}
+e^{i2\pi \sum_{\alpha\beta} k_{\alpha}
+S^{-1}_{\alpha\beta}(r_{\beta}-t_{\beta})} \times u_{n{\bf k}}(\sum_{\beta}
+S^{-1}_{\alpha\beta}(r_{\beta}-t_{\beta})) \\
+&\Longrightarrow& u_{n(S^{-1,t} k)}({\bf r}) \stackrel{\rm L.C.}{=}
+e^{-i2\pi \sum_{\alpha\beta} k_{\alpha} S^{-1}_{\alpha\beta}
+t_{\beta}} u_{nk}(\sum_{\beta}
+S^{-1}_{\alpha\beta}(r_{\beta}-t_{\beta})) \\
+&\Longrightarrow& \sum_{{\bf G}} c_{n(S^{-1,t}k )}({\bf G})
+ e^{i2\pi{\bf G}\cdot{\bf r}}
+\stackrel{\rm L.C.}{=} e^{-i2\pi \sum_{\alpha\beta} k_{\alpha}
+S^{-1}_{\alpha\beta} t_{\beta}} \sum_{{\bf G}'} c_{n{\bf k}}({\bf G}')
+ e^{i2\pi \sum_{\alpha\beta} G'_{\alpha}S^{-1}_{\alpha\beta}
+ (r_{\beta}-t_{\beta})} \\
+&\Longrightarrow& c_{n(S^{-1,t} k)}(\sum_{\alpha} G'_{\alpha}
+S^{-1}_{\alpha\beta}) \stackrel{\rm L.C.}{=} e^{-i2\pi
+\sum_{\alpha\beta}(k_{\alpha}+G'_{\alpha}) S^{-1}_{\alpha\beta}
+t_{\beta}} c_{n{\bf k}}({\bf G}') \\
+\end{eqnarray*}
+
+This formula allows to derive coefficients $c_{n}$ at one ${\bf k}$ point
+from these at a symmetric ${\bf k}$ point.
+-->
+
+<h2 id="symmetry-properties">Symmetry Properties<a class="headerlink" href="#symmetry-properties" title="Permanent link">&para;</a></h2>
+<h3 id="effect-of-space-group-symmetries-on-electron-energies-and-wavefunctions">Effect of space group symmetries on electron energies and wavefunctions<a class="headerlink" href="#effect-of-space-group-symmetries-on-electron-energies-and-wavefunctions" title="Permanent link">&para;</a></h3>
+<p>All the symmetry operations which leave the crystal unchanged constitute a space group.
+Besides the translation symmetry operations, a space group contains proper or 
+improper rotations followed by an appropriate fractional displacement.
+There are 230 in total <a class="wikilink citation-wikilink" data-tippy-content="Electronic states and optical transitions in solids" data-toggle="popover" href="/theory/bibliography#bassani1975">[Bassani1975]</a>. </p>
+<p>A generic element of the space group will be denoted in the following with <span><span class="MathJax_Preview">\hat\mcR_\tt</span><script type="math/tex">\hat\mcR_\tt</script></span>
+where <span><span class="MathJax_Preview">\mcR</span><script type="math/tex">\mcR</script></span> is a real orthonormal matrix associated to
+a proper or improper rotation while <span><span class="MathJax_Preview">\tt</span><script type="math/tex">\tt</script></span> is the corresponding fractional translation.
+If all the fractional translations are zero the space group is said to be <em>symmorphic</em>.
+In Abinit, the rotations in real space are called <a class="wikilink codevar-wikilink" href="/variables/basic#symrel">symrel</a>, while the corresponding 
+fractional translation are stored in the <a class="wikilink codevar-wikilink" href="/variables/basic#tnons">tnons</a> array.
+Note that both <em>symrel</em> and <em>tnons</em> are given in reduced coordinates. </p>
+<p>The application of a symmetry operation <span><span class="MathJax_Preview">\hat\mcR_\tt</span><script type="math/tex">\hat\mcR_\tt</script></span> to a vector <span><span class="MathJax_Preview">\Atm_i</span><script type="math/tex">\Atm_i</script></span> 
+defining the position of an atom in the unit cell gives:</p>
+<div>
+<div class="MathJax_Preview">\begin{equation}
+\omcR_\tt\, \Atm_i \equiv \mcR^{-1} (\Atm_i -\tt) = \Atm_j + \RR,
+\end{equation}</div>
+<script type="math/tex; mode=display">\begin{equation}
+\omcR_\tt\, \Atm_i \equiv \mcR^{-1} (\Atm_i -\tt) = \Atm_j + \RR,
+\end{equation}</script>
+</div>
+<p>where <span><span class="MathJax_Preview">\Atm_j</span><script type="math/tex">\Atm_j</script></span> indicates an atom in the same unit cell of the same type as 
+<span><span class="MathJax_Preview">\Atm_i</span><script type="math/tex">\Atm_i</script></span> which may be coincident with <span><span class="MathJax_Preview">\Atm_i</span><script type="math/tex">\Atm_i</script></span>, and <span><span class="MathJax_Preview">\RR</span><script type="math/tex">\RR</script></span> is a suitable lattice translation (possibly zero).
+The application of the symmetry operation <span><span class="MathJax_Preview">\hat \mcR_\tt</span><script type="math/tex">\hat \mcR_\tt</script></span> on a generic function <span><span class="MathJax_Preview">F(\rr)</span><script type="math/tex">F(\rr)</script></span> 
+of the three spatial coordinates is conventionally defined by:</p>
+<div>
+<div class="MathJax_Preview">\begin{equation}
+\omcR_\tt\, F (\rr) \equiv F(\Ri (\rr-\tt)).  
+\end{equation}</div>
+<script type="math/tex; mode=display">\begin{equation}
+\omcR_\tt\, F (\rr) \equiv F(\Ri (\rr-\tt)).  
+\end{equation}</script>
+</div>
+<p>Since <span><span class="MathJax_Preview">\omcR_\tt</span><script type="math/tex">\omcR_\tt</script></span> commutes with the Hamiltonian <span><span class="MathJax_Preview">\HH</span><script type="math/tex">\HH</script></span> of the crystal, it readily
+follows that, given <span><span class="MathJax_Preview">\Psi_{n\kk}(\rr)</span><script type="math/tex">\Psi_{n\kk}(\rr)</script></span> being eigenstate of <span><span class="MathJax_Preview">\HH</span><script type="math/tex">\HH</script></span>,
+ <span><span class="MathJax_Preview">\omcR_\tt\, \Psi_{n\kk}(\rr)</span><script type="math/tex">\omcR_\tt\, \Psi_{n\kk}(\rr)</script></span> is also eigenstate of the Schrödinger problem with the same eigenvalue:</p>
+<div>
+<div class="MathJax_Preview">\begin{equation}
+ \begin{cases}
+  \bigl[
+   \hat\mcR_\tt, \HH \bigr]  =0 &amp;  \\
+   \\
+   \HH \Psi_{n\kk}(\rr) = \ee_{n\kk}\Psi_{n\kk}(\rr) &amp;
+ \end{cases}
+ \Longrightarrow \HH\hat\mcR_\tt\, \Psi_{n\kk}= 
+ \omcR_\tt\HH\,\Psi_{n\kk} = \ee_{n\kk}\,\omcR_\tt\Psi_{n\kk}.
+\end{equation}</div>
+<script type="math/tex; mode=display">\begin{equation}
+ \begin{cases}
+  \bigl[
+   \hat\mcR_\tt, \HH \bigr]  =0 &  \\
+   \\
+   \HH \Psi_{n\kk}(\rr) = \ee_{n\kk}\Psi_{n\kk}(\rr) &
+ \end{cases}
+ \Longrightarrow \HH\hat\mcR_\tt\, \Psi_{n\kk}= 
+ \omcR_\tt\HH\,\Psi_{n\kk} = \ee_{n\kk}\,\omcR_\tt\Psi_{n\kk}.
+\end{equation}</script>
+</div>
+<p>Although <span><span class="MathJax_Preview">\omcR_\tt\,\Psi_{n\kk}(\rr)</span><script type="math/tex">\omcR_\tt\,\Psi_{n\kk}(\rr)</script></span> has the same eigenenergy as <span><span class="MathJax_Preview">\Psi_{n\kk}(\rr)</span><script type="math/tex">\Psi_{n\kk}(\rr)</script></span>, its 
+crystalline momentum is different.
+The operation <span><span class="MathJax_Preview">\hat\mcR_\tt</span><script type="math/tex">\hat\mcR_\tt</script></span> of the space group transforms a Bloch function with vector <span><span class="MathJax_Preview">\kk</span><script type="math/tex">\kk</script></span>
+into a new Bloch wave function of crystalline momentum <span><span class="MathJax_Preview">\mcR \kk</span><script type="math/tex">\mcR \kk</script></span>. 
+This important property can be seen as follows:</p>
+<div>
+<div class="MathJax_Preview">\begin{equation}
+\label{eq:Rotation_of_psi}
+ \begin{aligned}
+ \Bigl[ \omcR_\tt\Psi_\nk \Bigr] (\rr+\RR) =  \quad 
+   &amp; \Psi_\nk \bigl( \Ri (\rr+\RR-\tt) \bigr) \\ 
+ = &amp; e^{i \kk\cdot\Ri (\rr+\RR-\tt)}\, u_\nk \bigl( \Ri(\rr-\tt) \bigr) \\
+ = &amp; \quad e^{i\Rit \kk\cdot\rr}\, \Psi_\nk \bigl( \Ri (\rr-\tt)\bigr ) \\
+ = &amp; e^{i\,\mcR \kk \cdot \rr}\, \omcR_\tt \Psi_\nk(\rr),
+ \end{aligned}
+\end{equation}</div>
+<script type="math/tex; mode=display">\begin{equation}
+\label{eq:Rotation_of_psi}
+ \begin{aligned}
+ \Bigl[ \omcR_\tt\Psi_\nk \Bigr] (\rr+\RR) =  \quad 
+   & \Psi_\nk \bigl( \Ri (\rr+\RR-\tt) \bigr) \\ 
+ = & e^{i \kk\cdot\Ri (\rr+\RR-\tt)}\, u_\nk \bigl( \Ri(\rr-\tt) \bigr) \\
+ = & \quad e^{i\Rit \kk\cdot\rr}\, \Psi_\nk \bigl( \Ri (\rr-\tt)\bigr ) \\
+ = & e^{i\,\mcR \kk \cdot \rr}\, \omcR_\tt \Psi_\nk(\rr),
+ \end{aligned}
+\end{equation}</script>
+</div>
+<p>where <span><span class="MathJax_Preview">\RR</span><script type="math/tex">\RR</script></span> is an arbitrary vector of the direct Bravais lattice and the invariance of the periodic part of 
+the Bloch wave function has been exploited.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The last equality in follows from the orthogonality
+of the <span><span class="MathJax_Preview">\mcR</span><script type="math/tex">\mcR</script></span> matrix when referred to in a Cartesian frame of reference. 
+The orthogonality of the rotation matrix does not hold anymore if, as usually done in the ABINIT code,
+the symmetry operations are expressed in reduced coordinates.
+In this case, the correct matrix to use for operations in reciprocal space is given by the transpose of <span><span class="MathJax_Preview">\Ri</span><script type="math/tex">\Ri</script></span>.
+(called <em>symrec</em> in the Fortran code)</p>
+</div>
+<p>For a nondegenerate state, one obtains:</p>
+<div>
+<div class="MathJax_Preview">\begin{equation}
+\label{eq:rotation_wfn}
+\Psi_{\mcR\kk}(\rr) = \Psi_{\kk} (\Ri(\rr-\tt)).
+%u_{\mcR^{-1}\kk}(\GG)    &amp; = u_\kk(\mcR^{-1}\GG)
+\end{equation}</div>
+<script type="math/tex; mode=display">\begin{equation}
+\label{eq:rotation_wfn}
+\Psi_{\mcR\kk}(\rr) = \Psi_{\kk} (\Ri(\rr-\tt)).
+%u_{\mcR^{-1}\kk}(\GG)    & = u_\kk(\mcR^{-1}\GG)
+\end{equation}</script>
+</div>
+<p>The above equation can be used to reduce the number of <span><span class="MathJax_Preview">\kk</span><script type="math/tex">\kk</script></span>-points and 
+matrix elements that have to be evaluated and stored since the information in
+the full Brillouin zone can be reconstructed by symmetry from an appropriate irreducible wedge.
+The set of equations below summarizes the most useful relationships commonly employed:</p>
+<div>
+<div class="MathJax_Preview">\begin{eqnarray}
+\label{eq:space_group_symmetry}
+\begin{cases}
+\ee_{\mcR\kk}    &amp; =  \quad \ee_{\kk} 
+\\
+u_{\mcR\kk}(\rr) &amp; =  \quad e^{-i \mcR\kk     \cdot\tt}\, u_{\kk}\bigl(\RRm(\rmt)\bigr) 
+\\
+u_{\mcR\kk}(\GG) &amp; =  \quad e^{-i(\mcR\kk+\GG)\cdot\tt}\, u_{\kk}(\RRm\GG).
+\end{cases}
+\end{eqnarray}</div>
+<script type="math/tex; mode=display">\begin{eqnarray}
+\label{eq:space_group_symmetry}
+\begin{cases}
+\ee_{\mcR\kk}    & =  \quad \ee_{\kk} 
+\\
+u_{\mcR\kk}(\rr) & =  \quad e^{-i \mcR\kk     \cdot\tt}\, u_{\kk}\bigl(\RRm(\rmt)\bigr) 
+\\
+u_{\mcR\kk}(\GG) & =  \quad e^{-i(\mcR\kk+\GG)\cdot\tt}\, u_{\kk}(\RRm\GG).
+\end{cases}
+\end{eqnarray}</script>
+</div>
+<p>The time invariance of the Hamiltonian, <span><span class="MathJax_Preview">\HH^\* = \HH</span><script type="math/tex">\HH^\* = \HH</script></span>, might introduce additional constraints:</p>
+<div>
+<div class="MathJax_Preview">\begin{eqnarray}
+\label{eq:time_reversal_symmetry}
+\begin{cases}
+\ee_\nk   &amp; =  \quad \ee_{-\kk}, 
+\\
+u_\nk(\rr)&amp; =  \quad u^\*_{n-\kk}(\rr), 
+\\
+u_\nk(\GG)&amp; =  \quad u_{n-\kk}^\*(-\GG).
+\end{cases}
+\end{eqnarray}</div>
+<script type="math/tex; mode=display">\begin{eqnarray}
+\label{eq:time_reversal_symmetry}
+\begin{cases}
+\ee_\nk   & =  \quad \ee_{-\kk}, 
+\\
+u_\nk(\rr)& =  \quad u^\*_{n-\kk}(\rr), 
+\\
+u_\nk(\GG)& =  \quad u_{n-\kk}^\*(-\GG).
+\end{cases}
+\end{eqnarray}</script>
+</div>
+<p>It is important to stress that the set of equations in \ref{eq:space_group_symmetry}
+hold only in case of nondegenerate states.
+In the presence of degeneracy, the application of a symmetry operation on a Bloch 
+wave function with momentum <span><span class="MathJax_Preview">\kk</span><script type="math/tex">\kk</script></span> belonging to the set of degenerate states <span><span class="MathJax_Preview">\mcC_{\nk}</span><script type="math/tex">\mcC_{\nk}</script></span>, 
+produces a new eigenstate with same energy and crystalline momentum <span><span class="MathJax_Preview">\mcR \kk</span><script type="math/tex">\mcR \kk</script></span>. 
+The new eigenstate is given by an appropriate linear combination of the degenerate states with wave vector <span><span class="MathJax_Preview">\mcR\kk</span><script type="math/tex">\mcR\kk</script></span>. 
+More explicitly:</p>
+<div>
+<div class="MathJax_Preview">\begin{equation}
+\label{eq:symmetry_for_degenerate_states}
+\omcR_\tt\Psi_\nk (\rr)  = \Psi_\nk(\mcR^{-1}(\rr-\tt))
+= \sum_{\aa \in\,\mcC_\nk} D_{\aa n}(\mcR)\,\Psi_{\aa\mcR\kk}(\rr),
+%\psi_{n\mcR\kk}(\rr)% u_{\mcR^{-1}\kk}(\GG)    &amp; = u_\kk(\mcR^{-1}\GG)
+\end{equation}</div>
+<script type="math/tex; mode=display">\begin{equation}
+\label{eq:symmetry_for_degenerate_states}
+\omcR_\tt\Psi_\nk (\rr)  = \Psi_\nk(\mcR^{-1}(\rr-\tt))
+= \sum_{\aa \in\,\mcC_\nk} D_{\aa n}(\mcR)\,\Psi_{\aa\mcR\kk}(\rr),
+%\psi_{n\mcR\kk}(\rr)% u_{\mcR^{-1}\kk}(\GG)    & = u_\kk(\mcR^{-1}\GG)
+\end{equation}</script>
+</div>
+<p>where <span><span class="MathJax_Preview">D_{\aa\bb}(\mcR)</span><script type="math/tex">D_{\aa\bb}(\mcR)</script></span> is the unitary transformation associated with <span><span class="MathJax_Preview">\mcR</span><script type="math/tex">\mcR</script></span> <a class="wikilink citation-wikilink" data-tippy-content="Electronic states and optical transitions in solids" data-toggle="popover" href="/theory/bibliography#bassani1975">[Bassani1975]</a>. 
+Equation \ref{eq:symmetry_for_degenerate_states} reduces to \ref{eq:rotation_wfn}
+if the state <span><span class="MathJax_Preview">\Psi_\nk(\rr)</span><script type="math/tex">\Psi_\nk(\rr)</script></span> is nondegenerate since, in this particular case, <span><span class="MathJax_Preview">D_{\aa\bb}(\mcR) = \delta_{\aa\bb}</span><script type="math/tex">D_{\aa\bb}(\mcR) = \delta_{\aa\bb}</script></span>.</p>
+<h3 id="magnetic-space-groups">Magnetic Space Groups<a class="headerlink" href="#magnetic-space-groups" title="Permanent link">&para;</a></h3>
+<p>An extension of the concept of symmetry is needed in order to explain the magnetic properties 
+of crystals <a class="wikilink citation-wikilink" data-tippy-content="Electrodynamics of continuous media:" data-toggle="popover" href="/theory/bibliography#landau1984">[Landau1984]</a>.
+In addition to the spatial arrangement of atoms, the orientation of the atomic magnetic moment 
+also becomes important in such systems.
+It may turn out that the usual spatial operation, while leaving the crystal unchanged in 
+regard to its geometrical structure, will reverse the orientation of spins.</p>
+<p>Let the symbol <span><span class="MathJax_Preview">\mcJ</span><script type="math/tex">\mcJ</script></span>  indicate the operation of reversing all spins, and 
+let <span><span class="MathJax_Preview">\mcE</span><script type="math/tex">\mcE</script></span> denote the identity operator. 
+A combined operation consisting of an ordinary symmetry operation followed by <span><span class="MathJax_Preview">\mcJ</span><script type="math/tex">\mcJ</script></span>
+is a new type of symmetry operation called a complementary operation. 
+The rules for operator composition in the standard nonmagnetic group can be easily extended to include <span><span class="MathJax_Preview">\mcJ</span><script type="math/tex">\mcJ</script></span>:</p>
+<div>
+<div class="MathJax_Preview">\begin{equation}
+\text{If}\;\; \omcA_1 \cdot \omcA_2 = \omcA_3 \;\;\text{then}
+\begin{cases}
+(\mcJ \omcA_1) \cdot (\mcJ\omcA_2) = \omcA_3
+\\\\
+(\mcJ \omcA_1) \cdot \omcA_2 = \mcJ\omcA_3
+\\\\
+\omcA_1 \cdot (\mcJ\omcA_2) = \mcJ\omcA_3.
+\end{cases}
+\end{equation}</div>
+<script type="math/tex; mode=display">\begin{equation}
+\text{If}\;\; \omcA_1 \cdot \omcA_2 = \omcA_3 \;\;\text{then}
+\begin{cases}
+(\mcJ \omcA_1) \cdot (\mcJ\omcA_2) = \omcA_3
+\\\\
+(\mcJ \omcA_1) \cdot \omcA_2 = \mcJ\omcA_3
+\\\\
+\omcA_1 \cdot (\mcJ\omcA_2) = \mcJ\omcA_3.
+\end{cases}
+\end{equation}</script>
+</div>
+<p>Magnetic groups are obtained by replacing some of the symmetry elements of the initial non-magnetic 
+space group by their complementary operations so that the resulting ensemble forms a group 
+with respect to the new algebra.
+Magnetic space groups are sometimes referred to as Shubnikov groups, and can be 
+classified according to three different categories <a class="wikilink citation-wikilink" data-tippy-content="Crystal symmetry and physical properties: Application of group theory" data-toggle="popover" href="/theory/bibliography#bhagavantam1964">[Bhagavantam1964]</a>.</p>
+<dl>
+<dt>Shubnikov type IV</dt>
+<dd>Groups which include <span><span class="MathJax_Preview">\mcJ</span><script type="math/tex">\mcJ</script></span> explicitly, so-called grey groups or Shubnikov type IV (230 in number).
+Each group can be obtained by taking the direct product of each of the conventional space 
+groups with the group <span><span class="MathJax_Preview">(\mcE,\mcJ)</span><script type="math/tex">(\mcE,\mcJ)</script></span></dd>
+<dt>Shubnikov type III</dt>
+<dd>Groups which do not include <span><span class="MathJax_Preview">\mcJ</span><script type="math/tex">\mcJ</script></span> explicitly, but which contain complementary symmetry 
+operations. Also called mixed groups or Shubnikov type III. There are 1191 in total.</dd>
+<dt>Colorless</dt>
+<dd>Groups which do not include <span><span class="MathJax_Preview">\mcJ</span><script type="math/tex">\mcJ</script></span> either explicitly or in conjunction with a conventional 
+symmetry operation, also named colorless groups. There are 230 and they are indistinguishable from 
+the conventional space groups</dd>
+</dl>
+<p>Henceforth, in order to keep the notation as simple as possible, a symmetry operation containing <span><span class="MathJax_Preview">\mcJ</span><script type="math/tex">\mcJ</script></span> 
+will be denoted with an underlined symbol <span><span class="MathJax_Preview">\AFMomcR_\tt</span><script type="math/tex">\AFMomcR_\tt</script></span>, and will be said to have anti-ferromagnetic character.
+On the contrary, symmetry operations which preserve the orientation of the spin projection will be denoted using the 
+standard notation <span><span class="MathJax_Preview">\omcR_\tt</span><script type="math/tex">\omcR_\tt</script></span>, and will be said to have ferromagnetic character.
+The action of a magnetic symmetry on a nondegenerate Bloch state has to be generalized according to:</p>
+<div>
+<div class="MathJax_Preview">\begin{eqnarray}
+\label{eq:AFM_symmetries_wfs}
+\omcR_\tt\,    \Psi^\ss_\kk(\rr)  \equiv &amp; \Psi^\ss_\kk(\Ri(\rr-\tt))    &amp; = \Psi_{\mcR\kk}^\ss(\rr),
+\\
+\AFMomcR_\tt\, \Psi^\ss_\kk(\rr)  \equiv &amp; \Psi^{-\ss}_\kk(\Ri(\rr-\tt)) &amp; = \Psi_{\mcR\kk}^{-\ss}(\rr),
+\end{eqnarray}</div>
+<script type="math/tex; mode=display">\begin{eqnarray}
+\label{eq:AFM_symmetries_wfs}
+\omcR_\tt\,    \Psi^\ss_\kk(\rr)  \equiv & \Psi^\ss_\kk(\Ri(\rr-\tt))    & = \Psi_{\mcR\kk}^\ss(\rr),
+\\
+\AFMomcR_\tt\, \Psi^\ss_\kk(\rr)  \equiv & \Psi^{-\ss}_\kk(\Ri(\rr-\tt)) & = \Psi_{\mcR\kk}^{-\ss}(\rr),
+\end{eqnarray}</script>
+</div>
+<p>where <span><span class="MathJax_Preview">\ss = \pm \thalf</span><script type="math/tex">\ss = \pm \thalf</script></span>. 
+Using the above symmetry relations, 
+one can verify that the two spin components of the electron density transform according to:</p>
+<div>
+<div class="MathJax_Preview">\begin{eqnarray}
+\label{eq:rho_vxc_AFM_symmetry}
+\omcR_\tt\,    n^\ss(\rr) =  &amp; n^\ss \bigl(\mcR^{-1}(\rr-\tt)\bigr) &amp; =  n^\ss   (\rr),
+\\
+\AFMomcR_\tt\, n^\ss(\rr) =  &amp; n^\ss \bigl(\mcR^{-1}(\rr-\tt)\bigr) &amp; =  n^{-\ss}(\rr),
+\end{eqnarray}</div>
+<script type="math/tex; mode=display">\begin{eqnarray}
+\label{eq:rho_vxc_AFM_symmetry}
+\omcR_\tt\,    n^\ss(\rr) =  & n^\ss \bigl(\mcR^{-1}(\rr-\tt)\bigr) & =  n^\ss   (\rr),
+\\
+\AFMomcR_\tt\, n^\ss(\rr) =  & n^\ss \bigl(\mcR^{-1}(\rr-\tt)\bigr) & =  n^{-\ss}(\rr),
+\end{eqnarray}</script>
+</div>
+<p>from which it follows that the total charge and, consequently, the Hartree potential are invariant
+under the application of any operation of the magnetic group.
+Similar symmetry relationships hold for the two components of the exchange-correlation potential.</p>
+<p>The magnetic character of the symmetry operation is stored in the <a class="wikilink codevar-wikilink" href="/variables/gstate#symafm">symafm</a> array.</p>
+                
+                  
+                
+              
+
+<!-- 
+Add dropdown button with toolbar (based on https://bootsnipp.com/snippets/featured/inbox-by-gmail)
+and return to Top button (based on https://codepen.io/rdallaire/pen/apoyx)
+-->
+<div class="md-container">
+  <div class="row">
+    <div id="inbox">
+      <div class="fab btn-group show-on-hover dropup">
+        <div data-toggle="tooltip" data-placement="left" title="Menu" style="margin-left: 42px;">
+          <button id="return-to-top" type="button" class="btn btn-primary btn-io dropdown-toggle" data-toggle="dropdown">
+            <span class="fa-stack fa-2x">
+               <i class="fa fa-circle fa-stack-2x fab-backdrop"></i>
+               <i class="fa fa-chevron-up fa-stack-1x fa-inverse fab-primary"></i>
+               <i class="fa fa-map-signs fa-stack-1x fa-inverse fab-secondary"></i>
+            </span>
+          </button>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        
+        
+          <li>
+            <a href="https://docs.abinit.org/about/release-notes/" 
+               data-toggle="popover" data-tippy-content="About">
+               <i class="fa fa-info-circle"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/developers/git_and_gitlab/" 
+               data-toggle="popover" data-tippy-content="Developers">
+               <i class="fa fa-terminal"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/theory/geometry/" 
+               data-toggle="popover" data-tippy-content="Theory">
+               <i class="fa fa-book"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/faq/configuration_and_compilation/" 
+               data-toggle="popover" data-tippy-content="FAQ">
+               <i class="fa fa-graduation-cap"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/tutorial/" 
+               data-toggle="popover" data-tippy-content="Tutorials">
+               <i class="fa fa-file-text-o"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/variables/" 
+               data-toggle="popover" data-tippy-content="Variables">
+               <i class="fa fa-question"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/topics/features/" 
+               data-toggle="popover" data-tippy-content="Topics">
+               <i class="fa fa-user-circle-o"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/" 
+               data-toggle="popover" data-tippy-content="User Guides">
+               <i class="fa "></i>
+            </a>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../spherical_harmonics/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Spherical Harmonics
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../noncollinear/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Noncollinear
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+            <center>Abinit version 9.8.2</center>
+        
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2020-2021 The Abinit Group
+            
+            (X. Gonze, Y. Suzukawa, M. Mikami, MG)
+            
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/abinit/abinit" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://www.youtube.com/watch?v=gcbfb_Mteo4" target="_blank" rel="noopener" title="www.youtube.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="http://www.facebook.com/abinit.org" target="_blank" rel="noopener" title="www.facebook.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/hashtag/abinit" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "header.autohide"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fb4a9340.min.js", "version": "9.8.2"}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a1c7c35e.min.js"></script>
+      
+        <script src="../../extra_javascript/abidocs.js"></script>
+      
+    
+  </body>
+</html>

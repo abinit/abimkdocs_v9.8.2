@@ -1,0 +1,4546 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Abinit documentation">
+      
+      
+      
+        <meta name="author" content="The Abinit group">
+      
+      
+        <link rel="canonical" href="https://docs.abinit.org/INSTALL_EasyBuild/">
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.6">
+    
+    
+      
+        <title>EasyBuild - abinit</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2c0c5eaf.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.7fa14f5b.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#ff6e42">
+        
+      
+    
+    
+    
+
+    <!-- 
+    IMPORTANT: Don't use boostrap in particular boostrap.css since it comes into conflict with mkdocs-material theme.
+    Prefer low-level tools based on Jquery or JS library such as Tippyjs to get the work done.
+    -->
+
+    <!-- Jquery from Google CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load Jquery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- Handle jQuery plugin naming conflict between jQuery UI and Bootstrap
+    https://stackoverflow.com/questions/13731400/jqueryui-tooltips-are-competing-with-twitter-bootstrap
+    <script>
+      $.widget.bridge('uibutton', $.ui.button);
+      $.widget.bridge('uitooltip', $.ui.tooltip);
+    </script>
+    -->
+
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+    <!-- Tippyjs for popovers https://atomiks.github.io/tippyjs/ -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+
+    <!-- font-awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <!--Pace support. http://github.hubspot.com/pace/ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/white/pace-theme-big-counter.min.css" />
+
+    <script>
+        paceOptions = {
+            ajax: true,      // disabled
+            document: true,  // activated
+            eventLag: false  // disabled
+            //target: 'article'
+            //elements: {selectors: ['.my-page']}
+        };
+    </script>
+
+    <!-- MathJax support
+    <script type="text/javascript" async 
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script> 
+    -->
+
+    <!-- This version is compatible with plotly. -->
+    <script type="text/javascript" async 
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_SVG">
+    </script> 
+
+    <!-- Configure MathJax to produce automatic equation numbers http://docs.mathjax.org/en/latest/tex.html -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        //jax: ["input/TeX","output/HTML-CSS"],
+        //tex2jax: {inlineMath: [['$','$']]},
+        //displayAlign: "center",
+        TeX: {
+            equationNumbers: { autoNumber: "AMS" },
+            extensions: ["AMSmath.js", "boldsymbol.js"],
+            Macros: {
+                "*": "{\\dagger}",
+                "ra": "{\\rangle}",
+                "la": "{\\langle}",
+                // Workaround for bm package. See https://github.com/mathjax/MathJax/issues/1219
+                bm: ["{\\boldsymbol #1}",1],
+                // Mathcal symbols
+                mcL: "{\\mathcal{L}}",
+                mcG: "{\\mathcal{G}}",
+                mcR: "{\\mathcal{R}}",
+                mcS: "{\\mathcal{S}}",
+                mcC: "{\\mathcal{C}}",
+                mcO: "{\\mathcal{O}}",
+                // Acronyms
+                KS: "{\\text{KS}}",
+                eph: "{\\text{e-ph}}",
+                ee: "{\\text{e-e}}",
+                phph: "{\\text{ph-ph}}",
+                FM: "{\\text{FM}}",
+                DW: "{\\text{DW}}",
+                QP: "{\\text{QP}}",
+                BZ: "{\\text{BZ}}",
+                sign: "{\\text{sign}}",
+                xc: "{\\text{xc}}",
+                tchi: "{\\tilde\\chi}",
+                // Symbols commonly used (k-points, eigenvalues ...)
+                rr: "{\\bf r}",
+                RR: "{\\bf R}",
+                tt: "{\\bf t}",
+                GG: "{\\bf G}",
+                kk: "{\\bf k}",
+                qq: "{\\bf q}",
+                kq: "{\\kk + \\qq}",
+                qG: "{\\bf q + G}",
+                kG: "{\\bf k + G}",
+                kmq: "{\\kk - \\qq}",
+                kpq: "{\\kk + \\qq}",
+                kpG: "{\\kk + \\GG}",
+                qpG: "{\\qq + \\GG}",
+                nk: "{n \\kk}",
+                mk: "{, \\kk}",
+                nks: "{n \\kk\\sigma}",
+                mks: "{m \\kk\\sigma}",
+                enk: "{\\varepsilon_\\nk}",
+                emkq: "{\\varepsilon_{m\\kk+\\qq}}",
+                qnu: "{\\qq \\nu}",
+                wqnu: "{\\omega_{\\qnu}}",
+                vnk: "{\\mathbf{v}_{n\\kk}}",
+                vmkq: "{\\mathbf{v}_{m\\kk+\\qq}}",
+                vnka: "{\\mathrm{v}_{n\\kk,\\alpha}}",
+                vnkb: "{\\mathrm{v}_{n\\kk,\\beta}}",
+                ef: "{\\varepsilon_F}",
+                // EPH quantities
+                gkkp: "{g_{mn\\nu}(\\kk,\\qq)}",
+                gkq: "{g_{mn\\nu}(\\kk,\\qq)}",
+                //\newcommand{\gkkpL}{g_{mn\nu}^\Lc(\kb,\qb)}
+                // Many-body theory
+                Go: "{G_0}",
+                Wo: "{W_0}",
+                Ueff: "{U_{\\text{eff}}}",
+                // Greek symbols + tilde version
+                ee: "{\\epsilon}",
+                tee: "{\\tilde{\\epsilon}}",
+                ww: "{\\omega}",
+                tww: "{\\tilde\\omega}",
+                dd: "{\\,\\text{d}}",
+                vxc: "{v_\\xc}",
+                // symrel
+                Ri: "{\\mcR^{-1}}",
+                Rit: "{\\mcR^{-1\\tau}}",
+                // symrec
+                Si: "{\\mcS^{-1}}}",
+                Sit: "{\\Si^\\tau}}",
+                // partial and functional derivative.
+                PDER: ["{\\dfrac{\\partial #1}{\\partial #2}}", 2],
+                FDER: ["{\\dfrac{\\delta #1}{\\delta #2}}", 2],
+                // PAW
+                tPsi: "{\\tilde\\Psi}",
+                tpsi: "{\\tilde\\psi}",
+                tPhi: "{\\tilde\\Phi}",
+                tphi: "{\\tilde\\phi}",
+                tprj: "{\\tilde p}"
+            }
+          }
+      });
+    </script>
+
+    
+
+    
+
+    <!-- Load fonts used for input variables -->
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../css/extra.css">
+    
+      <link rel="stylesheet" href="../css/gallery.css">
+    
+      <link rel="stylesheet" href="../css/my_codehilite.css">
+    
+    
+      
+        
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-116681470-1","docs.abinit.org"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#how-to-install-abinit-with-easybuild" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="abinit" class="md-header__button md-logo" aria-label="abinit" data-md-component="logo">
+      
+  <img src="../images/logo-abinit-2015.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            abinit
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              EasyBuild
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="md-header__options">
+      
+    </div>
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/abinit/abinit/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github-abinit
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link md-tabs__link--active">
+        User Guides
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../topics/features/" class="md-tabs__link">
+        Topics
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../variables/" class="md-tabs__link">
+        Variables
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../tutorial/" class="md-tabs__link">
+        Tutorials
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../faq/configuration_and_compilation/" class="md-tabs__link">
+        FAQ
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../theory/geometry/" class="md-tabs__link">
+        Theory
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../developers/git_and_gitlab/" class="md-tabs__link">
+        Developers
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../about/release-notes/" class="md-tabs__link">
+        About
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="abinit" class="md-nav__button md-logo" aria-label="abinit" data-md-component="logo">
+      
+  <img src="../images/logo-abinit-2015.png" alt="logo">
+
+    </a>
+    abinit
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/abinit/abinit/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github-abinit
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+      
+      <label class="md-nav__link" for="__nav_1">
+        User Guides
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="User Guides" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          User Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        NewUser
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/abinit/" class="md-nav__link">
+        Abinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/aim/" class="md-nav__link">
+        Aim
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/anaddb/" class="md-nav__link">
+        Anaddb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/atdep/" class="md-nav__link">
+        aTDEP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/cut3d/" class="md-nav__link">
+        Cut3d
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/fold2bloch/" class="md-nav__link">
+        Fold2Bloch
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/mrgddb/" class="md-nav__link">
+        Mrgddb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/mrgscr/" class="md-nav__link">
+        Mrgscr
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/multibinit/" class="md-nav__link">
+        Multibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/optic/" class="md-nav__link">
+        Optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/respfn/" class="md-nav__link">
+        Respfn
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/spacegroup/" class="md-nav__link">
+        Spacegroup
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_14" type="checkbox" id="__nav_1_14" checked>
+      
+      <label class="md-nav__link" for="__nav_1_14">
+        Installation
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Installation" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_14">
+          <span class="md-nav__icon md-icon"></span>
+          Installation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        HowTo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../INSTALL_MacOS/" class="md-nav__link">
+        MacOS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../INSTALL_Ubuntu/" class="md-nav__link">
+        Ubuntu
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../INSTALL_CentOS/" class="md-nav__link">
+        CentOS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          EasyBuild
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        EasyBuild
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started-with-easybuild" class="md-nav__link">
+    Getting started with EasyBuild
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-a-customized-easyconfig" class="md-nav__link">
+    Using a customized easyconfig
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../INSTALL_gpu/" class="md-nav__link">
+        GPUs
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Topics
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/features/" class="md-nav__link">
+        Features
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/" class="md-nav__link">
+        Topic List
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Abipy/" class="md-nav__link">
+        Abipy
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/APPA/" class="md-nav__link">
+        APPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Artificial/" class="md-nav__link">
+        Artificial
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/AtomManipulator/" class="md-nav__link">
+        AtomManipulator
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/aTDEP/" class="md-nav__link">
+        aTDEP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/AtomTypes/" class="md-nav__link">
+        AtomTypes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Bader/" class="md-nav__link">
+        Bader
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Band2eps/" class="md-nav__link">
+        Band2eps
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Berry/" class="md-nav__link">
+        Berry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/BandOcc/" class="md-nav__link">
+        BandOcc
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/BSE/" class="md-nav__link">
+        BSE
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/BoundingProcess/" class="md-nav__link">
+        BoundingProcess
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/ConstrainedDFT/" class="md-nav__link">
+        ConstrainedDFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/ConstrainedPol/" class="md-nav__link">
+        ConstrainedPol
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Control/" class="md-nav__link">
+        Control
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Coulomb/" class="md-nav__link">
+        Coulomb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/CrossingBarriers/" class="md-nav__link">
+        CrossingBarriers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/CRPA/" class="md-nav__link">
+        CRPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/crystal/" class="md-nav__link">
+        Crystal
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/DFT%2BU/" class="md-nav__link">
+        DFT+U
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/DeltaSCF/" class="md-nav__link">
+        DeltaSCF
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/DensityPotential/" class="md-nav__link">
+        DensityPotential
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Dev/" class="md-nav__link">
+        Dev
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/DFPT/" class="md-nav__link">
+        DFPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/DMFT/" class="md-nav__link">
+        DMFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/DynamicsMultibinit/" class="md-nav__link">
+        DynamicsMultibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/EffectiveMass/" class="md-nav__link">
+        EffectiveMass
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/EFG/" class="md-nav__link">
+        EFG
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Elastic/" class="md-nav__link">
+        Elastic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/ElPhonInt/" class="md-nav__link">
+        ElPhonInt
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/ElPhonTransport/" class="md-nav__link">
+        ElPhonTransport
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/ElecDOS/" class="md-nav__link">
+        ElecDOS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/ElecBandStructure/" class="md-nav__link">
+        ElecBandStructure
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/ExtFPMD/" class="md-nav__link">
+        ExtFPMD
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/FileFormats/" class="md-nav__link">
+        FileFormats
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/FitProcess/" class="md-nav__link">
+        FitProcess
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/ForcesStresses/" class="md-nav__link">
+        ForcesStresses
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/FrequencyMeshMBPT/" class="md-nav__link">
+        FrequencyMeshMBPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/GeoConstraints/" class="md-nav__link">
+        GeoConstraints
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/GeoOpt/" class="md-nav__link">
+        GeoOpt
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Git/" class="md-nav__link">
+        Git
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/GSintroduction/" class="md-nav__link">
+        GSintroduction
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/GW/" class="md-nav__link">
+        GW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/GWls/" class="md-nav__link">
+        GWls
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Hybrids/" class="md-nav__link">
+        Hybrids
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/k-points/" class="md-nav__link">
+        K points
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/LatticeModel/" class="md-nav__link">
+        LatticeModel
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/LatticeWannier/" class="md-nav__link">
+        LatticeWannier
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/LWFModel/" class="md-nav__link">
+        LWFModel
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/LDAminushalf/" class="md-nav__link">
+        LDAminushalf
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/LOTF/" class="md-nav__link">
+        LOTF
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/longwave/" class="md-nav__link">
+        Longwave
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Macroave/" class="md-nav__link">
+        Macroave
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/MagField/" class="md-nav__link">
+        MagField
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/MagMom/" class="md-nav__link">
+        MagMom
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/MolecularDynamics/" class="md-nav__link">
+        MolecularDynamics
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/multidtset/" class="md-nav__link">
+        Multidtset
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/nonlinear/" class="md-nav__link">
+        Nonlinear
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Optic/" class="md-nav__link">
+        Optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Output/" class="md-nav__link">
+        Output
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/parallelism/" class="md-nav__link">
+        Parallelism
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/PAW/" class="md-nav__link">
+        PAW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/PIMD/" class="md-nav__link">
+        PIMD
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Planewaves/" class="md-nav__link">
+        Planewaves
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Phonons/" class="md-nav__link">
+        Phonons
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/PhononBands/" class="md-nav__link">
+        PhononBands
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/PhononWidth/" class="md-nav__link">
+        PhononWidth
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/PortabilityNonRegression/" class="md-nav__link">
+        PortabilityNonRegression
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/positron/" class="md-nav__link">
+        Positron
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/printing/" class="md-nav__link">
+        Printing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/PseudosPAW/" class="md-nav__link">
+        PseudosPAW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/q-points/" class="md-nav__link">
+        Q points
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/RandStopPow/" class="md-nav__link">
+        RandStopPow
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Recursion/" class="md-nav__link">
+        Recursion
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/RPACorrEn/" class="md-nav__link">
+        RPACorrEn
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/SCFControl/" class="md-nav__link">
+        SCFControl
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/SCFAlgorithms/" class="md-nav__link">
+        SCFAlgorithms
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/SelfEnergy/" class="md-nav__link">
+        SelfEnergy
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/SmartSymm/" class="md-nav__link">
+        SmartSymm
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/spinpolarisation/" class="md-nav__link">
+        Spinpolarisation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/SpinDynamicsMultibinit/" class="md-nav__link">
+        SpinDynamicsMultibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/STM/" class="md-nav__link">
+        STM
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Susceptibility/" class="md-nav__link">
+        Susceptibility
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/TDDFT/" class="md-nav__link">
+        TDDFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/TDepES/" class="md-nav__link">
+        TDepES
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Temperature/" class="md-nav__link">
+        Temperature
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/TransPath/" class="md-nav__link">
+        TransPath
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/TuningSpeedMem/" class="md-nav__link">
+        TuningSpeedMem
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Unfolding/" class="md-nav__link">
+        Unfolding
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/UnitCell/" class="md-nav__link">
+        UnitCell
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/vdw/" class="md-nav__link">
+        Vdw
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Verification/" class="md-nav__link">
+        Verification
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Wannier/" class="md-nav__link">
+        Wannier
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/Wavelets/" class="md-nav__link">
+        Wavelets
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/xc/" class="md-nav__link">
+        Xc
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topics/external_resources/" class="md-nav__link">
+        External Resources
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Variables
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Variables" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Variables
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/" class="md-nav__link">
+        All Variables
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      <label class="md-nav__link" for="__nav_3_2">
+        Abinit
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Abinit" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Abinit
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/basic/" class="md-nav__link">
+        Basic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/bse/" class="md-nav__link">
+        Bethe-Salpeter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/dev/" class="md-nav__link">
+        Developers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/dmft/" class="md-nav__link">
+        DMFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/eph/" class="md-nav__link">
+        Electron-Phonon
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/ffield/" class="md-nav__link">
+        Varff
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/files/" class="md-nav__link">
+        File-handling
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/geo/" class="md-nav__link">
+        Geometry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/gstate/" class="md-nav__link">
+        Ground-State
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/gw/" class="md-nav__link">
+        GW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/internal/" class="md-nav__link">
+        Internal
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/paral/" class="md-nav__link">
+        Parallelism
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/paw/" class="md-nav__link">
+        PAW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/dfpt/" class="md-nav__link">
+        DFPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/rlx/" class="md-nav__link">
+        Relaxation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/vdw/" class="md-nav__link">
+        VdW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/w90/" class="md-nav__link">
+        Wannier90
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/anaddb/" class="md-nav__link">
+        Anaddb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/atdep/" class="md-nav__link">
+        aTDEP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/multibinit/" class="md-nav__link">
+        Multibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/optic/" class="md-nav__link">
+        Optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/aim/" class="md-nav__link">
+        Aim
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/external_parameters/" class="md-nav__link">
+        External Parameters
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../variables/varset_stats/" class="md-nav__link">
+        Statistics
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      <label class="md-nav__link" for="__nav_4_2">
+        Basic tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Basic tutorials" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Basic tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/base1/" class="md-nav__link">
+        basic1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/base2/" class="md-nav__link">
+        basic2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/base3/" class="md-nav__link">
+        basic3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/base4/" class="md-nav__link">
+        basic4
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/abinit_build/" class="md-nav__link">
+        ABINIT_build
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/paw1/" class="md-nav__link">
+        PAW1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/spin/" class="md-nav__link">
+        Spin
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/polarization/" class="md-nav__link">
+        Polarization & finite field
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/rf1/" class="md-nav__link">
+        DFPT1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/rf2/" class="md-nav__link">
+        DFPT2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/basepar/" class="md-nav__link">
+        parallelism
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_10" type="checkbox" id="__nav_4_10" >
+      
+      <label class="md-nav__link" for="__nav_4_10">
+        ABINIT postprocessors
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="ABINIT postprocessors" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_10">
+          <span class="md-nav__icon md-icon"></span>
+          ABINIT postprocessors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/atdep1/" class="md-nav__link">
+        aTDEP1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/cut3d/" class="md-nav__link">
+        cut3D
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/fold2bloch/" class="md-nav__link">
+        fold2bloch
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/optic/" class="md-nav__link">
+        optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/wannier90/" class="md-nav__link">
+        wannier90
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/z2pack/" class="md-nav__link">
+        Z2pack
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_11" type="checkbox" id="__nav_4_11" >
+      
+      <label class="md-nav__link" for="__nav_4_11">
+        DFT beyond basics
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="DFT beyond basics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          DFT beyond basics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/nuc/" class="md-nav__link">
+        properties at the nucleus
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/dftu/" class="md-nav__link">
+        DFT+U
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/ucalc_crpa/" class="md-nav__link">
+        U_calc_RPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/ucalc_lr/" class="md-nav__link">
+        U_calc_LR
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/paw2/" class="md-nav__link">
+        PAW2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/paw3/" class="md-nav__link">
+        PAW3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/positron/" class="md-nav__link">
+        positron
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_12" type="checkbox" id="__nav_4_12" >
+      
+      <label class="md-nav__link" for="__nav_4_12">
+        Many-Body Theory & excitations
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Many-Body Theory & excitations" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_12">
+          <span class="md-nav__icon md-icon"></span>
+          Many-Body Theory & excitations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/gw1/" class="md-nav__link">
+        GW1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/gw2/" class="md-nav__link">
+        GW2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/bse/" class="md-nav__link">
+        Bethe-Salpeter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/dmft/" class="md-nav__link">
+        DMFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/tddft/" class="md-nav__link">
+        TDDFT (Casida)
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_13" type="checkbox" id="__nav_4_13" >
+      
+      <label class="md-nav__link" for="__nav_4_13">
+        DFPT & electron-phonon
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="DFPT & electron-phonon" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_13">
+          <span class="md-nav__icon md-icon"></span>
+          DFPT & electron-phonon
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/elastic/" class="md-nav__link">
+        elastic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/nlo/" class="md-nav__link">
+        nonlinear
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/lattice_wannier/" class="md-nav__link">
+        lattice_wannier
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/eph_intro/" class="md-nav__link">
+        eph_intro
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/eph4mob/" class="md-nav__link">
+        eph for mobilities
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/eph4zpr/" class="md-nav__link">
+        eph for zero-point renormalization
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/eph_legacy/" class="md-nav__link">
+        eph_legacy
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/eph_tdep_legacy/" class="md-nav__link">
+        tdepes_legacy
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_14" type="checkbox" id="__nav_4_14" >
+      
+      <label class="md-nav__link" for="__nav_4_14">
+        Multibinit
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Multibinit" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_14">
+          <span class="md-nav__icon md-icon"></span>
+          Multibinit
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/multibinit/" class="md-nav__link">
+        introduction to multibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/lattice_model/" class="md-nav__link">
+        lattice_model
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/spin_model/" class="md-nav__link">
+        spin_model
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/lwf_model/" class="md-nav__link">
+        lwf_model
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_15" type="checkbox" id="__nav_4_15" >
+      
+      <label class="md-nav__link" for="__nav_4_15">
+        Advanced parallelism
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Advanced parallelism" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_15">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced parallelism
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/paral_bandpw/" class="md-nav__link">
+        paral_band_PW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/paral_gswvl/" class="md-nav__link">
+        paral_wavelets
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/paral_moldyn/" class="md-nav__link">
+        paral_MD
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/paral_images/" class="md-nav__link">
+        paral_images
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/paral_dfpt/" class="md-nav__link">
+        paral_DFPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/paral_mbt/" class="md-nav__link">
+        paral_MBPT
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        FAQ
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="FAQ" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          FAQ
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/configuration_and_compilation/" class="md-nav__link">
+        Configuration and compilation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/general_questions/" class="md-nav__link">
+        General questions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/pre_and_post_processing/" class="md-nav__link">
+        Pre/Post processing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/ground_state/" class="md-nav__link">
+        Ground state
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/dfpt/" class="md-nav__link">
+        DFPT
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Theory
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Theory" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theory/geometry/" class="md-nav__link">
+        Geometry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theory/spherical_harmonics/" class="md-nav__link">
+        Spherical Harmonics
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theory/wavefunctions/" class="md-nav__link">
+        Wavefunctions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theory/noncollinear/" class="md-nav__link">
+        Noncollinear
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theory/pseudopotentials/" class="md-nav__link">
+        Pseudopotentials
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theory/mbt/" class="md-nav__link">
+        Many-Body Perturbation Theory
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theory/bse/" class="md-nav__link">
+        Bethe-Salpeter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theory/documents/" class="md-nav__link">
+        Documents
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theory/acknowledgments/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theory/bibliography/" class="md-nav__link">
+        Bibliography
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../theory/acronyms/" class="md-nav__link">
+        Acronyms
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      <label class="md-nav__link" for="__nav_7">
+        Developers
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Developers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Developers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/git_and_gitlab/" class="md-nav__link">
+        Git and Gitlab
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/developers_howto/" class="md-nav__link">
+        HowTo for developers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/abimkdocs/" class="md-nav__link">
+        Abimkdocs
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/markdown/" class="md-nav__link">
+        Markdown
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      <label class="md-nav__link" for="__nav_7_5">
+        Test Suite
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Test Suite" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          Test Suite
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/testsuite/" class="md-nav__link">
+        Test list
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/testsuite_howto/" class="md-nav__link">
+        Test Suite Howto
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/new_testsuite/" class="md-nav__link">
+        YAML-based test suite Howto
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/yaml_tools_api/" class="md-nav__link">
+        YAML-based test suite Python tools and API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/XgType/" class="md-nav__link">
+        XgType
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_7" type="checkbox" id="__nav_7_7" >
+      
+      <label class="md-nav__link" for="__nav_7_7">
+        Pseudos
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Pseudos" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_7">
+          <span class="md-nav__icon md-icon"></span>
+          Pseudos
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/psp1_info/" class="md-nav__link">
+        psp1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/psp3_info/" class="md-nav__link">
+        psp3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/psp45_info/" class="md-nav__link">
+        psp45
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/psp5spinorbit_info/" class="md-nav__link">
+        psp5
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/psp6_info/" class="md-nav__link">
+        psp6
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/psp8_info/" class="md-nav__link">
+        psp8
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/codestats/" class="md-nav__link">
+        Code stats
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/autoconf_examples/" class="md-nav__link">
+        Autoconf_examples
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developers/testlink/" class="md-nav__link">
+        Test Page for linkcheck
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      <label class="md-nav__link" for="__nav_8">
+        About
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about/release-notes/" class="md-nav__link">
+        Release Notes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about/contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about/history/" class="md-nav__link">
+        History
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started-with-easybuild" class="md-nav__link">
+    Getting started with EasyBuild
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-a-customized-easyconfig" class="md-nav__link">
+    Using a customized easyconfig
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+
+                
+                  <a href="https://github.com/abinit/abinit/edit/master/doc/INSTALL_EasyBuild.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="how-to-install-abinit-with-easybuild">How to install ABINIT with EasyBuild<a class="headerlink" href="#how-to-install-abinit-with-easybuild" title="Permanent link">&para;</a></h1>
+<p>This page describes how to compile and install ABINIT with <a href="https://github.com/easybuilders/easybuild">EasyBuild</a>,
+a python framework for managing scientific software on clusters
+that allows one to build an entire software stack and the associated modules with a single command.</p>
+<p>For further information about EasyBuild, please consult the <a href="https://easybuild.readthedocs.io/en/latest/">official documentation</a>.
+We also recommended to read this <a href="https://ulhpc-tutorials.readthedocs.io/en/latest/tools/easybuild/">tutorial</a> in which
+the different steps required to build and install software are discussed in more detail.
+For an introduction to Lmod and Environment Modules,
+see the <a href="https://lmod.readthedocs.io/en/latest/index.html">Lmod user guide</a>.</p>
+<p>Note also that EasyBuild configuration files (<em>easyconfigs</em>) for different ABINIT versions and different toolchains
+are available on <a href="https://github.com/easybuilders/easybuild-easyconfigs/tree/develop/easybuild/easyconfigs/a/ABINIT">github</a>.
+If you are not interested in learning how to use EasyBuild,
+feel free to ask your sysadmin to build an ABINIT module using one of the <em>easyconfigs</em> already available.
+If, on the other hand, you love learning how to use new tools to facilitate your work
+and you like to organize your own software stack in a clean way with automatically-generated modules, continue reading.</p>
+<h2 id="getting-started-with-easybuild">Getting started with EasyBuild<a class="headerlink" href="#getting-started-with-easybuild" title="Permanent link">&para;</a></h2>
+<p>First of all, let&rsquo;s use the <code>module spider</code> command to check whether an ABINIT module is already installed:</p>
+<div class="highlight"><pre><span></span><code>$ module spider abinit
+
+------------------------------------------------------------------------------------------------------------------------
+  ABINIT:
+------------------------------------------------------------------------------------------------------------------------
+    Description:
+      ABINIT is a package whose main program allows one to find the total energy, charge density and electronic
+      structure of systems made of electrons and nuclei <span class="o">(</span>molecules and periodic solids<span class="o">)</span> within Density Functional
+      Theory <span class="o">(</span>DFT<span class="o">)</span>, using pseudopotentials and a planewave or wavelet basis.
+
+     Versions:
+        ABINIT/8.2.2-foss-2016b
+        ABINIT/8.4.4-intel-2017b
+        ABINIT/8.6.3-intel-2018a
+        ABINIT/8.10.2-intel-2017b
+        ABINIT/8.10.3-intel-2018b
+
+------------------------------------------------------------------------------------------------------------------------
+  For detailed information about a specific <span class="s2">&quot;ABINIT&quot;</span> package <span class="o">(</span>including how to load the modules<span class="o">)</span> use the module<span class="err">&#39;</span>s full name.
+  Note that names that have a trailing <span class="o">(</span>E<span class="o">)</span> are extensions provided by other modules.
+  For example:
+
+     $ module spider ABINIT/8.10.3-intel-2018b
+------------------------------------------------------------------------------------------------------------------------
+</code></pre></div>
+<p>The output shows that there are five ABINIT versions already installed.
+The good news is that we can directly load one of these modules with</p>
+<div class="highlight"><pre><span></span><code>$ module load ABINIT/8.10.3-intel-2018b
+</code></pre></div>
+<p>to activate the 8.10.3 executable compiled with the intel toolchain 2018b.
+The bad news is that all the available versions are rather old so
+we have to use the EasyBuild command line interface to build a more recent version.</p>
+<p>To build software with EasyBuild, we need the <code>eb</code> python script.
+If <code>eb</code> is not already in $PATH, you will get the following error message:</p>
+<div class="highlight"><pre><span></span><code>$ which eb
+bash: eb: <span class="nb">command</span> not found...
+</code></pre></div>
+<p>In this case, issue <code>module spider EasyBuild</code> and follow the instructions printed to the terminal
+to load the EasyBuild module, e.g.:</p>
+<div class="highlight"><pre><span></span><code>$ module load EasyBuild/4.2.2
+
+$ which eb
+/opt/sw/arch/easybuild/software/EasyBuild/4.2.2/bin/eb
+</code></pre></div>
+<p>Now execute <code>eb</code> with the <code>-S</code> option to search for ABINIT easyconfigs:</p>
+<div class="highlight"><pre><span></span><code>$ eb -S <span class="nv">abinit</span>
+
+<span class="o">==</span> found valid index <span class="k">for</span> /usr/easybuild/easyconfigs, so using it...
+<span class="o">==</span> found valid index <span class="k">for</span> /usr/easybuild/easyconfigs, so using it...
+<span class="nv">CFGS1</span><span class="o">=</span>/usr/easybuild/easyconfigs
+<span class="nv">CFGS2</span><span class="o">=</span>/usr/easybuild/easyconfigs
+ * <span class="nv">$CFGS1</span>/a/ABINIT/ABINIT-8.0.8-intel-2016a.eb
+ * <span class="nv">$CFGS1</span>/a/ABINIT/ABINIT-8.0.8b-foss-2016b.eb
+ * <span class="nv">$CFGS1</span>/a/ABINIT/ABINIT-8.0.8b-intel-2016b.eb
+ * <span class="nv">$CFGS1</span>/a/ABINIT/ABINIT-8.10.2-intel-2018b.eb
+ * <span class="nv">$CFGS1</span>/a/ABINIT/ABINIT-8.10.3-intel-2018b.eb
+ * <span class="nv">$CFGS1</span>/a/ABINIT/ABINIT-8.2.2-foss-2016b.eb
+ * <span class="nv">$CFGS1</span>/a/ABINIT/ABINIT-8.2.2-intel-2016b.eb
+ * <span class="nv">$CFGS1</span>/a/ABINIT/ABINIT-8.4.4-intel-2017b.eb
+ * <span class="nv">$CFGS1</span>/a/ABINIT/ABINIT-8.6.3-intel-2018a.eb
+ * <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT-8.0.8-intel-2016a.eb
+ * <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT-8.0.8b-foss-2016b.eb
+ * <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT-8.0.8b-intel-2016b.eb
+ * <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT-8.10.2-intel-2018b.eb
+ * <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT-8.10.3-intel-2018b.eb
+ * <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT-8.2.2-foss-2016b.eb
+ * <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT-8.2.2-intel-2016b.eb
+ * <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT-8.4.4-intel-2017b.eb
+ * <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT-8.6.3-intel-2018a.eb
+ * <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT-9.0.4-foss-2019b.eb
+ * <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT-9.0.4-intel-2019b.eb
+</code></pre></div>
+<p>Various <em>easyconfig</em> files are found for different ABINIT versions
+and different toolchains: <code>foss 2016b</code>, <code>intel 2018a</code>, etc.
+Note that the output may change depending on the version of EasyBuild installed on your machine as
+these <code>eb</code> files are shipped with the EasyBuild installation.
+More recent <em>easyconfigs</em> files can be found in the
+<a href="https://github.com/easybuilders/easybuild-easyconfigs/tree/develop/easybuild/easyconfigs/a/ABINIT">github repository</a>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><code>eb</code> files typically follow the naming scheme <code>&lt;name&gt;-&lt;version&gt;[-&lt;toolchain&gt;][&lt;versionsuffix&gt;].eb</code>.
+The name reflects the fact each easyconfig file is associated to a particular version of the library/application
+and a particular <a href="https://easybuild.readthedocs.io/en/latest/Common-toolchains.html">toolchain</a>.
+For example, <code>foss</code> stands for Free and Open Source Software toolchain based on 
+GCC, OpenMPI, OpenBLAS/LAPACK, ScaLAPACK, and FFTW3
+whereas the <code>intel</code> toolchain is based on the intel compilers, MKL and intel MPI.</p>
+<p>Applications based on <code>foss</code> are relatively easy to build since all the basic building blocks
+(including the GCC compiler suite) can be compiled from source if needed.
+On the contrary, the <code>intel</code> toolchain requires licensed software and valid licenses must be available to install and use it.</p>
+<p>It is worth to mention that applications compiled with the <code>intel</code> toolchain are usually more performant
+than the <code>foss</code> version especially on intel hardware.
+Unfortunately, compiling and linking with the intel toolchain requires a pre-existent licensed installation
+that is usually done by the sysadmin.
+As a consequence, building software with an intel easyconfig is not that easy if the sysadmin hasn&rsquo;t
+already installed the intel toolchain.</p>
+</div>
+<p>We are lucky as our installation kindly provides two configuration files for ABINIT 9.0.4:</p>
+<div class="highlight"><pre><span></span><code>* <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT/9.0.4-foss-2019b.eb
+* <span class="nv">$CFGS2</span>/a/ABINIT/ABINIT/9.0.4-intel-2019b.eb
+</code></pre></div>
+<p>but before discussing the build process, let&rsquo;s have a look at the <code>Meta Modules</code> section that lists the
+releases available on our machine:</p>
+<div class="highlight"><pre><span></span><code>$ module avail
+
+------------------ Meta Modules ------------------
+   releases/elic-2017b        releases/2016b <span class="o">(</span>S,L<span class="o">)</span>
+   releases/2016a      <span class="o">(</span>S<span class="o">)</span>    releases/2017b <span class="o">(</span>S<span class="o">)</span>
+   releases/2018a <span class="o">(</span>S<span class="o">)</span>         releases/2019b <span class="o">(</span>S,D<span class="o">)</span>    use.own
+   releases/2018b <span class="o">(</span>S<span class="o">)</span>         tis/2018.01    <span class="o">(</span>S,L<span class="o">)</span>
+
+&lt;snip&gt;
+</code></pre></div>
+<p>The <code>(D)</code> after the name of the module stands for Default.
+It means that EasyBuild uses this release by default.</p>
+<p>Since we want to build <code>9.0.4-foss-2019b.eb</code> and <code>2019b</code> is the default release,
+we can proceed directly with the next steps.
+If you want to build a recipe associated to a different release e.g. <code>2016a</code>,
+you need to load the associated module before building the code using e.g.:</p>
+<div class="highlight"><pre><span></span><code>module load releases/2016a<span class="sb">`</span>
+</code></pre></div>
+<p>Now invoke <code>eb</code> with the name of the easyconfig file and the two options <code>--dry-run</code> and <code>--robot</code>
+(or just <code>-Dr</code> if you prefer the short version):</p>
+<div class="highlight"><pre><span></span><code>eb ABINIT-9.1.0-foss-2019b.eb --robot --dry-run
+</code></pre></div>
+<p><code>--dry-run</code> tells <code>eb</code> to print all the required dependencies <strong>without actually building software</strong>.
+We <strong>strongly</strong> suggest to use this option to understand what&rsquo;s going on before performing a full installation.
+The <code>--robot</code> option tells <code>eb</code> to automatically build and install all dependencies
+while searching for easyconfigs files in a set of pre-defined directories.
+To prepend additional directories to search for eb files (like the current directory $PWD),
+use the syntax <code>--robot-paths=$PWD</code>.
+Multiple directories can be specified using <code>--robot-paths=PATH1:PATH2</code></p>
+<p>On my machine, I get the following results:</p>
+<div class="highlight"><pre><span></span><code>eb ABINIT-9.1.0-foss-2019b.eb --robot --dry-run
+
+<span class="o">==</span> temporary log file <span class="k">in</span> <span class="k">case</span> of crash /tmp/eb-ttdRNl/easybuild-hVtLoS.log
+<span class="o">==</span> found valid index <span class="k">for</span> /usr/easybuild/easyconfigs, so using it...
+Dry run: printing build status of easyconfigs and dependencies
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/m/M4/M4-1.4.18.eb <span class="o">(</span>module: M4/1.4.18<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/b/Bison/Bison-3.3.2.eb <span class="o">(</span>module: Bison/3.3.2<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/z/zlib/zlib-1.2.11.eb <span class="o">(</span>module: zlib/1.2.11<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/h/help2man/help2man-1.47.4.eb <span class="o">(</span>module: help2man/1.47.4<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/f/flex/flex-2.6.4.eb <span class="o">(</span>module: flex/2.6.4<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/b/binutils/binutils-2.32.eb <span class="o">(</span>module: binutils/2.32<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/g/GCCcore/GCCcore-8.3.0.eb <span class="o">(</span>module: GCCcore/8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/h/help2man/help2man-1.47.8-GCCcore-8.3.0.eb <span class="o">(</span>module: help2man/1.47.8-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/m/M4/M4-1.4.18-GCCcore-8.3.0.eb <span class="o">(</span>module: M4/1.4.18-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/z/zlib/zlib-1.2.11-GCCcore-8.3.0.eb <span class="o">(</span>module: zlib/1.2.11-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/b/Bison/Bison-3.3.2-GCCcore-8.3.0.eb <span class="o">(</span>module: Bison/3.3.2-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/f/flex/flex-2.6.4-GCCcore-8.3.0.eb <span class="o">(</span>module: flex/2.6.4-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/b/binutils/binutils-2.32-GCCcore-8.3.0.eb <span class="o">(</span>module: binutils/2.32-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/g/GCC/GCC-8.3.0.eb <span class="o">(</span>module: GCC/8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/s/Szip/Szip-2.1.1-GCCcore-8.3.0.eb <span class="o">(</span>module: Szip/2.1.1-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/n/ncurses/ncurses-6.1-GCCcore-8.3.0.eb <span class="o">(</span>module: ncurses/6.1-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/e/expat/expat-2.2.7-GCCcore-8.3.0.eb <span class="o">(</span>module: expat/2.2.7-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/b/bzip2/bzip2-1.0.8-GCCcore-8.3.0.eb <span class="o">(</span>module: bzip2/1.0.8-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/l/libreadline/libreadline-8.0-GCCcore-8.3.0.eb <span class="o">(</span>module: libreadline/8.0-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/c/cURL/cURL-7.66.0-GCCcore-8.3.0.eb <span class="o">(</span>module: cURL/7.66.0-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/p/pkg-config/pkg-config-0.29.2-GCCcore-8.3.0.eb <span class="o">(</span>module: pkg-config/0.29.2-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/l/libtool/libtool-2.4.6-GCCcore-8.3.0.eb <span class="o">(</span>module: libtool/2.4.6-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/o/OpenBLAS/OpenBLAS-0.3.7-GCC-8.3.0.eb <span class="o">(</span>module: OpenBLAS/0.3.7-GCC-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/c/CMake/CMake-3.15.3-GCCcore-8.3.0.eb <span class="o">(</span>module: CMake/3.15.3-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/p/Perl/Perl-5.30.0-GCCcore-8.3.0.eb <span class="o">(</span>module: Perl/5.30.0-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/d/Doxygen/Doxygen-1.8.16-GCCcore-8.3.0.eb <span class="o">(</span>module: Doxygen/1.8.16-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/a/Autoconf/Autoconf-2.69-GCCcore-8.3.0.eb <span class="o">(</span>module: Autoconf/2.69-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/a/Automake/Automake-1.16.1-GCCcore-8.3.0.eb <span class="o">(</span>module: Automake/1.16.1-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span> <span class="o">]</span> /usr/easybuild/easyconfigs/l/libxc/libxc-4.3.4-GCC-8.3.0.eb <span class="o">(</span>module: libxc/4.3.4-GCC-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/a/Autotools/Autotools-20180311-GCCcore-8.3.0.eb <span class="o">(</span>module: Autotools/20180311-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/n/numactl/numactl-2.0.12-GCCcore-8.3.0.eb <span class="o">(</span>module: numactl/2.0.12-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/x/xorg-macros/xorg-macros-1.19.2-GCCcore-8.3.0.eb <span class="o">(</span>module: xorg-macros/1.19.2-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/l/libpciaccess/libpciaccess-0.14-GCCcore-8.3.0.eb <span class="o">(</span>module: libpciaccess/0.14-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/n/ncurses/ncurses-6.0.eb <span class="o">(</span>module: ncurses/6.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/g/gettext/gettext-0.19.8.1.eb <span class="o">(</span>module: gettext/0.19.8.1<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/x/XZ/XZ-5.2.4-GCCcore-8.3.0.eb <span class="o">(</span>module: XZ/5.2.4-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/l/libxml2/libxml2-2.9.9-GCCcore-8.3.0.eb <span class="o">(</span>module: libxml2/2.9.9-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/h/hwloc/hwloc-1.11.12-GCCcore-8.3.0.eb <span class="o">(</span>module: hwloc/1.11.12-GCCcore-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/o/OpenMPI/OpenMPI-3.1.4-GCC-8.3.0.eb <span class="o">(</span>module: OpenMPI/3.1.4-GCC-8.3.0<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/g/gompi/gompi-2019b.eb <span class="o">(</span>module: gompi/2019b<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/f/FFTW/FFTW-3.3.8-gompi-2019b.eb <span class="o">(</span>module: FFTW/3.3.8-gompi-2019b<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/s/ScaLAPACK/ScaLAPACK-2.0.2-gompi-2019b.eb <span class="o">(</span>module: ScaLAPACK/2.0.2-gompi-2019b<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/h/HDF5/HDF5-1.10.5-gompi-2019b.eb <span class="o">(</span>module: HDF5/1.10.5-gompi-2019b<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/n/netCDF/netCDF-4.7.1-gompi-2019b.eb <span class="o">(</span>module: netCDF/4.7.1-gompi-2019b<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/n/netCDF-Fortran/netCDF-Fortran-4.5.2-gompi-2019b.eb <span class="o">(</span>module: netCDF-Fortran/4.5.2-gompi-2019b<span class="o">)</span>
+ * <span class="o">[</span>x<span class="o">]</span> /usr/easybuild/easyconfigs/f/foss/foss-2019b.eb <span class="o">(</span>module: foss/2019b<span class="o">)</span>
+ * <span class="o">[</span> <span class="o">]</span> /home/users/g/m/gmatteo/try_eb/ABINIT-9.1.0-foss-2019b.eb <span class="o">(</span>module: ABINIT/9.0.4-foss-2019b<span class="o">)</span>
+<span class="o">==</span> Temporary log file<span class="o">(</span>s<span class="o">)</span> /tmp/eb-ttdRNl/easybuild-hVtLoS.log* have been removed.
+<span class="o">==</span> Temporary directory /tmp/eb-ttdRNl has been removed.
+</code></pre></div>
+<p>The output indicates that most of the dependencies are already installed (<strong>checked boxes</strong>).
+Only <em>libxc/4.3.4-GCC-8.3.0</em> and <em>ABINIT-9.1.0-foss-2019b.eb</em> must be built from source (<strong>unchecked boxes</strong>).</p>
+<p>Now we can finally build and install ABINIT v9.1.0 with <em>foss-2019b</em>
+by executing the same command without <code>--dry-run</code>:</p>
+<div class="highlight"><pre><span></span><code>eb ABINIT-9.1.0-foss-2019b.eb --robot
+
+<span class="o">==</span> temporary log file <span class="k">in</span> <span class="k">case</span> of crash /tmp/eb-4IOAjW/easybuild-vBwXik.log
+<span class="o">==</span> found valid index <span class="k">for</span> /usr/easybuild/easyconfigs, so using it...
+<span class="o">==</span> resolving dependencies ...
+<span class="o">==</span> processing EasyBuild easyconfig /usr/easybuild/easyconfigs/l/libxc/libxc-4.3.4-GCC-8.3.0.eb
+<span class="o">==</span> building and installing libxc/4.3.4-GCC-8.3.0...
+<span class="o">==</span> fetching files...
+<span class="o">==</span> creating build dir, resetting environment...
+<span class="o">==</span> starting iteration <span class="c1">#0 ...</span>
+<span class="o">==</span> unpacking...
+<span class="o">==</span> patching...
+<span class="o">==</span> preparing...
+<span class="o">==</span> configuring...
+<span class="o">==</span> building...
+<span class="o">==</span> testing...
+<span class="o">==</span> installing...
+<span class="o">==</span> taking care of extensions...
+<span class="o">==</span> creating build dir, resetting environment...
+<span class="o">==</span> starting iteration <span class="c1">#1 ...</span>
+<span class="o">==</span> unpacking...
+<span class="o">==</span> patching...
+<span class="o">==</span> preparing...
+<span class="o">==</span> configuring...
+<span class="o">==</span> building...
+<span class="o">==</span> testing...
+<span class="o">==</span> installing...
+<span class="o">==</span> taking care of extensions...
+<span class="o">==</span> restore after iterating...
+<span class="o">==</span> postprocessing...
+<span class="o">==</span> sanity checking...
+<span class="o">==</span> cleaning up...
+<span class="o">==</span> creating module...
+<span class="o">==</span> permissions...
+<span class="o">==</span> packaging...
+<span class="o">==</span> COMPLETED: Installation ended successfully <span class="o">(</span>took <span class="m">18</span> min <span class="m">29</span> sec<span class="o">)</span>
+<span class="o">==</span> Results of the build can be found <span class="k">in</span> the log file<span class="o">(</span>s<span class="o">)</span> /home/ucl/modl/gmatteo/.local/easybuild/software/libxc/4.3.4-GCC-8.3.0/easybuild/easybuild-libxc-4.3.4-20200904.010629.log
+<span class="o">==</span> processing EasyBuild easyconfig /home/users/g/m/gmatteo/try_eb/ABINIT-9.1.0-foss-2019b.eb
+<span class="o">==</span> building and installing ABINIT/9.0.4-foss-2019b...
+<span class="o">==</span> fetching files...
+<span class="o">==</span> creating build dir, resetting environment...
+<span class="o">==</span> unpacking...
+<span class="o">==</span> patching...
+<span class="o">==</span> preparing...
+<span class="o">==</span> configuring...
+<span class="o">==</span> building...
+<span class="o">==</span> testing...
+<span class="o">==</span> installing...
+<span class="o">==</span> taking care of extensions...
+<span class="o">==</span> restore after iterating...
+<span class="o">==</span> postprocessing...
+<span class="o">==</span> sanity checking...
+<span class="o">==</span> cleaning up...
+<span class="o">==</span> creating module...
+<span class="o">==</span> permissions...
+<span class="o">==</span> packaging...
+<span class="o">==</span> COMPLETED: Installation ended successfully <span class="o">(</span>took <span class="m">7</span> min <span class="m">4</span> sec<span class="o">)</span>
+<span class="o">==</span> Results of the build can be found <span class="k">in</span> the log file<span class="o">(</span>s<span class="o">)</span> /home/ucl/modl/gmatteo/.local/easybuild/software/ABINIT/9.0.4-foss-2019b/easybuild/easybuild-ABINIT-9.0.4-20200904.011333.log
+<span class="o">==</span> Build succeeded <span class="k">for</span> <span class="m">2</span> out of <span class="nv">2</span>
+<span class="o">==</span> Temporary log file<span class="o">(</span>s<span class="o">)</span> /tmp/eb-4IOAjW/easybuild-vBwXik.log* have been removed.
+<span class="o">==</span> Temporary directory /tmp/eb-4IOAjW has been removed.
+</code></pre></div>
+<p>As you can see from the log messages, <em>eb</em> has compiled <em>libxc</em> and finally <em>abinit</em>.
+Executables, libraries and modules are now installed in our <code>~/.local/easybuild/</code> directory.</p>
+<div class="highlight"><pre><span></span><code>$ ls ~/.local/easybuild/
+build  ebfiles_repo  modules  software  sources
+
+$ tree  ~/.local/easybuild/modules/
+/home/ucl/modl/gmatteo/.local/easybuild/modules/
+<span class="p">|</span>-- all
+<span class="p">|</span>   <span class="p">|</span>-- ABINIT
+<span class="p">|</span>   <span class="p">|</span>   <span class="sb">`</span>-- <span class="m">9</span>.0.4-foss-2019b.lua
+<span class="p">|</span>   <span class="sb">`</span>-- libxc
+<span class="p">|</span>       <span class="sb">`</span>-- <span class="m">4</span>.3.4-GCC-8.3.0.lua
+<span class="sb">`</span>-- chem
+    <span class="p">|</span>-- ABINIT
+    <span class="p">|</span>   <span class="sb">`</span>-- <span class="m">9</span>.0.4-foss-2019b.lua -&gt; /home/ucl/modl/gmatteo/.local/easybuild/modules/all/ABINIT/9.0.4-foss-2019b.lua
+    <span class="sb">`</span>-- libxc
+        <span class="sb">`</span>-- <span class="m">4</span>.3.4-GCC-8.3.0.lua -&gt; /home/ucl/modl/gmatteo/.local/easybuild/modules/all/libxc/4.3.4-GCC-8.3.0.lua
+</code></pre></div>
+<p>Since we need to load modules installed in <code>~/.local/easybuild/modules/all</code>,
+we must add this directory to $MODULEPATH.
+With a recent version of EasyBuild, issue:</p>
+<div class="highlight"><pre><span></span><code>module use use.own
+</code></pre></div>
+<p>If the <code>use.own</code> module is not available, execute the command:</p>
+<div class="highlight"><pre><span></span><code>module use ~/.local/easybuild/modules/all
+</code></pre></div>
+<p>At this point, we should have our version of ABINIT and the dependencies available as <code>User Modules</code></p>
+<div class="highlight"><pre><span></span><code>$ module avail
+
+------------- User Modules -------------
+   ABINIT/9.0.4-foss-2019b    libxc/4.3.4-GCC-8.3.0
+</code></pre></div>
+<p>We can finally load our brand-new ABINIT module with:</p>
+<div class="highlight"><pre><span></span><code>module load ABINIT/9.0.4-foss-2019b
+</code></pre></div>
+<p>and check that the abinit executable is in $PATH</p>
+<div class="highlight"><pre><span></span><code>$ which abinit
+~/.local/easybuild/software/ABINIT/9.0.4-foss-2019b/bin/abinit
+</code></pre></div>
+<p>and that we have the correct version:</p>
+<div class="highlight"><pre><span></span><code>$ abinit -v
+<span class="m">9</span>.0.4
+</code></pre></div>
+<p>The output of <code>ldd</code> shows that the executable is dynamically linked to our version of libxc
+whereas <em>openblas</em>, <em>fftw3</em>, <em>netcdf</em>, <em>hdf5</em> and MPI are provided by the <code>2019b</code> release of <code>foss</code> as expected:</p>
+<div class="highlight"><pre><span></span><code>$ ldd <span class="sb">`</span>which abinit<span class="sb">`</span>
+
+libxc.so.5 <span class="o">=</span>&gt; /home/ucl/modl/gmatteo/.local/easybuild/software/libxc/4.3.4-GCC-8.3.0/lib64/libxc.so.5 <span class="o">(</span>0x00002aaaaaccf000<span class="o">)</span>
+libfftw3f.so.3 <span class="o">=</span>&gt; /opt/sw/arch/easybuild/2019b/software/FFTW/3.3.8-gompi-2019b/lib/libfftw3f.so.3 <span class="o">(</span>0x00002aaaab2d9000<span class="o">)</span>
+libfftw3.so.3 <span class="o">=</span>&gt; /opt/sw/arch/easybuild/2019b/software/FFTW/3.3.8-gompi-2019b/lib/libfftw3.so.3 <span class="o">(</span>0x00002aaaab5c0000<span class="o">)</span>
+libopenblas.so.0 <span class="o">=</span>&gt; /opt/sw/arch/easybuild/2019b/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas.so.0 <span class="o">(</span>0x00002aaaab856000<span class="o">)</span>
+libnetcdff.so.7 <span class="o">=</span>&gt; /opt/sw/arch/easybuild/2019b/software/netCDF-Fortran/4.5.2-gompi-2019b/lib/libnetcdff.so.7 <span class="o">(</span>0x00002aaaaaad3000<span class="o">)</span>
+libnetcdf.so.15 <span class="o">=</span>&gt; /opt/sw/arch/easybuild/2019b/software/netCDF/4.7.1-gompi-2019b/lib64/libnetcdf.so.15 <span class="o">(</span>0x00002aaaaab59000<span class="o">)</span>
+libhdf5_hl.so.100 <span class="o">=</span>&gt; /opt/sw/arch/easybuild/2019b/software/HDF5/1.10.5-gompi-2019b/lib/libhdf5_hl.so.100 <span class="o">(</span>0x00002aaaaac95000<span class="o">)</span>
+libhdf5.so.103 <span class="o">=</span>&gt; /opt/sw/arch/easybuild/2019b/software/HDF5/1.10.5-gompi-2019b/lib/libhdf5.so.103 <span class="o">(</span>0x00002aaaac607000<span class="o">)</span>
+libmpi.so.40 <span class="o">=</span>&gt; /opt/sw/arch/easybuild/2019b/software/OpenMPI/3.1.4-GCC-8.3.0/lib/libmpi.so.40 <span class="o">(</span>0x00002aaaad432000<span class="o">)</span>
+</code></pre></div>
+<p>The binary works out of the box because the ABINIT module is automatically loading all the dependencies we need
+and our local installation is prepended to <code>LD_LIBRARY_PATH</code> and <code>PATH</code>.
+To see this, use <code>module show</code>:</p>
+<div class="highlight"><pre><span></span><code>module show ABINIT/9.0.4-foss-2019b
+
+whatis<span class="o">(</span><span class="s2">&quot;Description: ABINIT is a package whose main program allows one to find the total energy,</span>
+<span class="s2"> charge density and  electronic structure of systems made of electrons and nuclei (molecules</span>
+<span class="s2"> and periodic solids) within Density Functional  Theory (DFT), using pseudopotentials and a</span>
+<span class="s2"> planewave or wavelet basis.&quot;</span><span class="o">)</span>
+whatis<span class="o">(</span><span class="s2">&quot;Homepage: https://www.abinit.org/&quot;</span><span class="o">)</span>
+whatis<span class="o">(</span><span class="s2">&quot;URL: https://www.abinit.org/&quot;</span><span class="o">)</span>
+conflict<span class="o">(</span><span class="s2">&quot;ABINIT&quot;</span><span class="o">)</span>
+load<span class="o">(</span><span class="s2">&quot;foss/2019b&quot;</span><span class="o">)</span>
+load<span class="o">(</span><span class="s2">&quot;libxc/4.3.4-GCC-8.3.0&quot;</span><span class="o">)</span>
+load<span class="o">(</span><span class="s2">&quot;HDF5/1.10.5-gompi-2019b&quot;</span><span class="o">)</span>
+load<span class="o">(</span><span class="s2">&quot;netCDF/4.7.1-gompi-2019b&quot;</span><span class="o">)</span>
+load<span class="o">(</span><span class="s2">&quot;netCDF-Fortran/4.5.2-gompi-2019b&quot;</span><span class="o">)</span>
+prepend_path<span class="o">(</span><span class="s2">&quot;CMAKE_PREFIX_PATH&quot;</span>,<span class="s2">&quot;/home/ucl/modl/gmatteo/.local/easybuild/software/ABINIT/9.0.4-foss-2019b&quot;</span><span class="o">)</span>
+prepend_path<span class="o">(</span><span class="s2">&quot;LD_LIBRARY_PATH&quot;</span>,<span class="s2">&quot;/home/ucl/modl/gmatteo/.local/easybuild/software/ABINIT/9.0.4-foss-2019b/lib&quot;</span><span class="o">)</span>
+prepend_path<span class="o">(</span><span class="s2">&quot;LIBRARY_PATH&quot;</span>,<span class="s2">&quot;/home/ucl/modl/gmatteo/.local/easybuild/software/ABINIT/9.0.4-foss-2019b/lib&quot;</span><span class="o">)</span>
+prepend_path<span class="o">(</span><span class="s2">&quot;PATH&quot;</span>,<span class="s2">&quot;/home/ucl/modl/gmatteo/.local/easybuild/software/ABINIT/9.0.4-foss-2019b/bin&quot;</span><span class="o">)</span>
+prepend_path<span class="o">(</span><span class="s2">&quot;PKG_CONFIG_PATH&quot;</span>,<span class="s2">&quot;/home/ucl/modl/gmatteo/.local/easybuild/software/ABINIT/9.0.4-foss-2019b/lib/pkgconfig&quot;</span><span class="o">)</span>
+setenv<span class="o">(</span><span class="s2">&quot;EBROOTABINIT&quot;</span>,<span class="s2">&quot;/home/ucl/modl/gmatteo/.local/easybuild/software/ABINIT/9.0.4-foss-2019b&quot;</span><span class="o">)</span>
+setenv<span class="o">(</span><span class="s2">&quot;EBVERSIONABINIT&quot;</span>,<span class="s2">&quot;9.0.4&quot;</span><span class="o">)</span>
+setenv<span class="o">(</span><span class="s2">&quot;EBDEVELABINIT&quot;</span>,<span class="s2">&quot;/home/ucl/modl/gmatteo/.local/easybuild/software/ABINIT/9.0.4-foss-2019b/easybuild/ABINIT-9.0.4-foss</span>
+<span class="s2">-2019b-easybuild-devel&quot;</span><span class="o">)</span>
+</code></pre></div>
+<p>Q: What happens if you run</p>
+<div class="highlight"><pre><span></span><code>module load releases/2016a
+eb ABINIT-9.1.0-foss-2019b.eb -Dr
+</code></pre></div>
+<h2 id="using-a-customized-easyconfig">Using a customized easyconfig<a class="headerlink" href="#using-a-customized-easyconfig" title="Permanent link">&para;</a></h2>
+<p>In the previous example we used one of the official easyconfig files shipped with the EasyBuild package.
+There are cases, however, in which we need to perform a customized build.
+For example, we may want to compile the latest stable version of ABINIT recently released,
+or use a different version, or maybe we just need to activate configuration options that are not present in the official file.
+In this case, we can simply copy the original easyconfig file,
+change it according to our needs and finally pass this customized file to the <code>eb</code> script.</p>
+<p>First of all, let&rsquo;s have a look at <code>ABINIT-9.0.4-foss-2019b.eb</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">easyblock</span> <span class="o">=</span> <span class="s1">&#39;ConfigureMake&#39;</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ABINIT&#39;</span>
+<span class="n">version</span> <span class="o">=</span> <span class="s1">&#39;9.0.4&#39;</span>
+
+<span class="n">homepage</span> <span class="o">=</span> <span class="s1">&#39;https://www.abinit.org/&#39;</span>
+<span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;ABINIT is a package whose main program allows one to find the total energy,</span>
+<span class="s2"> charge density and  electronic structure of systems made of electrons and nuclei (molecules</span>
+<span class="s2"> and periodic solids) within Density Functional  Theory (DFT), using pseudopotentials and a</span>
+<span class="s2"> planewave or wavelet basis.&quot;&quot;&quot;</span>
+
+<span class="n">toolchain</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;foss&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;2019b&#39;</span><span class="p">}</span>
+<span class="n">toolchainopts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;usempi&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;pic&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+<span class="n">source_urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;https://www.abinit.org/sites/default/files/packages/&#39;</span><span class="p">]</span>
+<span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">SOURCELOWER_TAR_GZ</span><span class="p">]</span>
+<span class="c1">#checksums = [&#39;82e8d071088ab8dc1b3a24380e30b68c544685678314df1213180b449c84ca65&#39;]</span>
+
+<span class="n">dependencies</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;libxc&#39;</span><span class="p">,</span> <span class="s1">&#39;4.3.4&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;netCDF-Fortran&#39;</span><span class="p">,</span> <span class="s1">&#39;4.5.2&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c1"># Ensure MPI.</span>
+<span class="n">configopts</span> <span class="o">=</span> <span class="s1">&#39;--with-mpi=&quot;yes&quot; --enable-openmp=&quot;no&quot; &#39;</span>
+
+<span class="c1"># BLAS/Lapack</span>
+<span class="n">configopts</span> <span class="o">+=</span> <span class="s1">&#39;--with-linalg-flavor=&quot;openblas&quot;  LINALG_LIBS=&quot;-L$</span><span class="si">{EBROOTOPENBLAS}</span><span class="s1">/lib -lopenblas&quot; &#39;</span>
+
+<span class="c1"># FFTW3 support</span>
+<span class="n">configopts</span> <span class="o">+=</span> <span class="s1">&#39;--with-fft-flavor=fftw3 FFTW3_LIBS=&quot;-L$</span><span class="si">{EBROOTFFTW}</span><span class="s1"> -lfftw3f -lfftw3&quot; &#39;</span>
+
+<span class="c1"># libxc support</span>
+<span class="n">configopts</span> <span class="o">+=</span> <span class="s1">&#39;--with-libxc=$</span><span class="si">{EBROOTLIBXC}</span><span class="s1"> &#39;</span>
+
+<span class="c1"># hdf5/netcdf4.</span>
+<span class="n">configopts</span> <span class="o">+=</span> <span class="s1">&#39;with_netcdf=&quot;$</span><span class="si">{EBROOTNETCDF}</span><span class="s1">&quot; &#39;</span>
+<span class="n">configopts</span> <span class="o">+=</span> <span class="s1">&#39;with_netcdf_fortran=&quot;$</span><span class="si">{EBROOTNETCDFMINFORTRAN}</span><span class="s1">&quot; &#39;</span>
+<span class="n">configopts</span> <span class="o">+=</span> <span class="s1">&#39;with_hdf5=&quot;$</span><span class="si">{EBROOTHDF5}</span><span class="s1">&quot; &#39;</span>
+
+<span class="c1"># make sure --free-line-length-none is added to FCFLAGS</span>
+<span class="n">configopts</span> <span class="o">+=</span> <span class="s1">&#39;FCFLAGS=&quot;$</span><span class="si">{FCFLAGS}</span><span class="s1"> --free-line-length-none&quot; &#39;</span>
+
+<span class="n">runtest</span> <span class="o">=</span> <span class="s1">&#39;check&#39;</span>
+
+<span class="n">sanity_check_paths</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;files&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;bin/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;abinit&#39;</span><span class="p">,</span> <span class="s1">&#39;aim&#39;</span><span class="p">,</span> <span class="s1">&#39;cut3d&#39;</span><span class="p">,</span> <span class="s1">&#39;conducti&#39;</span><span class="p">,</span> <span class="s1">&#39;mrgddb&#39;</span><span class="p">,</span> <span class="s1">&#39;mrgscr&#39;</span><span class="p">,</span> <span class="s1">&#39;optic&#39;</span><span class="p">]],</span>
+    <span class="s1">&#39;dirs&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;lib/pkgconfig&#39;</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">moduleclass</span> <span class="o">=</span> <span class="s1">&#39;chem&#39;</span>
+</code></pre></div>
+<p>The meaning of the different easyconfig parameters
+is explained <a href="https://easybuild.readthedocs.io/en/latest/Writing_easyconfig_files.html">here</a>.</p>
+<p>In most of the cases, a customized build requires changing one of the following entries:</p>
+<ul>
+<li><code>version</code>: string with the version number. Used to download the tarball from <code>source_urls</code></li>
+<li>toolchain version</li>
+<li>dependencies</li>
+<li><code>configopts</code>: string with the options passed to the ABINIT configure script</li>
+</ul>
+<p>Changing <code>version</code> and/or toolchain version is straightforward.
+To use a different version of ABINIT (e.g. 9.2.0), simply change the value of <code>version</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="gd">- version = &#39;9.0.4&#39;</span>
+<span class="gi">+ version = &#39;9.2.0&#39;</span>
+</code></pre></div>
+<p>save the new file as <code>ABINIT-9.2.0-foss-2019b.eb</code> and execute:</p>
+<div class="highlight"><pre><span></span><code>eb ./ABINIT-9.2.0-foss-2019b.eb --robot
+</code></pre></div>
+<p>to install a new module for version 9.2.0.
+Everything should work out of the box provided version 9.2.0 is still supporting
+the version of the libraries listed in <code>dependencies</code>.
+By the same token, one can compile with version <code>2020a</code> of the <code>foss</code> toolchain by just changing</p>
+<div class="highlight"><pre><span></span><code><span class="gd">- toolchain = {&#39;name&#39;: &#39;foss&#39;, &#39;version&#39;: &#39;2019b&#39;}</span>
+<span class="gi">+ toolchain = {&#39;name&#39;: &#39;foss&#39;, &#39;version&#39;: &#39;2020a&#39;}</span>
+</code></pre></div>
+<p>provided <code>releases/2020a</code> is available on our cluster.</p>
+<p>Changing <code>dependencies</code> and <code>configopts</code> requires some basic understanding of the ABINIT build system
+and of the logic used by EasyBuild to automate the compilation.
+If you need a specialized <code>eb</code> file, feel free to contact the ABINIT developers on the forum or the EasyBuild 
+developers to ask for support.</p>
+                
+                  
+                
+              
+
+<!-- 
+Add dropdown button with toolbar (based on https://bootsnipp.com/snippets/featured/inbox-by-gmail)
+and return to Top button (based on https://codepen.io/rdallaire/pen/apoyx)
+-->
+<div class="md-container">
+  <div class="row">
+    <div id="inbox">
+      <div class="fab btn-group show-on-hover dropup">
+        <div data-toggle="tooltip" data-placement="left" title="Menu" style="margin-left: 42px;">
+          <button id="return-to-top" type="button" class="btn btn-primary btn-io dropdown-toggle" data-toggle="dropdown">
+            <span class="fa-stack fa-2x">
+               <i class="fa fa-circle fa-stack-2x fab-backdrop"></i>
+               <i class="fa fa-chevron-up fa-stack-1x fa-inverse fab-primary"></i>
+               <i class="fa fa-map-signs fa-stack-1x fa-inverse fab-secondary"></i>
+            </span>
+          </button>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        
+        
+          <li>
+            <a href="https://docs.abinit.org/about/release-notes/" 
+               data-toggle="popover" data-tippy-content="About">
+               <i class="fa fa-info-circle"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/developers/git_and_gitlab/" 
+               data-toggle="popover" data-tippy-content="Developers">
+               <i class="fa fa-terminal"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/theory/geometry/" 
+               data-toggle="popover" data-tippy-content="Theory">
+               <i class="fa fa-book"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/faq/configuration_and_compilation/" 
+               data-toggle="popover" data-tippy-content="FAQ">
+               <i class="fa fa-graduation-cap"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/tutorial/" 
+               data-toggle="popover" data-tippy-content="Tutorials">
+               <i class="fa fa-file-text-o"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/variables/" 
+               data-toggle="popover" data-tippy-content="Variables">
+               <i class="fa fa-question"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/topics/features/" 
+               data-toggle="popover" data-tippy-content="Topics">
+               <i class="fa fa-user-circle-o"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/" 
+               data-toggle="popover" data-tippy-content="User Guides">
+               <i class="fa "></i>
+            </a>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../INSTALL_CentOS/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              CentOS
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../INSTALL_gpu/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              GPUs
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+            <center>Abinit version 9.8.2</center>
+        
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2020-2021 The Abinit Group
+            
+            (M. Giantomassi)
+            
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/abinit/abinit" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://www.youtube.com/watch?v=gcbfb_Mteo4" target="_blank" rel="noopener" title="www.youtube.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="http://www.facebook.com/abinit.org" target="_blank" rel="noopener" title="www.facebook.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/hashtag/abinit" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "header.autohide"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../assets/javascripts/workers/search.fb4a9340.min.js", "version": "9.8.2"}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a1c7c35e.min.js"></script>
+      
+        <script src="../extra_javascript/abidocs.js"></script>
+      
+    
+  </body>
+</html>

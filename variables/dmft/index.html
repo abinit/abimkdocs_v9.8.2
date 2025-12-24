@@ -1,0 +1,5220 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="dmft input variables">
+      
+      
+      
+        <meta name="author" content="The Abinit group">
+      
+      
+        <link rel="canonical" href="https://docs.abinit.org/variables/dmft/">
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.6">
+    
+    
+      
+        <title>DMFT - abinit</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2c0c5eaf.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.7fa14f5b.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#ff6e42">
+        
+      
+    
+    
+    
+
+    <!-- 
+    IMPORTANT: Don't use boostrap in particular boostrap.css since it comes into conflict with mkdocs-material theme.
+    Prefer low-level tools based on Jquery or JS library such as Tippyjs to get the work done.
+    -->
+
+    <!-- Jquery from Google CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load Jquery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- Handle jQuery plugin naming conflict between jQuery UI and Bootstrap
+    https://stackoverflow.com/questions/13731400/jqueryui-tooltips-are-competing-with-twitter-bootstrap
+    <script>
+      $.widget.bridge('uibutton', $.ui.button);
+      $.widget.bridge('uitooltip', $.ui.tooltip);
+    </script>
+    -->
+
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+
+    <!-- Tippyjs for popovers https://atomiks.github.io/tippyjs/ -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+
+    <!-- font-awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <!--Pace support. http://github.hubspot.com/pace/ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/white/pace-theme-big-counter.min.css" />
+
+    <script>
+        paceOptions = {
+            ajax: true,      // disabled
+            document: true,  // activated
+            eventLag: false  // disabled
+            //target: 'article'
+            //elements: {selectors: ['.my-page']}
+        };
+    </script>
+
+    <!-- MathJax support
+    <script type="text/javascript" async 
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script> 
+    -->
+
+    <!-- This version is compatible with plotly. -->
+    <script type="text/javascript" async 
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_SVG">
+    </script> 
+
+    <!-- Configure MathJax to produce automatic equation numbers http://docs.mathjax.org/en/latest/tex.html -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        //jax: ["input/TeX","output/HTML-CSS"],
+        //tex2jax: {inlineMath: [['$','$']]},
+        //displayAlign: "center",
+        TeX: {
+            equationNumbers: { autoNumber: "AMS" },
+            extensions: ["AMSmath.js", "boldsymbol.js"],
+            Macros: {
+                "*": "{\\dagger}",
+                "ra": "{\\rangle}",
+                "la": "{\\langle}",
+                // Workaround for bm package. See https://github.com/mathjax/MathJax/issues/1219
+                bm: ["{\\boldsymbol #1}",1],
+                // Mathcal symbols
+                mcL: "{\\mathcal{L}}",
+                mcG: "{\\mathcal{G}}",
+                mcR: "{\\mathcal{R}}",
+                mcS: "{\\mathcal{S}}",
+                mcC: "{\\mathcal{C}}",
+                mcO: "{\\mathcal{O}}",
+                // Acronyms
+                KS: "{\\text{KS}}",
+                eph: "{\\text{e-ph}}",
+                ee: "{\\text{e-e}}",
+                phph: "{\\text{ph-ph}}",
+                FM: "{\\text{FM}}",
+                DW: "{\\text{DW}}",
+                QP: "{\\text{QP}}",
+                BZ: "{\\text{BZ}}",
+                sign: "{\\text{sign}}",
+                xc: "{\\text{xc}}",
+                tchi: "{\\tilde\\chi}",
+                // Symbols commonly used (k-points, eigenvalues ...)
+                rr: "{\\bf r}",
+                RR: "{\\bf R}",
+                tt: "{\\bf t}",
+                GG: "{\\bf G}",
+                kk: "{\\bf k}",
+                qq: "{\\bf q}",
+                kq: "{\\kk + \\qq}",
+                qG: "{\\bf q + G}",
+                kG: "{\\bf k + G}",
+                kmq: "{\\kk - \\qq}",
+                kpq: "{\\kk + \\qq}",
+                kpG: "{\\kk + \\GG}",
+                qpG: "{\\qq + \\GG}",
+                nk: "{n \\kk}",
+                mk: "{, \\kk}",
+                nks: "{n \\kk\\sigma}",
+                mks: "{m \\kk\\sigma}",
+                enk: "{\\varepsilon_\\nk}",
+                emkq: "{\\varepsilon_{m\\kk+\\qq}}",
+                qnu: "{\\qq \\nu}",
+                wqnu: "{\\omega_{\\qnu}}",
+                vnk: "{\\mathbf{v}_{n\\kk}}",
+                vmkq: "{\\mathbf{v}_{m\\kk+\\qq}}",
+                vnka: "{\\mathrm{v}_{n\\kk,\\alpha}}",
+                vnkb: "{\\mathrm{v}_{n\\kk,\\beta}}",
+                ef: "{\\varepsilon_F}",
+                // EPH quantities
+                gkkp: "{g_{mn\\nu}(\\kk,\\qq)}",
+                gkq: "{g_{mn\\nu}(\\kk,\\qq)}",
+                //\newcommand{\gkkpL}{g_{mn\nu}^\Lc(\kb,\qb)}
+                // Many-body theory
+                Go: "{G_0}",
+                Wo: "{W_0}",
+                Ueff: "{U_{\\text{eff}}}",
+                // Greek symbols + tilde version
+                ee: "{\\epsilon}",
+                tee: "{\\tilde{\\epsilon}}",
+                ww: "{\\omega}",
+                tww: "{\\tilde\\omega}",
+                dd: "{\\,\\text{d}}",
+                vxc: "{v_\\xc}",
+                // symrel
+                Ri: "{\\mcR^{-1}}",
+                Rit: "{\\mcR^{-1\\tau}}",
+                // symrec
+                Si: "{\\mcS^{-1}}}",
+                Sit: "{\\Si^\\tau}}",
+                // partial and functional derivative.
+                PDER: ["{\\dfrac{\\partial #1}{\\partial #2}}", 2],
+                FDER: ["{\\dfrac{\\delta #1}{\\delta #2}}", 2],
+                // PAW
+                tPsi: "{\\tilde\\Psi}",
+                tpsi: "{\\tilde\\psi}",
+                tPhi: "{\\tilde\\Phi}",
+                tphi: "{\\tilde\\phi}",
+                tprj: "{\\tilde p}"
+            }
+          }
+      });
+    </script>
+
+    
+
+    
+
+    <!-- Load fonts used for input variables -->
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+      <link rel="stylesheet" href="../../css/gallery.css">
+    
+      <link rel="stylesheet" href="../../css/my_codehilite.css">
+    
+    
+      
+        
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-116681470-1","docs.abinit.org"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dmft-input-variables" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="abinit" class="md-header__button md-logo" aria-label="abinit" data-md-component="logo">
+      
+  <img src="../../images/logo-abinit-2015.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            abinit
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              DMFT
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="md-header__options">
+      
+    </div>
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/abinit/abinit/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github-abinit
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        User Guides
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../topics/features/" class="md-tabs__link">
+        Topics
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../" class="md-tabs__link md-tabs__link--active">
+        Variables
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../tutorial/" class="md-tabs__link">
+        Tutorials
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../faq/configuration_and_compilation/" class="md-tabs__link">
+        FAQ
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../theory/geometry/" class="md-tabs__link">
+        Theory
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../developers/git_and_gitlab/" class="md-tabs__link">
+        Developers
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../about/release-notes/" class="md-tabs__link">
+        About
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="abinit" class="md-nav__button md-logo" aria-label="abinit" data-md-component="logo">
+      
+  <img src="../../images/logo-abinit-2015.png" alt="logo">
+
+    </a>
+    abinit
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/abinit/abinit/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github-abinit
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      <label class="md-nav__link" for="__nav_1">
+        User Guides
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="User Guides" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          User Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        NewUser
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/abinit/" class="md-nav__link">
+        Abinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/aim/" class="md-nav__link">
+        Aim
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/anaddb/" class="md-nav__link">
+        Anaddb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/atdep/" class="md-nav__link">
+        aTDEP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/cut3d/" class="md-nav__link">
+        Cut3d
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/fold2bloch/" class="md-nav__link">
+        Fold2Bloch
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/mrgddb/" class="md-nav__link">
+        Mrgddb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/mrgscr/" class="md-nav__link">
+        Mrgscr
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/multibinit/" class="md-nav__link">
+        Multibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/optic/" class="md-nav__link">
+        Optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/respfn/" class="md-nav__link">
+        Respfn
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/spacegroup/" class="md-nav__link">
+        Spacegroup
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_14" type="checkbox" id="__nav_1_14" >
+      
+      <label class="md-nav__link" for="__nav_1_14">
+        Installation
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Installation" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_14">
+          <span class="md-nav__icon md-icon"></span>
+          Installation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        HowTo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_MacOS/" class="md-nav__link">
+        MacOS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_Ubuntu/" class="md-nav__link">
+        Ubuntu
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_CentOS/" class="md-nav__link">
+        CentOS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_EasyBuild/" class="md-nav__link">
+        EasyBuild
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INSTALL_gpu/" class="md-nav__link">
+        GPUs
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Topics
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Topics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Topics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/features/" class="md-nav__link">
+        Features
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/" class="md-nav__link">
+        Topic List
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Abipy/" class="md-nav__link">
+        Abipy
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/APPA/" class="md-nav__link">
+        APPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Artificial/" class="md-nav__link">
+        Artificial
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/AtomManipulator/" class="md-nav__link">
+        AtomManipulator
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/aTDEP/" class="md-nav__link">
+        aTDEP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/AtomTypes/" class="md-nav__link">
+        AtomTypes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Bader/" class="md-nav__link">
+        Bader
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Band2eps/" class="md-nav__link">
+        Band2eps
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Berry/" class="md-nav__link">
+        Berry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/BandOcc/" class="md-nav__link">
+        BandOcc
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/BSE/" class="md-nav__link">
+        BSE
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/BoundingProcess/" class="md-nav__link">
+        BoundingProcess
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ConstrainedDFT/" class="md-nav__link">
+        ConstrainedDFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ConstrainedPol/" class="md-nav__link">
+        ConstrainedPol
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Control/" class="md-nav__link">
+        Control
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Coulomb/" class="md-nav__link">
+        Coulomb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/CrossingBarriers/" class="md-nav__link">
+        CrossingBarriers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/CRPA/" class="md-nav__link">
+        CRPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/crystal/" class="md-nav__link">
+        Crystal
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DFT%2BU/" class="md-nav__link">
+        DFT+U
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DeltaSCF/" class="md-nav__link">
+        DeltaSCF
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DensityPotential/" class="md-nav__link">
+        DensityPotential
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Dev/" class="md-nav__link">
+        Dev
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DFPT/" class="md-nav__link">
+        DFPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DMFT/" class="md-nav__link">
+        DMFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/DynamicsMultibinit/" class="md-nav__link">
+        DynamicsMultibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/EffectiveMass/" class="md-nav__link">
+        EffectiveMass
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/EFG/" class="md-nav__link">
+        EFG
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Elastic/" class="md-nav__link">
+        Elastic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ElPhonInt/" class="md-nav__link">
+        ElPhonInt
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ElPhonTransport/" class="md-nav__link">
+        ElPhonTransport
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ElecDOS/" class="md-nav__link">
+        ElecDOS
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ElecBandStructure/" class="md-nav__link">
+        ElecBandStructure
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ExtFPMD/" class="md-nav__link">
+        ExtFPMD
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/FileFormats/" class="md-nav__link">
+        FileFormats
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/FitProcess/" class="md-nav__link">
+        FitProcess
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/ForcesStresses/" class="md-nav__link">
+        ForcesStresses
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/FrequencyMeshMBPT/" class="md-nav__link">
+        FrequencyMeshMBPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GeoConstraints/" class="md-nav__link">
+        GeoConstraints
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GeoOpt/" class="md-nav__link">
+        GeoOpt
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Git/" class="md-nav__link">
+        Git
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GSintroduction/" class="md-nav__link">
+        GSintroduction
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GW/" class="md-nav__link">
+        GW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/GWls/" class="md-nav__link">
+        GWls
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Hybrids/" class="md-nav__link">
+        Hybrids
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/k-points/" class="md-nav__link">
+        K points
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LatticeModel/" class="md-nav__link">
+        LatticeModel
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LatticeWannier/" class="md-nav__link">
+        LatticeWannier
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LWFModel/" class="md-nav__link">
+        LWFModel
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LDAminushalf/" class="md-nav__link">
+        LDAminushalf
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/LOTF/" class="md-nav__link">
+        LOTF
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/longwave/" class="md-nav__link">
+        Longwave
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Macroave/" class="md-nav__link">
+        Macroave
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/MagField/" class="md-nav__link">
+        MagField
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/MagMom/" class="md-nav__link">
+        MagMom
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/MolecularDynamics/" class="md-nav__link">
+        MolecularDynamics
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/multidtset/" class="md-nav__link">
+        Multidtset
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/nonlinear/" class="md-nav__link">
+        Nonlinear
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Optic/" class="md-nav__link">
+        Optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Output/" class="md-nav__link">
+        Output
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/parallelism/" class="md-nav__link">
+        Parallelism
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PAW/" class="md-nav__link">
+        PAW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PIMD/" class="md-nav__link">
+        PIMD
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Planewaves/" class="md-nav__link">
+        Planewaves
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Phonons/" class="md-nav__link">
+        Phonons
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PhononBands/" class="md-nav__link">
+        PhononBands
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PhononWidth/" class="md-nav__link">
+        PhononWidth
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PortabilityNonRegression/" class="md-nav__link">
+        PortabilityNonRegression
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/positron/" class="md-nav__link">
+        Positron
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/printing/" class="md-nav__link">
+        Printing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/PseudosPAW/" class="md-nav__link">
+        PseudosPAW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/q-points/" class="md-nav__link">
+        Q points
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/RandStopPow/" class="md-nav__link">
+        RandStopPow
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Recursion/" class="md-nav__link">
+        Recursion
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/RPACorrEn/" class="md-nav__link">
+        RPACorrEn
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SCFControl/" class="md-nav__link">
+        SCFControl
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SCFAlgorithms/" class="md-nav__link">
+        SCFAlgorithms
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SelfEnergy/" class="md-nav__link">
+        SelfEnergy
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SmartSymm/" class="md-nav__link">
+        SmartSymm
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/spinpolarisation/" class="md-nav__link">
+        Spinpolarisation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/SpinDynamicsMultibinit/" class="md-nav__link">
+        SpinDynamicsMultibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/STM/" class="md-nav__link">
+        STM
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Susceptibility/" class="md-nav__link">
+        Susceptibility
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/TDDFT/" class="md-nav__link">
+        TDDFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/TDepES/" class="md-nav__link">
+        TDepES
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Temperature/" class="md-nav__link">
+        Temperature
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/TransPath/" class="md-nav__link">
+        TransPath
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/TuningSpeedMem/" class="md-nav__link">
+        TuningSpeedMem
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Unfolding/" class="md-nav__link">
+        Unfolding
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/UnitCell/" class="md-nav__link">
+        UnitCell
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/vdw/" class="md-nav__link">
+        Vdw
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Verification/" class="md-nav__link">
+        Verification
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Wannier/" class="md-nav__link">
+        Wannier
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/Wavelets/" class="md-nav__link">
+        Wavelets
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/xc/" class="md-nav__link">
+        Xc
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../topics/external_resources/" class="md-nav__link">
+        External Resources
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      <label class="md-nav__link" for="__nav_3">
+        Variables
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Variables" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Variables
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        All Variables
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" checked>
+      
+      <label class="md-nav__link" for="__nav_3_2">
+        Abinit
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Abinit" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Abinit
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basic/" class="md-nav__link">
+        Basic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bse/" class="md-nav__link">
+        Bethe-Salpeter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev/" class="md-nav__link">
+        Developers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          DMFT
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        DMFT
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_charge_prec" class="md-nav__link">
+    dmft_charge_prec
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_dc" class="md-nav__link">
+    dmft_dc
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_entropy" class="md-nav__link">
+    dmft_entropy
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_iter" class="md-nav__link">
+    dmft_iter
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_kspectral_func" class="md-nav__link">
+    dmft_kspectral_func
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_mxsf" class="md-nav__link">
+    dmft_mxsf
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_nlambda" class="md-nav__link">
+    dmft_nlambda
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_nwli" class="md-nav__link">
+    dmft_nwli
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_nwlo" class="md-nav__link">
+    dmft_nwlo
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_occnd_imag" class="md-nav__link">
+    dmft_occnd_imag
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_rslf" class="md-nav__link">
+    dmft_rslf
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_solv" class="md-nav__link">
+    dmft_solv
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_t2g" class="md-nav__link">
+    dmft_t2g
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_tolfreq" class="md-nav__link">
+    dmft_tolfreq
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_tollc" class="md-nav__link">
+    dmft_tollc
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_wanorthnorm" class="md-nav__link">
+    dmft_wanorthnorm
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftbandf" class="md-nav__link">
+    dmftbandf
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftbandi" class="md-nav__link">
+    dmftbandi
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftcheck" class="md-nav__link">
+    dmftcheck
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_check" class="md-nav__link">
+    dmftctqmc_check
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_config" class="md-nav__link">
+    dmftctqmc_config
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_correl" class="md-nav__link">
+    dmftctqmc_correl
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_gmove" class="md-nav__link">
+    dmftctqmc_gmove
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_grnns" class="md-nav__link">
+    dmftctqmc_grnns
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_meas" class="md-nav__link">
+    dmftctqmc_meas
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_mov" class="md-nav__link">
+    dmftctqmc_mov
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_mrka" class="md-nav__link">
+    dmftctqmc_mrka
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_order" class="md-nav__link">
+    dmftctqmc_order
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_triqs_nleg" class="md-nav__link">
+    dmftctqmc_triqs_nleg
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftqmc_l" class="md-nav__link">
+    dmftqmc_l
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftqmc_n" class="md-nav__link">
+    dmftqmc_n
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftqmc_seed" class="md-nav__link">
+    dmftqmc_seed
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftqmc_therm" class="md-nav__link">
+    dmftqmc_therm
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../eph/" class="md-nav__link">
+        Electron-Phonon
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ffield/" class="md-nav__link">
+        Varff
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../files/" class="md-nav__link">
+        File-handling
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../geo/" class="md-nav__link">
+        Geometry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gstate/" class="md-nav__link">
+        Ground-State
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gw/" class="md-nav__link">
+        GW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../internal/" class="md-nav__link">
+        Internal
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paral/" class="md-nav__link">
+        Parallelism
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paw/" class="md-nav__link">
+        PAW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dfpt/" class="md-nav__link">
+        DFPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rlx/" class="md-nav__link">
+        Relaxation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vdw/" class="md-nav__link">
+        VdW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../w90/" class="md-nav__link">
+        Wannier90
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../anaddb/" class="md-nav__link">
+        Anaddb
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../atdep/" class="md-nav__link">
+        aTDEP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multibinit/" class="md-nav__link">
+        Multibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../optic/" class="md-nav__link">
+        Optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aim/" class="md-nav__link">
+        Aim
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../external_parameters/" class="md-nav__link">
+        External Parameters
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../varset_stats/" class="md-nav__link">
+        Statistics
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      <label class="md-nav__link" for="__nav_4_2">
+        Basic tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Basic tutorials" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Basic tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/base1/" class="md-nav__link">
+        basic1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/base2/" class="md-nav__link">
+        basic2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/base3/" class="md-nav__link">
+        basic3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/base4/" class="md-nav__link">
+        basic4
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/abinit_build/" class="md-nav__link">
+        ABINIT_build
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paw1/" class="md-nav__link">
+        PAW1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/spin/" class="md-nav__link">
+        Spin
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/polarization/" class="md-nav__link">
+        Polarization & finite field
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/rf1/" class="md-nav__link">
+        DFPT1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/rf2/" class="md-nav__link">
+        DFPT2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/basepar/" class="md-nav__link">
+        parallelism
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_10" type="checkbox" id="__nav_4_10" >
+      
+      <label class="md-nav__link" for="__nav_4_10">
+        ABINIT postprocessors
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="ABINIT postprocessors" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_10">
+          <span class="md-nav__icon md-icon"></span>
+          ABINIT postprocessors
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/atdep1/" class="md-nav__link">
+        aTDEP1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/cut3d/" class="md-nav__link">
+        cut3D
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/fold2bloch/" class="md-nav__link">
+        fold2bloch
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/optic/" class="md-nav__link">
+        optic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/wannier90/" class="md-nav__link">
+        wannier90
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/z2pack/" class="md-nav__link">
+        Z2pack
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_11" type="checkbox" id="__nav_4_11" >
+      
+      <label class="md-nav__link" for="__nav_4_11">
+        DFT beyond basics
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="DFT beyond basics" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          DFT beyond basics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/nuc/" class="md-nav__link">
+        properties at the nucleus
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/dftu/" class="md-nav__link">
+        DFT+U
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/ucalc_crpa/" class="md-nav__link">
+        U_calc_RPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/ucalc_lr/" class="md-nav__link">
+        U_calc_LR
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paw2/" class="md-nav__link">
+        PAW2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paw3/" class="md-nav__link">
+        PAW3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/positron/" class="md-nav__link">
+        positron
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_12" type="checkbox" id="__nav_4_12" >
+      
+      <label class="md-nav__link" for="__nav_4_12">
+        Many-Body Theory & excitations
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Many-Body Theory & excitations" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_12">
+          <span class="md-nav__icon md-icon"></span>
+          Many-Body Theory & excitations
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/gw1/" class="md-nav__link">
+        GW1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/gw2/" class="md-nav__link">
+        GW2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/bse/" class="md-nav__link">
+        Bethe-Salpeter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/dmft/" class="md-nav__link">
+        DMFT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/tddft/" class="md-nav__link">
+        TDDFT (Casida)
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_13" type="checkbox" id="__nav_4_13" >
+      
+      <label class="md-nav__link" for="__nav_4_13">
+        DFPT & electron-phonon
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="DFPT & electron-phonon" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_13">
+          <span class="md-nav__icon md-icon"></span>
+          DFPT & electron-phonon
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/elastic/" class="md-nav__link">
+        elastic
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/nlo/" class="md-nav__link">
+        nonlinear
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/lattice_wannier/" class="md-nav__link">
+        lattice_wannier
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/eph_intro/" class="md-nav__link">
+        eph_intro
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/eph4mob/" class="md-nav__link">
+        eph for mobilities
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/eph4zpr/" class="md-nav__link">
+        eph for zero-point renormalization
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/eph_legacy/" class="md-nav__link">
+        eph_legacy
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/eph_tdep_legacy/" class="md-nav__link">
+        tdepes_legacy
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_14" type="checkbox" id="__nav_4_14" >
+      
+      <label class="md-nav__link" for="__nav_4_14">
+        Multibinit
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Multibinit" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_14">
+          <span class="md-nav__icon md-icon"></span>
+          Multibinit
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/multibinit/" class="md-nav__link">
+        introduction to multibinit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/lattice_model/" class="md-nav__link">
+        lattice_model
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/spin_model/" class="md-nav__link">
+        spin_model
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/lwf_model/" class="md-nav__link">
+        lwf_model
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_15" type="checkbox" id="__nav_4_15" >
+      
+      <label class="md-nav__link" for="__nav_4_15">
+        Advanced parallelism
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Advanced parallelism" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_15">
+          <span class="md-nav__icon md-icon"></span>
+          Advanced parallelism
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paral_bandpw/" class="md-nav__link">
+        paral_band_PW
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paral_gswvl/" class="md-nav__link">
+        paral_wavelets
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paral_moldyn/" class="md-nav__link">
+        paral_MD
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paral_images/" class="md-nav__link">
+        paral_images
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paral_dfpt/" class="md-nav__link">
+        paral_DFPT
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorial/paral_mbt/" class="md-nav__link">
+        paral_MBPT
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        FAQ
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="FAQ" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          FAQ
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/configuration_and_compilation/" class="md-nav__link">
+        Configuration and compilation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/general_questions/" class="md-nav__link">
+        General questions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/pre_and_post_processing/" class="md-nav__link">
+        Pre/Post processing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/ground_state/" class="md-nav__link">
+        Ground state
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/dfpt/" class="md-nav__link">
+        DFPT
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Theory
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Theory" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Theory
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/geometry/" class="md-nav__link">
+        Geometry
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/spherical_harmonics/" class="md-nav__link">
+        Spherical Harmonics
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/wavefunctions/" class="md-nav__link">
+        Wavefunctions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/noncollinear/" class="md-nav__link">
+        Noncollinear
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/pseudopotentials/" class="md-nav__link">
+        Pseudopotentials
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/mbt/" class="md-nav__link">
+        Many-Body Perturbation Theory
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/bse/" class="md-nav__link">
+        Bethe-Salpeter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/documents/" class="md-nav__link">
+        Documents
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/acknowledgments/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/bibliography/" class="md-nav__link">
+        Bibliography
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../theory/acronyms/" class="md-nav__link">
+        Acronyms
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      <label class="md-nav__link" for="__nav_7">
+        Developers
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Developers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Developers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/git_and_gitlab/" class="md-nav__link">
+        Git and Gitlab
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/developers_howto/" class="md-nav__link">
+        HowTo for developers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/abimkdocs/" class="md-nav__link">
+        Abimkdocs
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/markdown/" class="md-nav__link">
+        Markdown
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      <label class="md-nav__link" for="__nav_7_5">
+        Test Suite
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Test Suite" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          Test Suite
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/testsuite/" class="md-nav__link">
+        Test list
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/testsuite_howto/" class="md-nav__link">
+        Test Suite Howto
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/new_testsuite/" class="md-nav__link">
+        YAML-based test suite Howto
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/yaml_tools_api/" class="md-nav__link">
+        YAML-based test suite Python tools and API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/XgType/" class="md-nav__link">
+        XgType
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_7" type="checkbox" id="__nav_7_7" >
+      
+      <label class="md-nav__link" for="__nav_7_7">
+        Pseudos
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Pseudos" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_7">
+          <span class="md-nav__icon md-icon"></span>
+          Pseudos
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp1_info/" class="md-nav__link">
+        psp1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp3_info/" class="md-nav__link">
+        psp3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp45_info/" class="md-nav__link">
+        psp45
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp5spinorbit_info/" class="md-nav__link">
+        psp5
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp6_info/" class="md-nav__link">
+        psp6
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/psp8_info/" class="md-nav__link">
+        psp8
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/codestats/" class="md-nav__link">
+        Code stats
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/autoconf_examples/" class="md-nav__link">
+        Autoconf_examples
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/testlink/" class="md-nav__link">
+        Test Page for linkcheck
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      <label class="md-nav__link" for="__nav_8">
+        About
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/release-notes/" class="md-nav__link">
+        Release Notes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/history/" class="md-nav__link">
+        History
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_charge_prec" class="md-nav__link">
+    dmft_charge_prec
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_dc" class="md-nav__link">
+    dmft_dc
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_entropy" class="md-nav__link">
+    dmft_entropy
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_iter" class="md-nav__link">
+    dmft_iter
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_kspectral_func" class="md-nav__link">
+    dmft_kspectral_func
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_mxsf" class="md-nav__link">
+    dmft_mxsf
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_nlambda" class="md-nav__link">
+    dmft_nlambda
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_nwli" class="md-nav__link">
+    dmft_nwli
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_nwlo" class="md-nav__link">
+    dmft_nwlo
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_occnd_imag" class="md-nav__link">
+    dmft_occnd_imag
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_rslf" class="md-nav__link">
+    dmft_rslf
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_solv" class="md-nav__link">
+    dmft_solv
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_t2g" class="md-nav__link">
+    dmft_t2g
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_tolfreq" class="md-nav__link">
+    dmft_tolfreq
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_tollc" class="md-nav__link">
+    dmft_tollc
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmft_wanorthnorm" class="md-nav__link">
+    dmft_wanorthnorm
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftbandf" class="md-nav__link">
+    dmftbandf
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftbandi" class="md-nav__link">
+    dmftbandi
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftcheck" class="md-nav__link">
+    dmftcheck
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_check" class="md-nav__link">
+    dmftctqmc_check
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_config" class="md-nav__link">
+    dmftctqmc_config
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_correl" class="md-nav__link">
+    dmftctqmc_correl
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_gmove" class="md-nav__link">
+    dmftctqmc_gmove
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_grnns" class="md-nav__link">
+    dmftctqmc_grnns
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_meas" class="md-nav__link">
+    dmftctqmc_meas
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_mov" class="md-nav__link">
+    dmftctqmc_mov
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_mrka" class="md-nav__link">
+    dmftctqmc_mrka
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_order" class="md-nav__link">
+    dmftctqmc_order
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftctqmc_triqs_nleg" class="md-nav__link">
+    dmftctqmc_triqs_nleg
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftqmc_l" class="md-nav__link">
+    dmftqmc_l
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftqmc_n" class="md-nav__link">
+    dmftqmc_n
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftqmc_seed" class="md-nav__link">
+    dmftqmc_seed
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dmftqmc_therm" class="md-nav__link">
+    dmftqmc_therm
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+
+                
+                  <a href="https://github.com/abinit/abinit/edit/master/doc/variables/dmft.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <!--
+This file is automatically generated by mksite.py. All changes will be lost.
+Change the input yaml files or the python code
+-->
+<h1 id="dmft-input-variables">dmft input variables<a class="headerlink" href="#dmft-input-variables" title="Permanent link">&para;</a></h1>
+<p>This document lists and provides the description of the name (keywords) of the
+dmft input variables to be used in the input file for the abinit executable.</p>
+<h2 id="dmft_charge_prec"><strong>dmft_charge_prec</strong><a class="headerlink" href="#dmft_charge_prec" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: charge density precision<br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> real<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 1e-06<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [2/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a></li>
+</ul>
+</details>
+<p>Precision to achieve in determining the charge density in the computation of the fermi level.
+Should be decreased to increase precision. However, for a large system, it can increase importantly computer time.</p>
+<h2 id="dmft_dc"><strong>dmft_dc</strong><a class="headerlink" href="#dmft_dc" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Double Counting<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 1<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [15/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/paral/Input/t99.abi" target="_blank">t99.abi</a></li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a></li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on ferromagnetic NiO (2 atoms), check DMFT for several
+values of dmft_solv : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t45.abi" target="_blank">t45.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t30.abi" target="_blank">t30.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test restart of entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t31.abi" target="_blank">t31.abi</a></li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a></li>
+</ul>
+</details>
+<p>Value of double counting used for DMFT (so, only relevant for <a class="wikilink codevar-wikilink" href="/variables/dev#usedmft">usedmft</a>=1)..</p>
+<ul>
+<li>1 : corresponds to the &ldquo;Full Localized Limit&rdquo; double counting (to be used with <a class="wikilink codevar-wikilink" href="/variables/paw#usepawu">usepawu</a>=10).</li>
+<li>2 : corresponds to the &ldquo;Around Mean Field&rdquo; double counting (this is not yet in production).</li>
+<li>5 : the calculation is done without magnetism in the J term (cf <a class="wikilink citation-wikilink" data-tippy-content="Density functional versus spin-density functional and the choice of correlated subspace in multivariable effective action theories of electronic structure" data-toggle="popover" href="/theory/bibliography#park2015">[Park2015]</a> and <a class="wikilink citation-wikilink" data-tippy-content="Spin-density functional theories and their $+U$ and $+J$ extensions: A comparative study of transition metals and transition metal oxides" data-toggle="popover" href="/theory/bibliography#chen2016a">[Chen2016a]</a>), to be used with <a class="wikilink codevar-wikilink" href="/variables/paw#usepawu">usepawu</a>=14.</li>
+<li>6 : this option is in development.</li>
+</ul>
+<h2 id="dmft_entropy"><strong>dmft_entropy</strong><a class="headerlink" href="#dmft_entropy" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: ENTROPY<br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dev#usedmft">usedmft</a> == 1 and <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> == 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [3/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t30.abi" target="_blank">t30.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test restart of entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t31.abi" target="_blank">t31.abi</a></li>
+</ul>
+</details>
+<p>If 1, enables the calculation of the entropy within the DMFT framework and so
+allows one the calculation of the total energy (free energy). In the current
+implementation, this is only possible with <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> = 5 (Continuous Time
+Quantum Monte Carlo). See also the input variable <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_nlambda">dmft_nlambda</a>.</p>
+<h2 id="dmft_iter"><strong>dmft_iter</strong><a class="headerlink" href="#dmft_iter" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: number of ITERation<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [21/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a> &hellip;</li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a> &hellip;</li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on ferromagnetic NiO (2 atoms), check DMFT for several
+values of dmft_solv : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t45.abi" target="_blank">t45.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on Antiferromagnetic NiO (4 atoms), check DMFT loop with Hubbard I, DMFT
+self-consistency and density self-consistency : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t46.abi" target="_blank">t46.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT on Gd (f-orbitals) without spin-orbit coupling : compute occupations and energy." data-toggle="popover" href="/tests/v6/Input/t47.abi" target="_blank">t47.abi</a> &hellip;</li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="(Apparently the documentation section of this test has been lost)" data-toggle="popover" href="/tests/v7/Input/t21.abi" target="_blank">t21.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a> &hellip;</li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a> &hellip;</li>
+</ul>
+</details>
+<p>Number of iterations for the DMFT inner loop.</p>
+<h2 id="dmft_kspectral_func"><strong>dmft_kspectral_func</strong><a class="headerlink" href="#dmft_kspectral_func" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: compute K-resolved SPECTRAL FUNCtion<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Added in version:</em> 9.0.0  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [0/1121] in all abinit tests, [0/156] in abinit tutorials</summary></details>
+<p>When activated, in conjunction with <a class="wikilink codevar-wikilink" href="/variables/basic#iscf">iscf</a> = -2 or -3, a calculation
+of k-resolved spectral function (or density of state) is possible.
+However, the calculation requires as input the self-energy computed in the real
+axis using an external analytical continuation code.
+The section 7 of the <a class="wikilink lesson-wikilink" href="/tutorial/dmft">tutorial on DFT+DMFT</a>  details how to obtain this data
+and related informations.</p>
+<h2 id="dmft_mxsf"><strong>dmft_mxsf</strong><a class="headerlink" href="#dmft_mxsf" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: MiXing parameter for the SelF energy<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> real<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0.3<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [21/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a> &hellip;</li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a> &hellip;</li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on ferromagnetic NiO (2 atoms), check DMFT for several
+values of dmft_solv : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t45.abi" target="_blank">t45.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on Antiferromagnetic NiO (4 atoms), check DMFT loop with Hubbard I, DMFT
+self-consistency and density self-consistency : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t46.abi" target="_blank">t46.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT on Gd (f-orbitals) without spin-orbit coupling : compute occupations and energy." data-toggle="popover" href="/tests/v6/Input/t47.abi" target="_blank">t47.abi</a> &hellip;</li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="(Apparently the documentation section of this test has been lost)" data-toggle="popover" href="/tests/v7/Input/t21.abi" target="_blank">t21.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a> &hellip;</li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a> &hellip;</li>
+</ul>
+</details>
+<p>Mixing parameter for the simple mixing of the self-energy (0.3 is safe, but it can be increased most of the time to 0.6).</p>
+<h2 id="dmft_nlambda"><strong>dmft_nlambda</strong><a class="headerlink" href="#dmft_nlambda" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Number of LAMBDA points<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 6<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dev#usedmft">usedmft</a> == 1 and <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_entropy">dmft_entropy</a> == 1<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [3/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t30.abi" target="_blank">t30.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test restart of entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t31.abi" target="_blank">t31.abi</a></li>
+</ul>
+</details>
+<p><strong>dmft_nlambda</strong>  gives the number of integration points for the
+thermodynamic integration in case of free energy calculation within DMFT.
+Its value must be greater or equal to 3.</p>
+<h2 id="dmft_nwli"><strong>dmft_nwli</strong><a class="headerlink" href="#dmft_nwli" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Number of frequency omega (W) in the LInear mesh<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [21/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a> &hellip;</li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a> &hellip;</li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on ferromagnetic NiO (2 atoms), check DMFT for several
+values of dmft_solv : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t45.abi" target="_blank">t45.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on Antiferromagnetic NiO (4 atoms), check DMFT loop with Hubbard I, DMFT
+self-consistency and density self-consistency : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t46.abi" target="_blank">t46.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT on Gd (f-orbitals) without spin-orbit coupling : compute occupations and energy." data-toggle="popover" href="/tests/v6/Input/t47.abi" target="_blank">t47.abi</a> &hellip;</li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="(Apparently the documentation section of this test has been lost)" data-toggle="popover" href="/tests/v7/Input/t21.abi" target="_blank">t21.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a> &hellip;</li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a> &hellip;</li>
+</ul>
+</details>
+<p>Number of Matsubara frequencies (linear mesh)</p>
+<h2 id="dmft_nwlo"><strong>dmft_nwlo</strong><a class="headerlink" href="#dmft_nwlo" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Number of frequency omega (W) in the LOg mesh<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [21/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a> &hellip;</li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a> &hellip;</li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on ferromagnetic NiO (2 atoms), check DMFT for several
+values of dmft_solv : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t45.abi" target="_blank">t45.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on Antiferromagnetic NiO (4 atoms), check DMFT loop with Hubbard I, DMFT
+self-consistency and density self-consistency : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t46.abi" target="_blank">t46.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT on Gd (f-orbitals) without spin-orbit coupling : compute occupations and energy." data-toggle="popover" href="/tests/v6/Input/t47.abi" target="_blank">t47.abi</a> &hellip;</li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="(Apparently the documentation section of this test has been lost)" data-toggle="popover" href="/tests/v7/Input/t21.abi" target="_blank">t21.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a> &hellip;</li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a> &hellip;</li>
+</ul>
+</details>
+<p>Number of frequencies in the log mesh.</p>
+<h2 id="dmft_occnd_imag"><strong>dmft_occnd_imag</strong><a class="headerlink" href="#dmft_occnd_imag" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Occupation non-diagonal imaginary part<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 1<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [17/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="Test k-point parallelization for selfconsistent DFT+DMFT calculations. NiO" data-toggle="popover" href="/tests/paral/Input/t91.abi" target="_blank">t91.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test k-point parallelization for selfconsistent DFT+DMFT calculations. NiO" data-toggle="popover" href="/tests/paral/Input/t91.abi" target="_blank">t91.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test k-point parallelization for selfconsistent DFT+DMFT calculations. NiO" data-toggle="popover" href="/tests/paral/Input/t91.abi" target="_blank">t91.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/paral/Input/t99.abi" target="_blank">t99.abi</a></li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+NiO with 4 atoms. Check of the modified self-consistent loop over electronic density for DMFT. This
+calculation use LDA occupations for the test and is not running the DMFT part (dmftcheck2=-1)." data-toggle="popover" href="/tests/v6/Input/t07.abi" target="_blank">t07.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on ferromagnetic NiO (2 atoms), check DMFT for several
+values of dmft_solv : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t45.abi" target="_blank">t45.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on Antiferromagnetic NiO (4 atoms), check DMFT loop with Hubbard I, DMFT
+self-consistency and density self-consistency : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t46.abi" target="_blank">t46.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT on Gd (f-orbitals) without spin-orbit coupling : compute occupations and energy." data-toggle="popover" href="/tests/v6/Input/t47.abi" target="_blank">t47.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t30.abi" target="_blank">t30.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test restart of entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t31.abi" target="_blank">t31.abi</a></li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a></li>
+</ul>
+</details>
+<p>When 0 force non-diagonal occupations imaginary parts to be null. Do not use this, it is only for compatibility with old tests.</p>
+<h2 id="dmft_rslf"><strong>dmft_rslf</strong><a class="headerlink" href="#dmft_rslf" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Read SeLF energy<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [21/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a> &hellip;</li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a> &hellip;</li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on ferromagnetic NiO (2 atoms), check DMFT for several
+values of dmft_solv : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t45.abi" target="_blank">t45.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on Antiferromagnetic NiO (4 atoms), check DMFT loop with Hubbard I, DMFT
+self-consistency and density self-consistency : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t46.abi" target="_blank">t46.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT on Gd (f-orbitals) without spin-orbit coupling : compute occupations and energy." data-toggle="popover" href="/tests/v6/Input/t47.abi" target="_blank">t47.abi</a> &hellip;</li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="(Apparently the documentation section of this test has been lost)" data-toggle="popover" href="/tests/v7/Input/t21.abi" target="_blank">t21.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a> &hellip;</li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a> &hellip;</li>
+</ul>
+</details>
+<p>Flag to read/write Self-Energy. If put to one, self-energy is written and read at each DFT iteration.
+If self-energy file is missing, the self-energy is initialized to the double counting at the first iteration.
+Importantly, in order to the calculation to restart easily, the self-energy is read and write in the same file.</p>
+<h2 id="dmft_solv"><strong>dmft_solv</strong><a class="headerlink" href="#dmft_solv" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: choice of SOLVer<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> real<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [22/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a> &hellip;</li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a> &hellip;</li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+NiO with 4 atoms. Check of the modified self-consistent loop over electronic density for DMFT. This
+calculation use LDA occupations for the test and is not running the DMFT part (dmftcheck2=-1)." data-toggle="popover" href="/tests/v6/Input/t07.abi" target="_blank">t07.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on ferromagnetic NiO (2 atoms), check DMFT for several
+values of dmft_solv : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t45.abi" target="_blank">t45.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on Antiferromagnetic NiO (4 atoms), check DMFT loop with Hubbard I, DMFT
+self-consistency and density self-consistency : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t46.abi" target="_blank">t46.abi</a> &hellip;</li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="(Apparently the documentation section of this test has been lost)" data-toggle="popover" href="/tests/v7/Input/t21.abi" target="_blank">t21.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a> &hellip;</li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a> &hellip;</li>
+</ul>
+</details>
+<p>Choice of solver for the Impurity model.</p>
+<ul>
+<li>0 &rarr; No solver and U=0, J=0 (see <a class="wikilink codevar-wikilink" href="/variables/paw#upawu">upawu</a> and <a class="wikilink codevar-wikilink" href="/variables/paw#jpawu">jpawu</a>).</li>
+<li>1 &rarr; DFT+U self-energy is used (for testing purpose)</li>
+<li>2 &rarr; Hubbard one solver in the density density approximation of the Coulomb interaction. The Hubbard one solver is an approximation which gives a rough description of correlated Mott insulators. It should not be used for metals.</li>
+<li>5 &rarr; Use the Continuous Time Quantum Monte Carlo (CTQMC) solver CT-Hyb of ABINIT in the density density approximation of the Coulomb interaction. The calculation is fully parallelised over MPI processes.</li>
+<li>6 &rarr; Continuous Time Quantum Monte Carlo (CTQMC) solver CT-Hyb of TRIQS in the density density representation.</li>
+<li>7 &rarr; Continuous Time Quantum Monte Carlo (CTQMC) solver CT-Hyb of TRIQS with the rotationally invariant formulation.</li>
+<li>8 &rarr; Same as 5, but off-diagonal elements of the hybridization function are taken into account (useful for low symetry systems or with spin orbit coupling).</li>
+<li>9 &rarr; Python invocation. Give a symbolic link to your python interpreter as an input like &lsquo;input-tag&rsquo;_TRIQS_python_lib and the python script as an input like &lsquo;input-tag&rsquo;_TRIQS_script.py. The inputs for the script will be written in dft_for_triqs.nc and the output as triqs_for_dft.nc.</li>
+</ul>
+<p>The CT Hyb algorithm is described in <a class="wikilink citation-wikilink" data-tippy-content="Continuous-Time Solver for Quantum Impurity Models" data-toggle="popover" href="/theory/bibliography#werner2006">[Werner2006]</a>. For a
+discussion of density-density approximation with respect with the
+rotationnally invariant formulation, see e.g. <a class="wikilink citation-wikilink" data-tippy-content="Role of rotational symmetry in the magnetism of a multiorbital model" data-toggle="popover" href="/theory/bibliography#antipov2012">[Antipov2012]</a>.
+The ABINIT/CT Hyb implementation is discussed in <a class="wikilink citation-wikilink" data-tippy-content="Recent developments in the ABINIT software package" data-toggle="popover" href="/theory/bibliography#gonze2016">[Gonze2016]</a>.
+The TRIQS/CT Hyb implementation is described in <a class="wikilink citation-wikilink" data-tippy-content="TRIQS/CTHYB: A continuous-time quantum Monte Carlo hybridisation expansion solver for quantum impurity problems" data-toggle="popover" href="/theory/bibliography#seth2016">[Seth2016]</a>.
+Before using it, it has to be installed following instructions available <a href="https://triqs.github.io/triqs/2.1.x">here</a>.
+Until release 8.10 included, the
+interface was valid only for TRIQS 1.4 and TRIQS/CTHYB 1.4. It has then been upgraded to TRIQS 2.1 afterwards.
+An example of a config.ac file to compile ABINIT with TRIQS can be found in <a class="wikilink" href="/build/config-template.ac9"></a>.
+See the useful variables for CT-QMC solver: <a class="wikilink codevar-wikilink" href="/variables/dev#dmftctqmc_basis">dmftctqmc_basis</a>,
+<a class="wikilink codevar-wikilink" href="/variables/dmft#dmftctqmc_check">dmftctqmc_check</a>, <a class="wikilink codevar-wikilink" href="/variables/dmft#dmftctqmc_correl">dmftctqmc_correl</a>, <a class="wikilink codevar-wikilink" href="/variables/dmft#dmftctqmc_gmove">dmftctqmc_gmove</a>,
+<a class="wikilink codevar-wikilink" href="/variables/dmft#dmftctqmc_grnns">dmftctqmc_grnns</a>, <a class="wikilink codevar-wikilink" href="/variables/dmft#dmftctqmc_meas">dmftctqmc_meas</a>, <a class="wikilink codevar-wikilink" href="/variables/dmft#dmftctqmc_mrka">dmftctqmc_mrka</a>,
+<a class="wikilink codevar-wikilink" href="/variables/dmft#dmftctqmc_mov">dmftctqmc_mov</a>, <a class="wikilink codevar-wikilink" href="/variables/dmft#dmftctqmc_order">dmftctqmc_order</a>, <a class="wikilink codevar-wikilink" href="/variables/dmft#dmftctqmc_triqs_nleg">dmftctqmc_triqs_nleg</a>,
+<a class="wikilink codevar-wikilink" href="/variables/dmft#dmftqmc_l">dmftqmc_l</a>, <a class="wikilink codevar-wikilink" href="/variables/dmft#dmftqmc_n">dmftqmc_n</a>, <a class="wikilink codevar-wikilink" href="/variables/dmft#dmftqmc_seed">dmftqmc_seed</a>, <a class="wikilink codevar-wikilink" href="/variables/dmft#dmftqmc_therm">dmftqmc_therm</a></p>
+<h2 id="dmft_t2g"><strong>dmft_t2g</strong><a class="headerlink" href="#dmft_t2g" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: t2g orbitals<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [8/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/paral/Input/t99.abi" target="_blank">t99.abi</a></li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t30.abi" target="_blank">t30.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test restart of entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t31.abi" target="_blank">t31.abi</a></li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a></li>
+</ul>
+</details>
+<p>Can be set to 1 only if in cubic symmetry. It enables one to carry a DFT+DMFT
+calculations only on <em>t<sub>2g</sub></em> orbitals.</p>
+<h2 id="dmft_tolfreq"><strong>dmft_tolfreq</strong><a class="headerlink" href="#dmft_tolfreq" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: TOLerance on DFT correlated electron occupation matrix for the definition of the FREQuency grid<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> real<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0.0001<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [3/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/paral/Input/t99.abi" target="_blank">t99.abi</a></li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a></li>
+</ul>
+</details>
+<p>The DFT occupation matrix for correlated electrons can be computed directly.
+It can be compared to the calculation of the same quantity using DFT Green&rsquo;s
+function, a sum over Matsubara frequencies and a projection over correlated
+orbitals. Because the Matsubara grid is finite, the two quantities differ. If
+this difference is larger than dmft_tolfreq, then the code stops and an error
+message is given.</p>
+<h2 id="dmft_tollc"><strong>dmft_tollc</strong><a class="headerlink" href="#dmft_tollc" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: TOLerance on Local Charge for convergence of the DMFT loop<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> real<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 1e-05<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [1/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on ferromagnetic NiO (2 atoms), check DMFT for several
+values of dmft_solv : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t45.abi" target="_blank">t45.abi</a></li>
+</ul>
+</details>
+<p>Tolerance for the variation of Local Charge for convergence of the DMFT Loop.
+Most of the time however, DFT+DMFT calculations can converge fastly using <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_iter">dmft_iter</a>=1, so
+that this variable is not required.</p>
+<h2 id="dmft_wanorthnorm"><strong>dmft_wanorthnorm</strong><a class="headerlink" href="#dmft_wanorthnorm" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: WANnier OrthoNormalization<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> real<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 3<br />
+<em>Added in version:</em> 9.4.0  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [5/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="Test k-point parallelization for selfconsistent DFT+DMFT calculations. NiO" data-toggle="popover" href="/tests/paral/Input/t91.abi" target="_blank">t91.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test k-point parallelization for selfconsistent DFT+DMFT calculations. NiO" data-toggle="popover" href="/tests/paral/Input/t91.abi" target="_blank">t91.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test k-point parallelization for selfconsistent DFT+DMFT calculations. NiO" data-toggle="popover" href="/tests/paral/Input/t91.abi" target="_blank">t91.abi</a></li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+NiO with 4 atoms. Check of the modified self-consistent loop over electronic density for DMFT. This
+calculation use LDA occupations for the test and is not running the DMFT part (dmftcheck2=-1)." data-toggle="popover" href="/tests/v6/Input/t07.abi" target="_blank">t07.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on Antiferromagnetic NiO (4 atoms), check DMFT loop with Hubbard I, DMFT
+self-consistency and density self-consistency : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t46.abi" target="_blank">t46.abi</a></li>
+</ul>
+</details>
+<p>Definition of Wannier orthormalization in DMFT.
+Default value is 3 (Normalization of the overlap of Wannier functions summed
+over k-point) if <a class="wikilink codevar-wikilink" href="/variables/basic#natom">natom</a>=1, or 2 (Normalization of the overlap for each k-point) if
+<a class="wikilink codevar-wikilink" href="/variables/basic#natom">natom</a>&gt;1.</p>
+<h2 id="dmftbandf"><strong>dmftbandf</strong><a class="headerlink" href="#dmftbandf" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: BAND: Final<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [24/1121] in all abinit tests, [2/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a> &hellip;</li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="For SrVO3, compute U
+The results of this test with 24 procs are non-reproducible at present ! See the huge tolerance. There must be a bug ..." data-toggle="popover" href="/tests/tutoparal/Input/tucalc_crpa_2.abi" target="_blank">tucalc_crpa_2.abi</a> &hellip;</li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+NiO with 4 atoms. Check of the modified self-consistent loop over electronic density for DMFT. This
+calculation use LDA occupations for the test and is not running the DMFT part (dmftcheck2=-1)." data-toggle="popover" href="/tests/v6/Input/t07.abi" target="_blank">t07.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on ferromagnetic NiO (2 atoms), check DMFT for several
+values of dmft_solv : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t45.abi" target="_blank">t45.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on Antiferromagnetic NiO (4 atoms), check DMFT loop with Hubbard I, DMFT
+self-consistency and density self-consistency : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t46.abi" target="_blank">t46.abi</a> &hellip;</li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="(Apparently the documentation section of this test has been lost)" data-toggle="popover" href="/tests/v7/Input/t21.abi" target="_blank">t21.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a> &hellip;</li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a> &hellip;</li>
+</ul>
+</details>
+<p><strong>dmftbandf</strong>  is the last band taken into account in the Projected Local
+Orbitals scheme of DFT+DMFT. With <a class="wikilink codevar-wikilink" href="/variables/dmft#dmftbandi">dmftbandi</a>, they define the energy window
+used to define Wannier Functions (see <a class="wikilink citation-wikilink" data-tippy-content="Plane-wave based electronic structure calculations for correlated materials using dynamical mean-field theory and projected local orbitals" data-toggle="popover" href="/theory/bibliography#amadon2008">[Amadon2008]</a>).</p>
+<h2 id="dmftbandi"><strong>dmftbandi</strong><a class="headerlink" href="#dmftbandi" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: BAND: Initial<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [24/1121] in all abinit tests, [2/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a> &hellip;</li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="For SrVO3, compute U
+The results of this test with 24 procs are non-reproducible at present ! See the huge tolerance. There must be a bug ..." data-toggle="popover" href="/tests/tutoparal/Input/tucalc_crpa_2.abi" target="_blank">tucalc_crpa_2.abi</a> &hellip;</li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+NiO with 4 atoms. Check of the modified self-consistent loop over electronic density for DMFT. This
+calculation use LDA occupations for the test and is not running the DMFT part (dmftcheck2=-1)." data-toggle="popover" href="/tests/v6/Input/t07.abi" target="_blank">t07.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on ferromagnetic NiO (2 atoms), check DMFT for several
+values of dmft_solv : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t45.abi" target="_blank">t45.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on Antiferromagnetic NiO (4 atoms), check DMFT loop with Hubbard I, DMFT
+self-consistency and density self-consistency : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t46.abi" target="_blank">t46.abi</a> &hellip;</li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="(Apparently the documentation section of this test has been lost)" data-toggle="popover" href="/tests/v7/Input/t21.abi" target="_blank">t21.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a> &hellip;</li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a> &hellip;</li>
+</ul>
+</details>
+<p><strong>dmftbandi</strong>  is the first band taken into account in the Projected Local
+Orbitals scheme of DFT+DMFT. With <a class="wikilink codevar-wikilink" href="/variables/dmft#dmftbandf">dmftbandf</a>, they define the energy window
+used to define Wannier Functions (see <a class="wikilink citation-wikilink" data-tippy-content="Plane-wave based electronic structure calculations for correlated materials using dynamical mean-field theory and projected local orbitals" data-toggle="popover" href="/theory/bibliography#amadon2008">[Amadon2008]</a>).</p>
+<h2 id="dmftcheck"><strong>dmftcheck</strong><a class="headerlink" href="#dmftcheck" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: CHECKs<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [22/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a> &hellip;</li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a> &hellip;</li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+NiO with 4 atoms. Check of the modified self-consistent loop over electronic density for DMFT. This
+calculation use LDA occupations for the test and is not running the DMFT part (dmftcheck2=-1)." data-toggle="popover" href="/tests/v6/Input/t07.abi" target="_blank">t07.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on ferromagnetic NiO (2 atoms), check DMFT for several
+values of dmft_solv : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t45.abi" target="_blank">t45.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="
+DMFT tests on Antiferromagnetic NiO (4 atoms), check DMFT loop with Hubbard I, DMFT
+self-consistency and density self-consistency : computes occupations and energy." data-toggle="popover" href="/tests/v6/Input/t46.abi" target="_blank">t46.abi</a> &hellip;</li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="(Apparently the documentation section of this test has been lost)" data-toggle="popover" href="/tests/v7/Input/t21.abi" target="_blank">t21.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a> &hellip;</li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a> &hellip;</li>
+</ul>
+</details>
+<p>Only for developer purposes.</p>
+<h2 id="dmftctqmc_check"><strong>dmftctqmc_check</strong><a class="headerlink" href="#dmftctqmc_check" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Continuous Time Quantum Monte Carlo CHECK<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> == 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [4/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a></li>
+</ul>
+</details>
+<p>Check the fast calculations during the Monte Carlo simulation with very slow
+but robust methods. Should only be used for debugging.</p>
+<ul>
+<li>0 &rarr; No check.</li>
+<li>1 &rarr; Check the overlap calculations (Impurity operator).</li>
+<li>2 &rarr; Check the update of M matrix calculation (Bath operator).</li>
+<li>3 &rarr; Check both.</li>
+</ul>
+<h2 id="dmftctqmc_config"><strong>dmftctqmc_config</strong><a class="headerlink" href="#dmftctqmc_config" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: CTQMC: calculation of weight of CONFIGurations<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> in [5, 8]<br />
+<em>Added in version:</em> 9.5.0  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [2/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a></li>
+</ul>
+</details>
+<p>Compute weight of configuration computed during CTQMC calculations.
+For example, for a calculation on <span><span class="MathJax_Preview">d</span><script type="math/tex">d</script></span> orbitals, the calculations
+gives the weight of 0,1,2,3,4,5,6,7,8,9 and 10 electrons configurations.</p>
+<h2 id="dmftctqmc_correl"><strong>dmftctqmc_correl</strong><a class="headerlink" href="#dmftctqmc_correl" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Continuous Time Quantum Monte Carlo CORRELations<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> == 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [4/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a></li>
+</ul>
+</details>
+<p>Flag to compute statistics about segments and anti-segments during the
+simulation. Slow down the simulation.</p>
+<ul>
+<li>0 &rarr; Nothing done</li>
+<li>1 &rarr; Calculations performed and written in &ldquo;Correlation.dat&rdquo; file</li>
+</ul>
+<h2 id="dmftctqmc_gmove"><strong>dmftctqmc_gmove</strong><a class="headerlink" href="#dmftctqmc_gmove" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Continuous Time Quantum Monte Carlo Global MOVEs<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> == 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [8/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a></li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a></li>
+</ul>
+</details>
+<p>Default is no global moves. The value of this variable is the modulo used to
+try a global move. A value of 5000 means that a global move is tried every 5000 Monte Carlo sweep.</p>
+<h2 id="dmftctqmc_grnns"><strong>dmftctqmc_grnns</strong><a class="headerlink" href="#dmftctqmc_grnns" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Continuous Time Quantum Monte Carlo GReeNs NoiSe<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> == 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [4/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a></li>
+</ul>
+</details>
+<p>Compute the statistical noise for each time slice of each green function. This
+is a good approximation only if there is enough Monte Carlo sweeps per cpu.</p>
+<ul>
+<li>0 &rarr; Nothing</li>
+<li>1 &rarr; Do it and write the noise in the &ldquo;Gtau.dat&rdquo; file.</li>
+</ul>
+<h2 id="dmftctqmc_meas"><strong>dmftctqmc_meas</strong><a class="headerlink" href="#dmftctqmc_meas" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Continuous Time Quantum Monte Carlo MEASurements<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 1<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> == 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [4/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a></li>
+</ul>
+</details>
+<p>The modulo used to measure the interaction energy and the number of electrons.
+Example: 2 means the measure is perform every two sweeps.</p>
+<h2 id="dmftctqmc_mov"><strong>dmftctqmc_mov</strong><a class="headerlink" href="#dmftctqmc_mov" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Continuous Time Quantum Monte Carlo MOVie<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> == 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [4/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a></li>
+</ul>
+</details>
+<p>Print a latex file per cpu displaying the full simulation. This option should
+only be use with very small number (&lt;1000) of Monte Carlo sweeps since it
+requires a lot of I/O band width.</p>
+<ul>
+<li>0 &rarr; Nothing</li>
+<li>1 &rarr; Write the &ldquo;Movie_id.dat&rdquo; file where id is the MPI rank of each process</li>
+</ul>
+<h2 id="dmftctqmc_mrka"><strong>dmftctqmc_mrka</strong><a class="headerlink" href="#dmftctqmc_mrka" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Continuous Time Quantum Monte Carlo MARKov Analysis<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> == 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [4/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a></li>
+</ul>
+</details>
+<p>Measure the time evolution of the number of electrons for each orbital and
+perform a fourier transform. The result can be plotted using the &ldquo;Markov_id.dat&rdquo; file</p>
+<ul>
+<li>0 &rarr; Nothing</li>
+<li>1 &rarr; Do it and write the noise in the &ldquo;Markov_id.dat&rdquo; file where id is the rank of each MPI process.</li>
+</ul>
+<h2 id="dmftctqmc_order"><strong>dmftctqmc_order</strong><a class="headerlink" href="#dmftctqmc_order" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Continuous Time Quantum Monte Carlo perturbation ORDER<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> == 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [6/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for SrVO3 using Hubard I code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t86.abi" target="_blank">t86.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a></li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a></li>
+</ul>
+</details>
+<p>Print a file containing the statistic distribution of the number of segments
+per orbital. The maximal order taken into account  <strong>dmftctqmc_order</strong> : 50
+means that we have the statistic distribution from 0 to 50 segments. The
+result is written in the &ldquo;Perturbation.dat&rdquo; file.</p>
+<h2 id="dmftctqmc_triqs_nleg"><strong>dmftctqmc_triqs_nleg</strong><a class="headerlink" href="#dmftctqmc_triqs_nleg" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Continuous Time Quantum Monte Carlo perturbation of TRIQS, Number of LEGendre polynomials<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 30<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> in [6, 7]<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [3/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/paral/Input/t99.abi" target="_blank">t99.abi</a></li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a></li>
+</ul>
+</details>
+<p>Specify the number of Legendre polynomials used for the calculation of Green&rsquo;s
+function in CTQMC code from the library TRIQS. Default is 30. The value of
+coefficients are given in file whose name ending is
+&ldquo;Legendre_coefficient.dat&rdquo; (see also <a class="wikilink citation-wikilink" data-tippy-content="Orthogonal polynomial representation of imaginary-time Green&#x27;s functions" data-toggle="popover" href="/theory/bibliography#boehnke2011">[Boehnke2011]</a>).</p>
+<h2 id="dmftqmc_l"><strong>dmftqmc_l</strong><a class="headerlink" href="#dmftqmc_l" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Quantum Monte Carlo time sLices<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> &gt;= 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [14/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/paral/Input/t99.abi" target="_blank">t99.abi</a></li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a></li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+NiO with 4 atoms. Check of the modified self-consistent loop over electronic density for DMFT. This
+calculation use LDA occupations for the test and is not running the DMFT part (dmftcheck2=-1)." data-toggle="popover" href="/tests/v6/Input/t07.abi" target="_blank">t07.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t30.abi" target="_blank">t30.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test restart of entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t31.abi" target="_blank">t31.abi</a></li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a></li>
+</ul>
+</details>
+<p>Number of time slices used to represent the time green function. This value
+should be carefully chosen according to Niquist frequency and the <a class="wikilink codevar-wikilink" href="/variables/gstate#tsmear">tsmear</a> value.</p>
+<h2 id="dmftqmc_n"><strong>dmftqmc_n</strong><a class="headerlink" href="#dmftqmc_n" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Quantum Monte Carlo Number of sweeps<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> real<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 0.0<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> &gt;= 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [14/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/paral/Input/t99.abi" target="_blank">t99.abi</a></li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a></li>
+<li>v6:  <a class="wikilink abifile-wikilink" data-tippy-content="
+NiO with 4 atoms. Check of the modified self-consistent loop over electronic density for DMFT. This
+calculation use LDA occupations for the test and is not running the DMFT part (dmftcheck2=-1)." data-toggle="popover" href="/tests/v6/Input/t07.abi" target="_blank">t07.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t30.abi" target="_blank">t30.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test restart of entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t31.abi" target="_blank">t31.abi</a></li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a></li>
+</ul>
+</details>
+<p>Number of Monte Carlo sweeps. Should be at least 10<sup>6&lt;\sup&gt;.</p>
+<h2 id="dmftqmc_seed"><strong>dmftqmc_seed</strong><a class="headerlink" href="#dmftqmc_seed" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Quantum Monte Carlo SEED<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> <a class="wikilink codevar-wikilink" href="/variables/basic#jdtset">jdtset</a><br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> &gt;= 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Rarely used, [2/1121] in all abinit tests, [0/156] in abinit tutorials</summary><ul>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a></li>
+</ul>
+</details>
+<p>Seed to initialize the random number generator.
+Should not be relevant except for testing purpose.
+NOTE: If the CT-QMC (<a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> = 5) is used on many CPUs, each CPU
+initializes its random number generator with dmftqmc_seed+rank where rank is
+the rank of the cpu in the MPI communicator.</p>
+<h2 id="dmftqmc_therm"><strong>dmftqmc_therm</strong><a class="headerlink" href="#dmftqmc_therm" title="Permanent link">&para;</a></h2>
+<p><em>Mnemonics:</em> Dynamical Mean Field Theory: Quantum Monte Carlo THERMalization<br />
+<em>Characteristics:</em> <a class="wikilink" href="/guide/abinit#parameters">DEVELOP</a><br />
+<em>Mentioned in topic(s):</em> <a class="wikilink topic-wikilink" data-tippy-content="How to perform a DMFT calculation" data-toggle="popover" href="/topics/DMFT">topic_DMFT</a><br />
+<em>Variable type:</em> integer<br />
+<em>Dimensions:</em> scalar<br />
+<em>Default value:</em> 1000<br />
+<em>Only relevant if:</em> <a class="wikilink codevar-wikilink" href="/variables/dmft#dmft_solv">dmft_solv</a> == 5<br />
+<em>Added in version:</em> before_v9  </p>
+<details class="note"><summary>Test list (click to open). Moderately used, [13/1121] in all abinit tests, [1/156] in abinit tutorials</summary><ul>
+<li>paral:  <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code" data-toggle="popover" href="/tests/paral/Input/t83.abi" target="_blank">t83.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="DFT+DMFT for Vanadium using off diag CTQMC code with KGB parallelism" data-toggle="popover" href="/tests/paral/Input/t84.abi" target="_blank">t84.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC parallelism" data-toggle="popover" href="/tests/paral/Input/t92.abi" target="_blank">t92.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/paral/Input/t99.abi" target="_blank">t99.abi</a></li>
+<li>tutoparal:  <a class="wikilink abifile-wikilink" data-tippy-content="Tutorial DFT+DMFT on SrVO3" data-toggle="popover" href="/tests/tutoparal/Input/tdmft_2.abi" target="_blank">tdmft_2.abi</a></li>
+<li>v7:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v7/Input/t27.abi" target="_blank">t27.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t28.abi" target="_blank">t28.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC options only. Not realistic" data-toggle="popover" href="/tests/v7/Input/t29.abi" target="_blank">t29.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t30.abi" target="_blank">t30.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test restart of entropy calculation for SrVO3 within DMFT" data-toggle="popover" href="/tests/v7/Input/t31.abi" target="_blank">t31.abi</a></li>
+<li>v8:  <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density" data-toggle="popover" href="/tests/v8/Input/t01.abi" target="_blank">t01.abi</a>, <a class="wikilink abifile-wikilink" data-tippy-content="Test CT-QMC within DMFT in ABINIT and QMC solver from TRIQS for VSrO3 NSCF over density. This test is different the t01.in because the reference for triqs1.4 and triqs2.0 are different." data-toggle="popover" href="/tests/v8/Input/t01_triqs2_0.abi" target="_blank">t01_triqs2_0.abi</a></li>
+</ul>
+</details>
+<p>Number of Monte Carlo sweeps for the thermalization</p>
+                
+                  
+                
+              
+
+<!-- 
+Add dropdown button with toolbar (based on https://bootsnipp.com/snippets/featured/inbox-by-gmail)
+and return to Top button (based on https://codepen.io/rdallaire/pen/apoyx)
+-->
+<div class="md-container">
+  <div class="row">
+    <div id="inbox">
+      <div class="fab btn-group show-on-hover dropup">
+        <div data-toggle="tooltip" data-placement="left" title="Menu" style="margin-left: 42px;">
+          <button id="return-to-top" type="button" class="btn btn-primary btn-io dropdown-toggle" data-toggle="dropdown">
+            <span class="fa-stack fa-2x">
+               <i class="fa fa-circle fa-stack-2x fab-backdrop"></i>
+               <i class="fa fa-chevron-up fa-stack-1x fa-inverse fab-primary"></i>
+               <i class="fa fa-map-signs fa-stack-1x fa-inverse fab-secondary"></i>
+            </span>
+          </button>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        
+        
+          <li>
+            <a href="https://docs.abinit.org/about/release-notes/" 
+               data-toggle="popover" data-tippy-content="About">
+               <i class="fa fa-info-circle"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/developers/git_and_gitlab/" 
+               data-toggle="popover" data-tippy-content="Developers">
+               <i class="fa fa-terminal"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/theory/geometry/" 
+               data-toggle="popover" data-tippy-content="Theory">
+               <i class="fa fa-book"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/faq/configuration_and_compilation/" 
+               data-toggle="popover" data-tippy-content="FAQ">
+               <i class="fa fa-graduation-cap"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/tutorial/" 
+               data-toggle="popover" data-tippy-content="Tutorials">
+               <i class="fa fa-file-text-o"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/variables/" 
+               data-toggle="popover" data-tippy-content="Variables">
+               <i class="fa fa-question"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/topics/features/" 
+               data-toggle="popover" data-tippy-content="Topics">
+               <i class="fa fa-user-circle-o"></i>
+            </a>
+          </li>
+        
+          <li>
+            <a href="https://docs.abinit.org/" 
+               data-toggle="popover" data-tippy-content="User Guides">
+               <i class="fa "></i>
+            </a>
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../dev/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Developers
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../eph/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Electron-Phonon
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+            <center>Abinit version 9.8.2</center>
+        
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2020-2021 The Abinit Group
+            
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/abinit/abinit" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://www.youtube.com/watch?v=gcbfb_Mteo4" target="_blank" rel="noopener" title="www.youtube.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="http://www.facebook.com/abinit.org" target="_blank" rel="noopener" title="www.facebook.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/hashtag/abinit" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "header.autohide"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fb4a9340.min.js", "version": "9.8.2"}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a1c7c35e.min.js"></script>
+      
+        <script src="../../extra_javascript/abidocs.js"></script>
+      
+    
+  </body>
+</html>
